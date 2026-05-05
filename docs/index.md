@@ -30,6 +30,7 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
 -   **Get Started**
 
+    ---
 
     Request an account and learn how to log in to Juno
 
@@ -37,6 +38,7 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
 -   **SLURM Job Scheduler**
 
+    ---
 
     Learn to submit and manage jobs on the cluster
 
@@ -44,6 +46,7 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
 -   **GUI Programs**
 
+    ---
 
     Launch graphical applications using Open OnDemand or X11
 
@@ -51,7 +54,7 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
 -   **Get Help**
 
-
+    ---
 
     Contact support and find answers to common questions
 
