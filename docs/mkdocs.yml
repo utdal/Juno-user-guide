@@ -1,0 +1,42 @@
+site_name: Juno HPC Cluster User Guide
+site_description: Documentation for the Juno HPC Cluster at UT Dallas
+site_url: https://juno.readthedocs.io
+
+docs_dir: .
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Account Request: getting-started/account-request.md
+    - Login: getting-started/login.md
+    - Storage & Data Transfer: getting-started/storage.md
+    - Scratch Space: getting-started/scratch-space.md
+    - Hardware Overview: getting-started/hardware.md
+  - Working on Juno:
+    - Linux Commands: working-on-juno/linux-commands.md
+    - Module System: working-on-juno/modules.md
+    - Available Software: working-on-juno/software.md
+  - Running Programs:
+    - SLURM Job Scheduler: running-programs/slurm.md
+    - Common Scientific Programs: running-programs/common-programs.md
+    - Parallelism Models: running-programs/parallelism.md
+    - Launcher: running-programs/launcher.md
+  - GUI & Tools:
+    - GUI Programs: gui-and-tools/gui-programs.md
+    - JupyterLab: gui-and-tools/jupyter.md
+    - VSCode: gui-and-tools/vscode.md
+  - Advanced:
+    - Containers: advanced/containers.md
+    - Python Optimization: advanced/python-optimization.md
+    - Miniconda: advanced/miniconda.md
+  - Support:
+    - Getting Help: support/getting-help.md
+    - FAQ: support/faq.md
