@@ -2,7 +2,7 @@ site_name: Juno HPC Cluster User Guide
 site_description: Documentation for the Juno HPC Cluster at UT Dallas
 site_url: https://juno.readthedocs.io
 
-docs_dir: .
+docs_dir: docs
 
 theme:
   name: material
