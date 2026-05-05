@@ -4,6 +4,13 @@ site_url: https://juno.readthedocs.io
 
 docs_dir: docs
 
+plugins:
+  - search
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+
 theme:
   name: material
   features:
