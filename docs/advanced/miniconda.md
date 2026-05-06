@@ -82,7 +82,8 @@ conda create -p /path/to/myenv python=3.9 numpy pandas matplotlib
 conda create -p /path/to/myenv python=3.9 --file requirements.txt
 ```
 
-**Note:** It's recommended that you create a conda environment in `~/work` or `/groups/` directory, as the installation can easily overflow your home directory.
+!!! note
+    It's recommended that you create a conda environment in `~/work` or `/groups/` directory, as the installation can easily overflow your home directory.
 
 ### Activate/Deactivate
 

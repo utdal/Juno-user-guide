@@ -133,8 +133,8 @@ mv file1.txt file2.txt /destination/
 
 ### Deleting Files
 
-**Danger!!!**
-Deleted files cannot be recovered. Be careful with `rm` command!
+!!! danger
+    Deleted files cannot be recovered. Be careful with `rm` command!
 
 ```bash
 # Remove file

@@ -135,7 +135,8 @@ Launch → Connect to RStudio
 4. Click **Save**
 
 
-**NOTE:** The upload/download limit is 10GB/file
+!!! note
+    The upload/download limit is 10GB/file
 
 ---
 
@@ -184,7 +185,8 @@ X11 is typically pre-installed. No additional software needed.
 ssh -X netID@juno.utdallas.edu
 ```
 
-**Note:** Use capital `-X` for X11 forwarding, not lowercase `-x`
+!!! note
+    Use capital `-X` for X11 forwarding, not lowercase `-x`
 
 **For slower connections, use compression**:
 ```bash
@@ -203,7 +205,8 @@ If a clock appears on your screen, X11 forwarding is working correctly!
 
 ### Running GUI Programs on Login Node
 
-**Note:** Only use login nodes for quick tests or launching programs that will run on compute nodes.
+!!! note
+    Only use login nodes for quick tests or launching programs that will run on compute nodes.
 
 ```bash
 # Test X11

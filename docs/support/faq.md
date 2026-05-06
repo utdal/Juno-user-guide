@@ -476,10 +476,12 @@ Can't find your answer here?
 
 ---
 
-**Tip**: Before asking, try:
-1. Searching this FAQ
-2. Checking relevant guide sections
-3. Looking at error messages carefully
-4. Testing simple cases
+!!! tip
+    Before asking, try:
+
+    1. Searching this FAQ
+    2. Checking relevant guide sections
+    3. Looking at error messages carefully
+    4. Testing simple cases
 
 When you do ask, provide details: job IDs, error messages, what you've tried. This helps us help you faster!

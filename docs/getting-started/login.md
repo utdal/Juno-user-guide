@@ -126,7 +126,8 @@ ssh -X netID@juno.utdallas.edu
 ```
 
 
-**NOTE:** Use capital `-X` (not lowercase `-x`)
+!!! note
+    Use capital `-X` (not lowercase `-x`)
 
 ### Test X11 Forwarding
 
@@ -156,7 +157,8 @@ Access Juno through your web browser:
 - **Job Composer**: Create and submit jobs through GUI
 - **Active Jobs**: Monitor your running jobs
 
-**Tip:** Open OnDemand is perfect for users who prefer graphical interfaces or need to access Juno from networks that block SSH.
+!!! tip
+    Open OnDemand is perfect for users who prefer graphical interfaces or need to access Juno from networks that block SSH.
 
 For detailed Open OnDemand usage, see [Launching GUI Programs](../gui-and-tools/gui-programs.md).
 
