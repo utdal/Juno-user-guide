@@ -87,9 +87,17 @@ Learn the essential tools and commands for working on the cluster.
 Master job submission and execution on Juno.
 
 - [SLURM Job Scheduler](running-programs/slurm.md)
+- [Monitoring Jobs and Cluster State](running-programs/advanced-slurm.md)
 - [Running Common Scientific Programs](running-programs/common-programs.md)
 - [Parallelism Models](running-programs/parallelism.md)
 - [High Throughput Processing with Launcher](running-programs/launcher.md)
+
+### AI & Machine Learning
+Run GPU workloads, train PyTorch models, and optimize GPU performance.
+
+- [GPU Computing on Juno](ai-and-ml/index.md)
+- [PyTorch Training Jobs](ai-and-ml/pytorch-training.md)
+- [GPU Performance & Monitoring](ai-and-ml/gpu-performance.md)
 
 ### GUI & Development Tools
 Access graphical interfaces and modern development environments.

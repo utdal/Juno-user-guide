@@ -429,10 +429,7 @@ sinfo -o "%P %l"
    #SBATCH -t 0:10:00  # 10 minutes for testing
    ```
 
-5. **Monitor resource usage**:
-   ```bash
-   seff 12345  # Shows efficiency after job completes
-   ```
+5. **Monitor resource usage**: Run `jobstats <jobid>` after a job completes to see CPU and memory efficiency. See [Monitoring Jobs and Cluster State](advanced-slurm.md).
 
 6. **Clean up old files**:
    - Remove old output/error files

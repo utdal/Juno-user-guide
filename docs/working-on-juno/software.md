@@ -1,738 +1,236 @@
-# Software and Compilers Available on Juno
+# Available Software
 
-## Overview
-
-This page provides information about software and compilers available on Juno, how to access them, and how to request new software installations.
-
-## Finding Available Software
-
-### Using the Module System
+Software on Juno is managed through the [module system](modules.md). Use `module avail` to browse everything installed, or `module avail <name>` to search for a specific package.
 
 ```bash
-# List all available software
-module avail
-
-# Search for specific software
-module avail python
-module avail gnu14
-module avail matlab
-
-# Case-insensitive search
-module avail -i tensorflow
-```
-
-See the [Module System Guide](modules.md) for detailed usage.
-
-## Categories of Software
-
-### Compilers
-
-#### GNU Compiler
-
-**Languages**: C, C++, Fortran
-
-```bash
-# Available versions
-module avail gnu
-
-# Load GNU
-module load gnu14
-
-# Verify
-gcc --version
-g++ --version
-gfortran --version
-```
-
-**Compile examples**:
-```bash
-# C program
-gcc -O3 program.c -o program
-
-# C++ program
-g++ -O3 program.cpp -o program
-
-# Fortran program
-gfortran -O3 program.f90 -o program
-```
-
-#### Intel Compilers
-
-**Languages**: C, C++, Fortran (optimized for Intel processors)
-
-```bash
-# Load Intel compilers
-module load intel/2025
-
-# Use
-icc program.c -o program      # C
-icpc program.cpp -o program   # C++
-ifort program.f90 -o program  # Fortran
-```
-
-### Programming Languages
-
-#### Python
-
-**Available versions**: Multiple Python versions
-
-```bash
-# Check available versions
-module avail python
-
-# Load Python
-module load python/3.11.11
+module avail             # list all available software
+module avail python      # search by name
 module load python/3.12.2
-
-# Verify
-python --version
-python3 --version
 ```
 
-**Installing packages**:
-```bash
-# User installation
-pip install --user package_name
+The tables below list software currently installed on Juno, grouped by category. The **Module** column shows the command to load each package. Versions marked **(D)** are the default loaded when no version is specified.
+
+---
+
+## Compilers
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| GNU Compiler Collection | 5.5, 8.5, 9.3, 11.3, 12.4, 13.2, **14.2 (D)** | `module load gnu14` | C, C++, and Fortran compilers (`gcc`, `g++`, `gfortran`) |
+| Intel oneAPI | 2023.2, **2025.0 (D)** | `module load intel/2025.0` | Intel C, C++, and Fortran compilers, optimized for Intel hardware |
+| AOCC | 5.0 | `module load aocc/5.0` | AMD Optimizing C/C++ Compiler |
+| NVHPC | 24.11 | `module load nvhpc/24.11` | NVIDIA HPC SDK — C, C++, and Fortran with GPU directives (OpenACC, OpenMP offload) |
+
+---
+
+## Programming Languages
 
-# Or use virtual environments
-python -m venv myenv
-source myenv/bin/activate
-pip install package_name
-```
-
-See [Python Optimization Guide](../advanced/python-optimization.md) and [Miniconda Guide](../advanced/miniconda.md).
-
-#### R
-
-**Statistical computing and graphics**:
-
-```bash
-# Load R
-module load R/4.5.0
-
-# Launch R
-R
-
-# Install packages in R
-install.packages("package_name")
-```
-
-#### Julia
-
-**High-performance numerical computing**:
-
-```bash
-module load julia/1.11.3
-
-julia --version
-```
-
-#### MATLAB
-
-**Commercial mathematical computing environment**:
-
-```bash
-# Check available versions
-module avail matlab
-
-# Load MATLAB
-module load matlab/r2024b
-
-# GUI (requires X11)
-matlab
-
-# Command line
-matlab -nodisplay -nosplash
-
-# Run script
-matlab -nodisplay -nosplash -r "run('script.m'); exit;"
-```
-
-#### Ansys
-
-**Simulation software (Fluent, Lumerical, and more)**:
-
-```bash
-module load ansys/2025R1
-
-# Ansys Fluent (CLI)
-fluent 2d -g -i sample.jou
-
-# Ansys Fluent (GUI, requires X11)
-fluent
-```
-
-See the [GUI Programs Guide](../gui-and-tools/gui-programs.md) for running Fluent interactively.
-
-### Parallel Computing
-
-#### MPI (Message Passing Interface)
-
-**OpenMPI**:
-```bash
-module load openmpi5
-
-# Compile
-mpicc program.c -o program
-mpicxx program.cpp -o program
-mpifort program.f90 -o program
-
-# Run
-mpirun -np 4 ./program
-```
-
-**MPICH**:
-```bash
-module load mpich/4.0
-```
-
-
-#### OpenMP
-
-Thread-based parallelism (built into compilers):
-
-```bash
-module load gnu14
-
-# Compile with OpenMP
-gcc -fopenmp program.c -o program
-```
-
-### GPU Computing
-
-#### CUDA
-
-**NVIDIA GPU programming**:
-
-```bash
-# Check available versions
-module avail cuda
-
-# Load CUDA
-module load cuda/11.8
-module load cuda/12.4
-
-# Compile
-nvcc program.cu -o program
-
-# Verify
-nvidia-smi
-```
-
-#### Deep Learning Frameworks
-
-**TensorFlow**:
-```bash
-module load python/3.11.11
-module load cuda/12.4
-
-pip install --user tensorflow
-```
-
-**PyTorch**:
-```bash
-module load python/3.11.11
-module load cuda/12.4
-
-pip install --user torch torchvision
-```
-
-### Scientific Applications
-
-#### Computational Chemistry / Molecular Dynamics
-
-**Gaussian** (quantum chemistry):
-```bash
-module load gaussian
-```
-
-**GROMACS** (molecular dynamics):
-```bash
-module load gromacs
-```
-
-**AMBER** (molecular dynamics):
-```bash
-module load amber
-```
-
-**NAMD** (molecular dynamics):
-```bash
-module load namd
-```
-
-**VASP** (electronic structure, DFT):
-```bash
-module load vasp
-```
-
-**ORCA** (quantum chemistry):
-```bash
-module load orca
-```
-
-**QChem** (quantum chemistry):
-```bash
-module load qchem
-```
-
-#### AI / Inference
-
-**Ollama** (run large language models locally on GPU):
-```bash
-module load ollama
-```
-
-### Libraries
-
-#### Mathematical Libraries
-
-**BLAS/LAPACK**:
-```bash
-# Provided by OpenBLAS
-module load openblas
-```
-
-**FFTW** (Fast Fourier Transform):
-```bash
-module load fftw
-```
-
-#### HDF5
-
-**Hierarchical data format**:
-```bash
-module load hdf5
-```
-
-#### NetCDF
-
-**Network Common Data Form**:
-```bash
-module load netcdf
-```
-
-### Development Tools
-
-#### Version Control
-
-**Git** (usually pre-installed):
-```bash
-git --version
-
-# If not available
-module load git
-```
-
-#### Build Systems
-
-**Make** (pre-installed):
-```bash
-make --version
-```
-
-#### Debuggers
-
-**Valgrind**:
-```bash
-module load valgrind
-valgrind ./program
-```
-
-## Compiler Optimization Flags
-
-### GCC Optimization Levels
-
-```bash
-# No optimization
-gcc program.c -o program
-
-# Basic optimization
-gcc -O1 program.c -o program
-
-# Recommended optimization
-gcc -O2 program.c -o program
-
-# Aggressive optimization
-gcc -O3 program.c -o program
-
-# Size optimization
-gcc -Os program.c -o program
-```
-
-### Additional Optimization Flags
-
-```bash
-# Architecture-specific
-gcc -O3 -march=native program.c -o program
-
-# Enable vectorization reports
-gcc -O3 -fopt-info-vec program.c -o program
-
-# OpenMP parallel
-gcc -O3 -fopenmp program.c -o program
-
-# Link math library
-gcc -O3 program.c -o program -lm
-```
-
-### Intel Compiler Optimization
-
-```bash
-# Intel specific optimizations
-icc -O3 -xHost program.c -o program
-
-# Interprocedural optimization
-icc -O3 -ipo program.c -o program
-
-# Profile-guided optimization
-icc -O3 -prof-gen program.c -o program
-./program
-icc -O3 -prof-use program.c -o program
-```
-
-## Installing Your Own Software
-
-### Python Packages
-
-**User installation**:
-```bash
-pip install --user package_name
-```
-
-**Virtual environments**:
-```bash
-python -m venv ~/myenv
-source ~/myenv/bin/activate
-pip install package_name
-```
-
-**Conda/Mamba**:
-See [Miniconda Guide](../advanced/miniconda.md)
-
-### R Packages
-
-**User library**:
-```R
-# In R
-install.packages("package_name")
-
-# Or specify location
-install.packages("package_name", lib="~/R/library")
-```
-
-### Compiling from Source
-
-**General pattern**:
-```bash
-# Create software directory
-mkdir -p ~/software
-cd ~/software
-
-# Download source
-wget https://example.com/software.tar.gz
-tar xzf software.tar.gz
-cd software
-
-# Configure
-./configure --prefix=$HOME/software/installed
-
-# Compile
-make -j 4
-
-# Install
-make install
-
-# Add to PATH
-echo 'export PATH=$HOME/software/installed/bin:$PATH' >> ~/.bashrc
-```
-
-### Using Containers
-
-For software that's difficult to install:
-
-See [Containers Guide](../advanced/containers.md)
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| Python | 3.11.11, **3.12.2 (D)** | `module load python/3.12.2` | General-purpose scripting and scientific computing |
+| R | 4.5.0 | `module load R/4.5.0` | Statistical computing and graphics |
+| Julia | 1.11.3 | `module load julia/1.11.3` | High-performance numerical computing |
+| MATLAB | r2024b | `module load matlab/r2024b` | Mathematical computing environment (licensed) |
+| Java | 11 | `module load java/11` | Java Development Kit (JDK) |
+| Lua | 5.4.7 | `module load lua/5.4.7` | Lightweight scripting language |
+| Stata | 19.5 | `module load stata/19.5` | Statistical analysis (licensed) |
+
+---
+
+## MPI & Parallel Communication
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| OpenMPI | 4.1.6, **5.0.7 (D)** | `module load openmpi5` | Open-source MPI implementation (default on Juno) |
+| MPICH | 3.4.3-ofi, **3.4.3-ucx (D)** | `module load mpich` | Portable MPI reference implementation |
+| OpenMPI (AOCC) | 5.0.6 | `module load openmpi-aocc/5.0.6` | OpenMPI built with the AMD AOCC compiler |
+| OpenCoarrays | 2.10.2 | `module load opencoarrays/2.10.2` | Fortran coarray parallelism library |
+
+---
+
+## GPU Computing
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| CUDA | 11.7, 12.4, 12.6, **13.0 (D)** | `module load cuda/12.6` | NVIDIA GPU programming toolkit |
+| CUDA-Q | 0.12.0 | `module load cuda-q/0.12.0` | Hybrid quantum-classical computing on GPU |
+| NCCL | 2.29.2 (cuda12.4) | `module load nccl/2.29.2-1-cuda12.4` | NVIDIA collective communications library for multi-GPU |
+| NVSHMEM | 3.5.19 (cuda12.4) | `module load nvshmem/3.5.19-cuda12.4` | OpenSHMEM-based GPU memory library |
+| Ollama | 12, 15, **21 (D)** | `module load ollama/21` | Run large language models locally on GPU |
+
+---
+
+## Computational Chemistry & Molecular Dynamics
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| Gaussian | 16 | `module load gaussian/16` | Quantum chemistry (licensed) |
+| ORCA | 6.0.1, **6.1.1 (D)** | `module load orca/6.1.1` | Quantum chemistry — DFT, coupled cluster, and more |
+| Q-Chem | 6.2.2, **6.3 (D)** | `module load qchem/6.3` | Quantum chemistry (licensed) |
+| Quantum ESPRESSO | 7.3.1 | `module load qe/7.3.1` | Plane-wave DFT for electronic structure |
+| CASTEP | 25.12 | `module load castep/25.12` | Plane-wave DFT materials modeling (licensed) |
+| SIESTA | 5.2.1-parallel, **5.4.2-wannier90 (D)** | `module load siesta/5.4.2-wannier90` | DFT for large systems with Wannier90 |
+| VASP | 6.4.2-upgrade, **6.4.2-wannier90-only (D)** | `module load vasp/6.4.2-wannier90-only` | DFT electronic structure (licensed) |
+| GROMACS | 2024.5-plumed | `module load gromacs/2024.5-plumed` | Molecular dynamics with PLUMED enhanced sampling |
+| AMBER | 24-beta, **24 (D)** | `module load amber/24` | Molecular dynamics (licensed) |
+| NAMD | 3.0.1 | `module load namd/3.0.1` | Scalable molecular dynamics |
+| TINKER | 9 | `module load tinker/9` | Molecular mechanics and dynamics |
+| AutoDock Vina | 1.2.7 | `module load autodock_vina/1.2.7` | Molecular docking |
+| Rosetta | 3.15 | `module load rosetta/3.15` | Protein structure prediction and design |
+| LICHEM | lichem | `module load lichem/lichem` | QM/MM calculations |
+| BCL | 4.3.1 | `module load bcl/4.3.1` | Biochemistry library — cheminformatics |
+| DiagHam | 0.01 | `module load diagham/0.01` | Exact diagonalization for quantum many-body systems |
+
+---
+
+## Engineering & Simulation
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| ANSYS | **2025R1** (also 2024R2) | `module load ansys/2025R1` | Simulation suite: Fluent, Workbench, Mechanical, AnsysEM, Autodyn (licensed) |
+| Abaqus | 2023, **2026 (D)** | `module load abaqus/2026` | Finite element analysis (licensed) |
+| COMSOL | 6.4 | `module load comsol/6.4` | Multiphysics simulation (licensed) |
+| OpenFOAM | 2512 | `module load openfoam/2512` | Computational fluid dynamics |
+| FVCOM | 5.0.1 | `module load fvcom/5.0.1` | Finite-volume coastal ocean model |
+| NonLinLoc | 7.1.04 | `module load nonlinloc/7.1.04` | Probabilistic earthquake location |
+
+---
+
+## Optimization & Mathematical Programming
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| CPLEX | 22.1.2 | `module load cplex/22.1.2` | Mixed-integer programming solver (licensed) |
+| Gurobi | 12.0.1 | `module load gurobi/12.0.1` | Mathematical optimization solver (licensed) |
+
+---
+
+## Bioinformatics & Neuroimaging
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| AFNI | 25.3.03 | `module load afni/25.3.03` | Neuroimaging analysis suite |
+| FSL | 6.0.7.19 | `module load fsl/6.0.7.19` | FMRIB Software Library for neuroimaging |
+
+---
+
+## EDA & Semiconductor
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| CyberWorkbench | 10.1.7 | `module load cyberworkbench/10.1.7` | High-level synthesis and verification (licensed) |
+| TCAD Silvaco | 243422 | `module load tcad-silvaco/243422` | Semiconductor device and process simulation (licensed) |
+
+---
+
+## Numerical Libraries
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| OpenBLAS | 0.3.29 | `module load openblas/0.3.29` | Optimized BLAS and LAPACK routines |
+| FFTW | 3.3.10 | `module load fftw/3.3.10` | Fast Fourier transforms |
+| ScaLAPACK | 2.2.2 | `module load scalapack/2.2.2` | Distributed-memory linear algebra |
+| PLASMA | 24.8.7 | `module load plasma/24.8.7` | Parallel linear algebra for multicore |
+| PETSc | 3.18.1 | `module load petsc/3.18.1` | Scalable solvers for PDEs |
+| HYPRE | 2.33.0 | `module load hypre/2.33.0` | Parallel multigrid and Krylov solvers |
+| Trilinos | 13.4.0 | `module load trilinos/13.4.0` | Sandia's suite of scientific algorithms |
+| MUMPS | 5.2.1 | `module load mumps/5.2.1` | Parallel sparse direct solver |
+| SuperLU | 7.0.0 | `module load superlu/7.0.0` | Sparse LU factorization |
+| SuperLU_DIST | 6.4.0 | `module load superlu_dist/6.4.0` | Distributed-memory sparse direct solver |
+| SLEPc | 3.18.0 | `module load slepc/3.18.0` | Parallel eigenvalue solver (builds on PETSc) |
+| GSL | 2.8 | `module load gsl/2.8` | GNU Scientific Library |
+| Boost | 1.88.0 | `module load boost/1.88.0` | C++ general-purpose libraries |
+| MFEM | 4.4 | `module load mfem/4.4` | Scalable finite element library |
+| METIS | 5.1.0 | `module load metis/5.1.0` | Graph/mesh partitioning |
+| Scotch / PT-Scotch | 7.0.7 | `module load scotch/7.0.7` | Graph partitioning and sparse matrix ordering |
+
+---
+
+## Data Formats & I/O
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| HDF5 | **1.14.6 (D)**, 1.13.2-nvhpc | `module load hdf5/1.14.6` | Hierarchical data format |
+| NetCDF | 4.9.3 | `module load netcdf/4.9.3` | Network common data form (C interface) |
+| NetCDF-Fortran | **4.6.2 (D)**, 4.6.1-nvhpc | `module load netcdf-fortran/4.6.2` | NetCDF Fortran interface |
+| NetCDF-C++ | 4.3.1 | `module load netcdf-cxx/4.3.1` | NetCDF C++ interface |
+| PnetCDF | 1.14.0 | `module load pnetcdf/1.14.0` | Parallel NetCDF for MPI applications |
+| Parallel HDF5 | 1.14.6 | `module load phdf5/1.14.6` | HDF5 with MPI-IO support |
+| ADIOS2 | 2.10.1 | `module load adios2/2.10.1` | Adaptable I/O system for large-scale simulations |
+| SIONlib | 1.7.7 | `module load sionlib/1.7.7` | Scalable parallel I/O for task-local files |
+
+---
+
+## Profiling & Performance Analysis
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| TAU | 2.31.1 | `module load tau/2.31.1` | Tuning and analysis utilities — MPI, OpenMP, CUDA profiling |
+| Score-P | 9.0 | `module load scorep/9.0` | Scalable performance measurement infrastructure |
+| Scalasca | 2.6.2 | `module load scalasca/2.6.2` | Scalable MPI/OpenMP performance analysis |
+| Extrae | 3.8.3 | `module load extrae/3.8.3` | Instrumentation framework for parallel programs |
+| Dimemas | 5.4.2 | `module load dimemas/5.4.2` | MPI performance simulator |
+| OTF2 | 3.1.1 | `module load otf2/3.1.1` | Open trace format library |
+| PAPI | 6.0.0 | `module load papi/6.0.0` | Hardware performance counter API |
+| Likwid | 5.4.1 | `module load likwid/5.4.1` | Performance monitoring and benchmarking tools |
+| AMD uProf | 5.1.7 | `module load amduprof/5.1.7` | AMD CPU/GPU profiling |
+| Valgrind | 3.24.0 | `module load valgrind/3.24.0` | Memory error detection and profiling |
+| Gotcha | 1.0.8 | `module load gotcha/1.0.8` | Function wrapping / interposition library |
+| CubeLib / CubeW | 4.9 | `module load cubelib/4.9` | Cube performance report format and writer |
+| Opari2 | 2.0.9 | `module load opari2/2.0.9` | OpenMP source-code instrumentor |
+| PDToolkit | 3.25.1 | `module load pdtoolkit/3.25.1` | Program database toolkit |
+| HPCC | 1.5 | `module load hpcc/1.5` | HPC Challenge benchmark suite |
+| IMB | 2021.3 | `module load imb/2021.3` | Intel MPI benchmarks |
+| OMB | 7.5 | `module load omb/7.5` | OSU micro-benchmarks for MPI latency/bandwidth |
+
+---
+
+## Containers
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| Apptainer | 1.3.4 | `module load apptainer/1.3.4` | Container runtime (successor to Singularity) — run Docker images on HPC |
+| Charliecloud | 0.15 | `module load charliecloud/0.15` | Rootless container runtime |
+
+See the [Containers Guide](../advanced/containers.md) for usage details.
+
+---
+
+## Development & Build Tools
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| CMake | 4.0.0 | `module load cmake/4.0.0` | Cross-platform build system generator |
+| EasyBuild | 5.0.0 | `module load EasyBuild/5.0.0` | HPC software build and installation framework |
+| Spack | 0.23.1 | `module load spack/0.23.1` | Package manager for HPC software |
+| Miniconda | 24.11.1 | `module load miniconda/24.11.1` | Conda package and environment manager |
+| Code-Server | 3.10.2, 4.100.2, **4.108.2 (D)** | `module load code-server/4.108.2` | VS Code in the browser |
+| GNUplot | 6.0.4 | `module load gnuplot/6.0.4` | Command-line plotting |
+| jq | 1.7.1 | `module load jq/1.7.1` | Lightweight JSON processor |
+| Launcher | 3.9 | `module load launcher/3.9` | Parametric job launcher for task arrays |
+| KempnerPulse | 0.4.1 | `module load kempnerpulse/0.4.1` | AI workload management tools |
+
+---
 
 ## Requesting New Software
 
-### Before Requesting
+If software you need is not listed here:
 
-1. **Check if available**: `module avail software_name`
+1. **Try a user-space install first** — Python packages (`pip install --user`), R packages (`install.packages()`), or Conda environments often don't require admin access. See [Miniconda](../advanced/miniconda.md).
 
-2. **Try user installation**: Many packages can be installed locally
+2. **Use a container** — If the software has a Docker or Apptainer image, you can often run it directly. See [Containers](../advanced/containers.md).
 
-3. **Check containers**: Software might be available as container
+3. **Open a support ticket** — Email [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu) and include:
+    - Software name, version, and official URL
+    - Brief description of your use case
+    - License type (open source or commercial)
+    - Whether other users would benefit
 
-### How to Request
+---
 
-**Open a support ticket**:
+## Related Pages
 
-1. Go to [HPC Services page](https://hpc.utdallas.edu/services)
-2. Click on "Software Installation"
-3. Provide:
-   - Software name and version
-   - Official website/documentation URL
-   - Brief description of use case
-   - License information (if applicable)
-   - Whether others would benefit
-   - Required dependencies
-   - Timeline/urgency
-
-**Example request**:
-```
-Software: TensorFlow
-Version: 2.14
-URL: https://www.tensorflow.org/
-
-Purpose: Deep learning research for image classification
-
-License: Open source (Apache 2.0)
-
-Dependencies: Python 3.9+, CUDA 11.8, cuDNN 8.6
-
-Multiple users in our research group would benefit.
-
-Needed by: [date]
-```
-
-### What Gets Installed
-
-**Typically installed system-wide**:
-
-- Popular software with multiple users
-- Licensed software with site license
-- Software requiring root access
-- Complex dependencies
-
-**Better as user install**:
-
-- Python/R packages
-- Software with simple installation
-- Frequently updated software
-- Personal use only
-
-## Software Modules vs User Installation
-
-### When to Use Modules
-
-✓ Large scientific applications  
-✓ Compilers and MPI  
-✓ Licensed software  
-✓ GPU-enabled software  
-✓ Multiple version needs  
-
-### When to Install Yourself
-
-✓ Python/R packages  
-✓ Quick tools and scripts  
-✓ Experimental software  
-✓ Frequently updated packages  
-✓ Personal utilities  
-
-## Checking Software Versions
-
-### Module Versions
-
-```bash
-# See available versions
-module avail software_name
-
-# Check loaded version
-module list
-
-# After loading
-python --version
-gcc --version
-```
-
-### Command Versions
-
-```bash
-# Most software supports --version
-command --version
-
-# Or -v
-command -v
-
-# Or version subcommand
-command version
-```
-
-## Performance Considerations
-
-### Choosing Compilers
-
-**GNU**: 
-
-- Free, widely compatible
-- Good general-purpose performance
-- Best for portability
-
-**Intel**:
-
-- Optimized for Intel processors
-- May offer better performance on Juno
-- Commercial (but available on cluster)
-
-### MPI Implementations
-
-**OpenMPI**: 
-
-- Most common, good compatibility
-- Active development
-
-**Intel MPI**: 
-
-- Optimized for Intel architecture
-- Good for large-scale jobs
-
-**MPICH**: 
-
-- Reference implementation
-- Lightweight
-
-### Library Choices
-
-**OpenBLAS**:
-
-- Open source alternative
-- Good performance
-
-## Common Software Combinations
-
-### Python Data Science
-
-```bash
-module purge
-module load python/3.11
-module load gnu14
-
-pip install --user numpy scipy pandas matplotlib seaborn scikit-learn
-```
-
-### GPU Deep Learning
-
-```bash
-module purge
-module load python/3.11
-module load cuda/12.4
-
-pip install --user torch torchvision tensorflow
-```
-
-### MPI Applications
-
-```bash
-module purge
-module load gnu14
-module load openmpi/4.1
-module load hdf5
-```
-
-### MATLAB with Parallel Computing
-
-```bash
-module purge
-module load matlab/r2024b
-```
-
-## Troubleshooting
-
-### Software Not Found After Loading Module
-
-```bash
-# Verify module loaded
-module list
-
-# Check if command in PATH
-which command_name
-
-# Reload module
-module unload software
-module load software/version
-```
-
-### Library Linking Errors
-
-```bash
-# Check LD_LIBRARY_PATH
-echo $LD_LIBRARY_PATH
-
-# May need additional module
-module load dependency
-
-# Check what module provides
-module show software_name
-```
-
-### Version Conflicts
-
-```bash
-# Start fresh
-module purge
-
-# Load in order: compiler -> MPI -> libraries -> application
-module load gnu14
-module load openmpi5
-module load application
-```
-
-## Quick Reference
-
-### Essential Commands
-
-```bash
-# Find software
-module avail | grep -i name
-
-# Load software
-module load software/version
-
-# Check what's loaded
-module list
-
-# Get info
-module show software/version
-
-# Unload
-module unload software
-```
-
-### Common Modules
-
-```bash
-# Compilers (gnu12 is loaded by default)
-module load gnu14
-module load intel/2025.0
-
-# Languages
-module load python/3.11
-module load R/4.5.0
-module load julia/1.11.3
-
-# Applications
-module load matlab/r2024b
-module load gaussian
-module load ansys/2025R1
-module load stata
-
-# MPI (openmpi4 is loaded by default)
-module load openmpi5
-
-# GPU
-module load cuda/12.4
-module load cuda/12.6
-```
-
-## Next Steps
-
-- [Learn module system details →](modules.md)
-- [Submit computational jobs →](../running-programs/slurm.md)
-- [Optimize Python workflows →](../advanced/python-optimization.md)
-- [Use containers for complex software →](../advanced/containers.md)
-
-## Need Help?
-
-- **Software questions**: [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
-- **Installation requests**: Open ticket → Software Installation
-- **Compilation help**: Request consultation via support ticket
+- [Module System](modules.md) — how to load, search, and manage modules
+- [Common Scientific Programs](../running-programs/common-programs.md) — job script examples for popular software
+- [Miniconda](../advanced/miniconda.md) — Python environment management
+- [Containers](../advanced/containers.md) — running containerized software

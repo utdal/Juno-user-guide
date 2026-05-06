@@ -1,6 +1,6 @@
-site_name: Juno HPC Cluster User Guide
+site_name: Juno User Guide
 site_description: Documentation for the Juno HPC Cluster at UT Dallas
-site_url: https://juno.readthedocs.io
+site_url: https://utdallas-hpc-juno-ug.readthedocs-hosted.com/
 
 docs_dir: docs
 
@@ -16,11 +16,19 @@ markdown_extensions:
 
 theme:
   name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    primary: custom
+    accent: custom
   features:
     - navigation.tabs
     - navigation.sections
     - search.suggest
     - search.highlight
+
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - Home: index.md
@@ -36,6 +44,7 @@ nav:
     - Available Software: working-on-juno/software.md
   - Running Programs:
     - SLURM Job Scheduler: running-programs/slurm.md
+    - Monitoring Jobs and Cluster State: running-programs/advanced-slurm.md
     - Common Scientific Programs: running-programs/common-programs.md
     - Parallelism Models: running-programs/parallelism.md
     - Launcher: running-programs/launcher.md
@@ -43,6 +52,10 @@ nav:
     - GUI Programs: gui-and-tools/gui-programs.md
     - JupyterLab: gui-and-tools/jupyter.md
     - VSCode: gui-and-tools/vscode.md
+  - AI & Machine Learning:
+    - GPU Computing on Juno: ai-and-ml/index.md
+    - PyTorch Training Jobs: ai-and-ml/pytorch-training.md
+    - GPU Performance & Monitoring: ai-and-ml/gpu-performance.md
   - Advanced:
     - Containers: advanced/containers.md
     - Python Optimization: advanced/python-optimization.md
