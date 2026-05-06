@@ -344,7 +344,7 @@ conda env export --from-history > ml_gpu.yml
 ```bash
 #!/bin/bash
 #SBATCH -J ml_training
-#SBATCH -p gpu
+#SBATCH -p h100
 #SBATCH --gres=gpu:1
 #SBATCH -c 4
 #SBATCH --mem=32GB

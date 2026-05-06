@@ -10,11 +10,12 @@ Juno is a high performance computing cluster consisting of multiple computers (n
 
 ### Cluster Components
 
-The cluster contains **101 compute nodes** organized into three types:
+The cluster contains **104 nodes** organized into four types:
 
 - **CPU compute nodes**: 94 nodes with 2× AMD EPYC CPUs (64 cores, 384 GB RAM each)
 - **GPU compute nodes**: 7 nodes with NVIDIA H100 or A30 GPUs
-- **Login nodes**: Your entry point to the cluster (3 nodes)
+- **Login nodes**: Your entry point to the cluster (2 nodes, `juno-l-01` and `juno-l-02`)
+- **Head node**: Where the job scheduler (SLURM) is hosted
 
 All compute nodes are interconnected via HDR100 InfiniBand for fast MPI communication.
 

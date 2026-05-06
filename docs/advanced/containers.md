@@ -262,7 +262,7 @@ apptainer exec ~/scratch/mycontainer.sif \
 ```bash
 #!/bin/bash
 #SBATCH -J gpu_container
-#SBATCH -p gpu
+#SBATCH -p a30			# or h100
 #SBATCH --gres=gpu:1
 #SBATCH -c 4
 #SBATCH --mem=32GB
@@ -334,7 +334,7 @@ apptainer pull docker://nvcr.io/nvidia/pytorch:22.12-py3
 ```bash
 #!/bin/bash
 #SBATCH -J tf_training
-#SBATCH -p gpu
+#SBATCH -p h100
 #SBATCH --gres=gpu:1
 #SBATCH -t 8:00:00
 
