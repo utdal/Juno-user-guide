@@ -48,6 +48,7 @@ Fair share is a system that remembers who has been running jobs recently:
 | 2 weeks later | 1.0 | 1.0 | Equal priority |
 
 **Key Points**:
+
 - User with higher fair share gets priority
 - Heavy users temporarily get lower priority
 - Ensures occasional users aren't stuck behind constant users
@@ -93,6 +94,7 @@ srun --pty bash
 Your prompt changes from `juno-l-01` (login node) to something like `c-04-01` (compute node).
 
 **Common options for salloc**:
+
 - `-p` or `--partition`: Specify partition (normal, gpu, etc.)
 - `--mem`: Memory allocation (e.g., `2GB`, `16GB`)
 - `-c` or `--cpus-per-task`: Number of CPUs
@@ -260,6 +262,7 @@ squeue -p normal
 ```
 
 **Output columns**:
+
 - `JOBID`: Job identifier
 - `PARTITION`: Queue name
 - `NAME`: Job name
@@ -333,6 +336,7 @@ sbatch --dependency=afterok:$job1 job2.sh
 ```
 
 **Dependency types**:
+
 - `afterok`: Start after successful completion
 - `afternotok`: Start only if previous failed
 - `afterany`: Start after completion (success or failure)
@@ -348,12 +352,14 @@ squeue -u $USER -l
 ```
 
 **Common reasons**:
+
 - `Resources`: No available resources
 - `Priority`: Other jobs have higher priority
 - `QOSMaxCpuPerUserLimit`: Exceeded CPU limit
 - `AssocGrpMemLimit`: Exceeded memory limit
 
 **Solutions**:
+
 - Reduce resource requests
 - Wait for fair share to recover
 - Check if requesting too much memory/CPUs
@@ -366,6 +372,7 @@ cat error_12345.txt
 ```
 
 **Common issues**:
+
 - Module not loaded
 - Incorrect paths
 - Permission errors
@@ -374,6 +381,7 @@ cat error_12345.txt
 ### Out of Memory Error
 
 **Symptoms**:
+
 - Job killed with exit code 137
 - "Out of memory" in error file
 

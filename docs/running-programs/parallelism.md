@@ -20,12 +20,14 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 **Concept**: Multiple threads share the same memory space
 
 **Best for**:
+
 - Single-node parallel programs
 - Loop parallelization
 - Embarrassingly parallel tasks on one node
 - Quick parallelization of existing code
 
 **Not suitable for**:
+
 - Multi-node programs
 - Problems requiring distributed memory
 
@@ -34,12 +36,14 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 **Concept**: Multiple processes with separate memory, communicate via message passing
 
 **Best for**:
+
 - Multi-node applications
 - Large-scale parallel computing
 - Problems requiring inter-process communication
 - Scalable applications
 
 **Not suitable for**:
+
 - Simple single-node programs (overhead not worth it)
 - Shared-state algorithms without explicit communication
 
@@ -48,6 +52,7 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 **Concept**: Combines MPI across nodes with OpenMP within nodes
 
 **Best for**:
+
 - Large-scale computations
 - Maximizing resource utilization
 - Memory-intensive applications
@@ -58,6 +63,7 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 **Concept**: Offload massively parallel computations to GPU
 
 **Best for**:
+
 - Data-parallel operations
 - Matrix operations
 - Deep learning
@@ -395,6 +401,7 @@ srun ./hybrid_program
 ```
 
 **Calculation**:
+
 - 4 nodes × 4 MPI ranks per node = 16 total MPI ranks
 - Each MPI rank uses 4 OpenMP threads
 - Total: 64 CPU cores (16 × 4)
@@ -561,10 +568,12 @@ Is your problem parallel?
 ### Scaling
 
 **Strong scaling**: Fixed problem size, increase processors
+
 - Goal: Reduce runtime
 - Limited by Amdahl's Law
 
 **Weak scaling**: Increase problem size with processors
+
 - Goal: Maintain runtime
 - Better scaling potential
 
@@ -580,6 +589,7 @@ N = Number of processors
 ```
 
 **Example**: If 10% of code is serial:
+
 - 10 processors: max speedup = 5.3×
 - 100 processors: max speedup = 9.2×
 - ∞ processors: max speedup = 10×
@@ -587,6 +597,7 @@ N = Number of processors
 ### Communication Overhead
 
 **Minimize communication**:
+
 - Larger messages, fewer sends
 - Overlap communication and computation
 - Use collective operations when possible
@@ -741,6 +752,7 @@ done
 ### Example Repositories
 
 Check HPC website for example codes:
+
 - OpenMP examples
 - MPI tutorials
 - Hybrid applications
@@ -749,14 +761,17 @@ Check HPC website for example codes:
 ### Learning Resources
 
 **OpenMP**:
+
 - [openmp.org/resources](https://www.openmp.org/resources/)
 - Tutorial: [hpc-tutorials.llnl.gov/openmp](https://hpc-tutorials.llnl.gov/openmp/)
 
 **MPI**:
+
 - [mpi-forum.org](https://www.mpi-forum.org/)
 - Tutorial: [mpitutorial.com](https://mpitutorial.com/)
 
 **CUDA**:
+
 - [developer.nvidia.com/cuda-zone](https://developer.nvidia.com/cuda-zone)
 
 ## Next Steps

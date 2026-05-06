@@ -80,6 +80,7 @@ echo "All tasks completed."
 ```
 
 **How it works**:
+
 - Launcher reads `tasks.txt`
 - Distributes tasks across all allocated cores (2 nodes × 64 cores = 128 cores)
 - Runs tasks until all complete
@@ -389,10 +390,12 @@ with open('retry_tasks.txt', 'w') as f:
 ### Task Granularity
 
 **Too short** (< 1 minute):
+
 - High overhead
 - Poor efficiency
 
 **Too long** (> 1 hour):
+
 - Load imbalance
 - Wasted resources if job fails
 
@@ -483,16 +486,19 @@ cat input_files.txt | parallel -j 16 python process.py {}
 ### Comparison
 
 **Choose Launcher when**:
+
 - Multi-node capability needed
 - Simple task list preferred
 - Automatic load balancing desired
 
 **Choose Array Jobs when**:
+
 - Tasks are indexed/numbered
 - Simple pattern (same command, different input)
 - Native SLURM features needed
 
 **Choose GNU Parallel when**:
+
 - Single-node sufficient
 - Need shell features (pipes, etc.)
 - Complex command construction
@@ -571,11 +577,13 @@ echo $LAUNCHER_WORKDIR
 ### Slow Performance
 
 **Possible causes**:
+
 - Tasks too short (overhead dominates)
 - I/O bottleneck (all tasks accessing same files)
 - Insufficient resources (not enough cores)
 
 **Solutions**:
+
 - Batch multiple small tasks together
 - Use scratch space for I/O
 - Increase core count
@@ -583,11 +591,13 @@ echo $LAUNCHER_WORKDIR
 ### Uneven Load
 
 **Some cores finish early**:
+
 - Tasks have variable runtime
 - Expected behavior
 - Launcher handles automatically
 
 **If severe**:
+
 - Break long tasks into smaller pieces
 - Sort tasks by expected runtime
 

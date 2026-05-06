@@ -13,6 +13,7 @@ Visit: **[hpc.utdallas.edu/services](https://hpc.utdallas.edu/services)**
 This is your primary portal for all HPC support needs.
 
 **What you'll find**:
+
 - Contact information
 - Service tiles for different systems (Juno, Ganymede, etc.)
 - Quick links to request specific services
@@ -55,6 +56,7 @@ If you're unsure which service to request or need immediate guidance:
 **Email**: [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 
 **When to use direct email**:
+
 - Urgent issues affecting active jobs
 - Unclear which service category to use
 - Follow-up on existing ticket
@@ -86,6 +88,7 @@ Attached: job script and error log
 ### For Software Requests
 
 **Include**:
+
 - Software name and version
 - Purpose/use case
 - Required dependencies
@@ -115,6 +118,7 @@ Reference: https://www.tensorflow.org/install
 ### For Account Issues
 
 **Specify**:
+
 - NetID or username
 - Nature of issue (can't login, quota exceeded, etc.)
 - When problem started
@@ -140,6 +144,7 @@ For time-sensitive problems affecting active research:
 3. Provide deadline context
 
 We prioritize:
+
 - Production runs with deadlines
 - Grant-funded research time constraints
 - Issues affecting multiple users
@@ -149,6 +154,7 @@ We prioritize:
 The HPC support team operates during business hours (M-F, 8AM–5PM CST). You can visit us in person at **AD 3.206** (Administration Building).
 
 **Emergency contacts**:
+
 - Available for critical cluster-wide issues
 - Contact information provided in account welcome email
 
@@ -157,6 +163,7 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 ### 1. General User Support
 
 **Use for**:
+
 - How-to questions
 - Job submission issues
 - Performance optimization advice
@@ -166,6 +173,7 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 - Login issues
 
 **Example tickets**:
+
 - "How do I request GPU resources?"
 - "My job is pending - what's wrong?"
 - "Need help optimizing parallel code"
@@ -173,12 +181,14 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 ### 2. Software Installation
 
 **Use for**:
+
 - New software requests
 - Version updates
 - Compiler issues
 - Library dependencies
 
 **What we provide**:
+
 - Centrally installed software via modules
 - Guidance for user installations
 - Container support
@@ -186,12 +196,14 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 ### 3. Training and Documentation
 
 **Use for**:
+
 - Orientation session scheduling
 - Custom training requests
 - Documentation improvements
 - Tutorial requests
 
 **Available**:
+
 - Juno Orientation (recorded sessions)
 - One-on-one consultations
 - Workshops on specific topics
@@ -199,6 +211,7 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 ### 4. Storage and Data
 
 **Use for**:
+
 - Quota increases
 - Data transfer assistance
 - Backup inquiries
@@ -207,6 +220,7 @@ The HPC support team operates during business hours (M-F, 8AM–5PM CST). You ca
 ### 5. Account Management
 
 **Use for**:
+
 - New account requests
 - Group management
 - Access modifications
@@ -219,6 +233,7 @@ Before opening a ticket, check if your question is answered in existing resource
 ### Documentation
 
 **Primary docs**: [hpc.utdallas.edu](https://hpc.utdallas.edu)
+
 - User guides
 - Quick start guides
 - Best practices
@@ -227,6 +242,7 @@ Before opening a ticket, check if your question is answered in existing resource
 ### Recorded Sessions
 
 **Juno Orientation**: Available on documentation site
+
 - Covers basics of using Juno
 - SLURM job submission
 - Storage and data management
@@ -235,6 +251,7 @@ Before opening a ticket, check if your question is answered in existing resource
 ### Knowledge Base
 
 Common topics documented:
+
 - Module system usage
 - Job script examples
 - Troubleshooting guides
@@ -245,6 +262,7 @@ Common topics documented:
 ### Office Hours
 
 Check the HPC Services page for scheduled office hours:
+
 - Drop-in virtual sessions
 - Ask questions in real-time
 - Get immediate guidance
@@ -252,6 +270,7 @@ Check the HPC Services page for scheduled office hours:
 ### Workshops and Training
 
 Periodic workshops on:
+
 - Introduction to HPC
 - Parallel programming with OpenMP and MPI
 - Python on HPC
@@ -265,6 +284,7 @@ Subscribe to HPC mailing list for announcements.
 ### Available Consultations
 
 **One-on-one sessions** for:
+
 - Code optimization
 - Workflow design
 - Scaling studies
@@ -272,6 +292,7 @@ Subscribe to HPC mailing list for announcements.
 - Grant proposal support
 
 **Request consultation**:
+
 - Open ticket → "Consultation Request"
 - Describe your project and needs
 - We'll schedule a meeting
@@ -292,6 +313,7 @@ We value your input to improve services:
 ### Thumbs Down Button
 
 At the bottom of every response in documentation or tickets:
+
 - Click thumbs down if unhelpful
 - Provide specific feedback
 - Helps us improve
@@ -299,6 +321,7 @@ At the bottom of every response in documentation or tickets:
 ### Surveys
 
 Periodic user satisfaction surveys:
+
 - Share your experience
 - Suggest improvements
 - Identify needs
@@ -306,6 +329,7 @@ Periodic user satisfaction surveys:
 ### Direct Feedback
 
 Email suggestions to [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu):
+
 - Documentation improvements
 - New features requests
 - Service enhancements
@@ -344,11 +368,13 @@ We're committed to resolving all issues satisfactorily.
 ### Cluster-Wide Issues
 
 If you notice problems affecting everyone:
+
 - Cluster unreachable
 - File system failures
 - Widespread job failures
 
 **Report immediately**:
+
 - Email [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 - Mark as URGENT
 - Describe the issue and impact
@@ -356,12 +382,14 @@ If you notice problems affecting everyone:
 ### Security Concerns
 
 **Report immediately** if you observe:
+
 - Unauthorized access attempts
 - Suspicious activity in your account
 - Compromised credentials
 - Security vulnerabilities
 
 **Contact**: 
+
 - [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 - UT Dallas IT Security: [infosecurity@utdallas.edu](mailto:infosecurity@utdallas.edu)
 

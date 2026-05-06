@@ -736,6 +736,7 @@ print(f"Numba parallel: {t1-t0:.2f}s")
 ### 1. Premature Optimization
 
 **Don't**:
+
 - Optimize before profiling
 - Sacrifice readability for minor gains
 - Over-engineer simple problems
@@ -743,6 +744,7 @@ print(f"Numba parallel: {t1-t0:.2f}s")
 ### 2. Wrong Tool
 
 **Don't**:
+
 - Use Cython for everything (NumPy often enough)
 - Parallelize serial bottlenecks
 - Use GPU for small data
@@ -750,6 +752,7 @@ print(f"Numba parallel: {t1-t0:.2f}s")
 ### 3. Memory Issues
 
 **Watch for**:
+
 - Copying large arrays unnecessarily
 - Creating temporary arrays in loops
 - Not using appropriate data types

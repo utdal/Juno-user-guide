@@ -189,6 +189,7 @@ If connection times out:
 ### Authentication Failed
 
 **Wrong password**:
+
 - Verify credentials
 - Check Caps Lock
 - Reset password if needed
@@ -221,6 +222,7 @@ tmux attach -t mysession
     Login nodes are shared resources. **Do not run computational work on login nodes.**
 
 **Acceptable on login nodes**:
+
 - Editing files
 - Compiling code
 - Transferring small files
@@ -228,6 +230,7 @@ tmux attach -t mysession
 - Light testing
 
 **Not acceptable on login nodes**:
+
 - Running simulations
 - Processing large datasets
 - Memory-intensive operations

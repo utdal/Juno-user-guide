@@ -58,12 +58,14 @@ code ~/scratch/project
 ### File Explorer
 
 **Left sidebar**:
+
 - Browse Juno filesystem
 - Create/delete/rename files
 - Drag and drop files
 - Search files
 
 **Right-click options**:
+
 - Open in Terminal
 - Reveal in File Explorer
 - Copy Path
@@ -72,11 +74,13 @@ code ~/scratch/project
 ### Integrated Terminal
 
 **Open terminal**:
+
 - Press `` Ctrl+` `` (backtick)
 - Or: View → Terminal
 - Multiple terminals supported
 
 **Use terminal for**:
+
 - Running commands
 - Submitting jobs
 - Loading modules
@@ -85,6 +89,7 @@ code ~/scratch/project
 ### Editing Code
 
 **Features**:
+
 - Syntax highlighting (auto-detected)
 - Auto-completion
 - Code formatting
@@ -92,6 +97,7 @@ code ~/scratch/project
 - Multi-cursor editing
 
 **Keyboard shortcuts**:
+
 - `Ctrl+S`: Save
 - `Ctrl+F`: Find
 - `Ctrl+H`: Find and replace
@@ -110,6 +116,7 @@ Publisher: Microsoft
 ```
 
 **Features**:
+
 - IntelliSense
 - Linting
 - Debugging
@@ -150,6 +157,7 @@ Publisher: GitKraken
 ```
 
 **Features**:
+
 - Enhanced Git integration
 - Blame annotations
 - File history
@@ -158,14 +166,17 @@ Publisher: GitKraken
 ### Other Useful Extensions
 
 **Markdown All in One**:
+
 - Preview markdown files
 - Useful for documentation
 
 **YAML**:
+
 - Syntax checking for YAML files
 - Useful for configuration
 
 **C/C++** (Microsoft):
+
 - IntelliSense for C/C++
 - Debugging support
 
@@ -230,6 +241,7 @@ python my_script.py
 ```
 
 **Debug**:
+
 - Set breakpoints (click left of line numbers)
 - Press `F5` to start debugging
 - Step through code with `F10`, `F11`
@@ -263,6 +275,7 @@ python my_script.py
 ### Automatic Sync
 
 VSCode automatically syncs:
+
 - Edits you make in VSCode
 - File creation/deletion
 - No manual upload needed
@@ -270,10 +283,12 @@ VSCode automatically syncs:
 ### Manual Download/Upload
 
 **Download files**:
+
 - Right-click file → Download
 - Downloads to local computer
 
 **Upload files**:
+
 - Drag and drop into VSCode explorer
 - Or use SCP/SFTP separately
 
@@ -436,6 +451,7 @@ Host juno
 ### Extensions Not Working
 
 **Install on SSH**:
+
 - Extensions → Find extension
 - Click "Install in SSH: juno"
 
@@ -455,12 +471,14 @@ which python
 ### 1. Use Workspaces
 
 Save workspace with specific settings:
+
 - File → Save Workspace As
 - Saves all open folders and settings
 
 ### 2. Version Control
 
 **Always use Git**:
+
 - Track changes
 - Collaborate easily
 - Backup code
@@ -489,6 +507,7 @@ results/
 ### 5. Remote Extensions Only
 
 Install extensions on SSH side only when needed:
+
 - Reduces local resource usage
 - Faster VSCode startup
 

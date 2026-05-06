@@ -576,6 +576,7 @@ conda activate myenv
 ```
 
 See:
+
 - [Python Optimization Guide](../advanced/python-optimization.md)
 - [Miniconda Guide](../advanced/miniconda.md)
 

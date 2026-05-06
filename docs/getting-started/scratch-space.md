@@ -66,6 +66,7 @@ du -h --max-depth=1 ~/scratch | sort -h
 ```
 
 **High I/O workloads**:
+
 - Processing large datasets
 - Writing many small files
 - Frequent read/write operations
@@ -88,21 +89,25 @@ python analyze.py
 ### Inappropriate Uses
 
 **Long-term storage**: 
+
 - Data you need after project completes
 - Results for publication
 - Reference datasets
 
 **Irreplaceable data**:
+
 - Original data without backup
 - Unique experimental results
 - Data that can't be regenerated
 
 **Small files**:
+
 - Source code (use home directory)
 - Scripts and configuration files
 - Small reference files
 
 **Archival purposes**:
+
 - Completed project data
 - Historical records
 - Backup copies
@@ -112,6 +117,7 @@ python analyze.py
 ### Automatic Purge Rules
 
 **Scratch policy**:
+
 - Files not accessed in **[45 days]** may be purged
 - System checks **access time** (last read or write)
 - Purge runs automatically on schedule
@@ -126,12 +132,14 @@ stat ~/scratch/myfile.txt
 ```
 
 **Not purged if you**:
+
 - Read the file
 - Write to the file
 - Run programs that access it
 - Copy it (as destination)
 
 **Still purged if you only**:
+
 - Look at directory listing
 - Check file properties
 - Navigate through directories
@@ -403,6 +411,7 @@ cp output/* ~/scratch/results/
 4. Regenerate data if possible
 
 **Prevention**:
+
 - Regular backups
 - Monitor age of files
 - Touch files to update access time
@@ -437,11 +446,13 @@ du -sh ~/scratch
 ### Slow I/O on Scratch
 
 **Possible causes**:
+
 - Many small files (use fewer large files)
 - Many users accessing simultaneously
 - Filesystem contention
 
 **Solutions**:
+
 - Combine small files into larger archives
 - Use node-local $TMPDIR for temporary I/O
 - Schedule jobs during off-peak hours

@@ -29,6 +29,7 @@ Juno accounts are available to:
 [Submit an account request](https://websites.utdallas.edu/research/hpc-account/)
 
 **Required Information**:
+
 - Full name, email adress, and NetID of the principal investigator (PI)
 - Full name and NetID of the user
 - Department/College affiliation
@@ -78,6 +79,7 @@ Attending (or watching a recording of) the Juno Orientation is strongly recommen
 ### Acceptable Use
 
 Users must:
+
 - Use resources for approved research/academic purposes only
 - Follow UT Dallas IT policies
 - Respect fair-share scheduling
@@ -103,6 +105,7 @@ Upon account deactivation, contact [circ-assist@utdallas.edu](mailto:circ-assist
 ### Request Not Approved?
 
 **Common reasons**:
+
 - Missing faculty sponsor approval
 - Incomplete request form
 - Lack of NetID or university affiliation
@@ -114,6 +117,7 @@ Upon account deactivation, contact [circ-assist@utdallas.edu](mailto:circ-assist
 ### Account Locked?
 
 Contact support immediately if you believe your account has been locked due to:
+
 - Failed login attempts
 - Security concerns
 - Policy violations

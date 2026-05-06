@@ -18,6 +18,7 @@ Juno has two storage tiers:
 **Purpose**: Configuration files, login scripts, user-installed software, small input/output files
 
 **Characteristics**:
+
 - ✓ Backed up daily
 - ✓ Persistent (data retained indefinitely)
 - ✓ Private to your account
@@ -25,6 +26,7 @@ Juno has two storage tiers:
 - ✗ Not suitable for batch job I/O
 
 **Best for**:
+
 - Source code and scripts
 - Configuration files (`.bashrc`, SSH keys, etc.)
 - Small reference datasets
@@ -42,6 +44,7 @@ mfsgetquota -H ~
 **Purpose**: User-installed software, large software packages, large data files, results files
 
 **Characteristics**:
+
 - ✓ Backed up daily
 - ✓ Persistent (data retained indefinitely)
 - ✓ Private to your account
@@ -49,6 +52,7 @@ mfsgetquota -H ~
 - ✓ Can be used for batch jobs with light to moderate I/O
 
 **Best for**:
+
 - Conda environments and large software installs
 - Large datasets and results files
 
@@ -64,6 +68,7 @@ mfsgetquota -H ~/work
 **Purpose**: Shared data for research groups
 
 **Characteristics**:
+
 - ✓ Shared among group members
 - ✓ Quota: 1 TB or more (varies by group)
 - ✓ Persistent storage
@@ -72,6 +77,7 @@ mfsgetquota -H ~/work
 - ✗ Requires PI request
 
 **Best for**:
+
 - Shared datasets and models
 - Group software installations
 - Collaborative project results
@@ -85,6 +91,7 @@ mfsgetquota -H ~/work
 **Purpose**: High-speed temporary storage for I/O during batch jobs
 
 **Characteristics**:
+
 - ✓ Quota: 30 TB (soft limit)
 - ✓ Up to 10× faster than Home/Work/Group for large I/O
 - ✓ Private to your account
@@ -93,6 +100,7 @@ mfsgetquota -H ~/work
 - ✗ Not suitable for long-term storage
 
 **Best for**:
+
 - Large input/output files during active jobs
 - Intermediate computation results
 - Any job requiring heavy I/O
@@ -161,6 +169,7 @@ du -sh ~/scratch
 5. Request quota increase (if justified)
 
 **Request quota increase**:
+
 - Open ticket at HPC Services page
 - Justify need with details
 - Specify amount needed
@@ -208,6 +217,7 @@ exit                       # Quit
 ```
 
 **GUI clients**:
+
 - **FileZilla**: Cross-platform, free
 - **WinSCP**: Windows only, free
 - **Cyberduck**: Mac/Windows, free
@@ -217,6 +227,7 @@ exit                       # Quit
 #### Rsync
 
 **Advantages**:
+
 - Only transfers changed files
 - Resumes interrupted transfers
 - Preserves permissions and timestamps
@@ -233,6 +244,7 @@ rsync -avzP netID@juno.utdallas.edu:~/scratch/results/ ./results/
 ```
 
 **Common rsync options**:
+
 - `-a`: Archive mode (preserves permissions, timestamps)
 - `-v`: Verbose output
 - `-z`: Compress during transfer
@@ -260,6 +272,7 @@ rsync -z largefile.txt netID@juno.utdallas.edu:~/scratch
 ```
 
 **2. Avoid compression for already-compressed files**:
+
 - Don't compress .gz, .zip, .bz2, .mp4, .jpg, etc.
 - Adds overhead without benefit
 
@@ -270,6 +283,7 @@ parallel -j 4 rsync -avzP {} netID@juno.utdallas.edu:~/scratch ::: file1 file2 f
 ```
 
 **4. Transfer during off-peak hours**:
+
 - Late evening/early morning typically faster
 - Less network congestion
 
@@ -312,12 +326,14 @@ rsync -avzP ~/scratch/large_output/ \
 ### When to Compress
 
 **Compress**:
+
 - Text files (code, logs, CSV)
 - Uncompressed images
 - Before long-term storage
 - Before transfer (if not already compressed)
 
 **Don't compress**:
+
 - Already compressed files
 - Files needed for immediate processing
 - Small files (overhead not worth it)
@@ -426,6 +442,7 @@ cp output_data.txt ~/scratch/results/
 ### Regular Cleanup
 
 **Set reminders** to clean up:
+
 - Old job output files
 - Intermediate results
 - Scratch space (before purge)
@@ -456,6 +473,7 @@ find ~/scratch -name "*.tmp" -mtime +7 -delete
 **Critical Data:**Never rely solely on HPC storage for critical data. Always maintain backups.
 
 **Backup destinations**:
+
 - Personal computer
 - External hard drive
 - UT Dallas cloud storage (Box)

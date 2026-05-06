@@ -498,12 +498,14 @@ Needed by: [date]
 ### What Gets Installed
 
 **Typically installed system-wide**:
+
 - Popular software with multiple users
 - Licensed software with site license
 - Software requiring root access
 - Complex dependencies
 
 **Better as user install**:
+
 - Python/R packages
 - Software with simple installation
 - Frequently updated software
@@ -561,11 +563,13 @@ command version
 ### Choosing Compilers
 
 **GNU**: 
+
 - Free, widely compatible
 - Good general-purpose performance
 - Best for portability
 
 **Intel**:
+
 - Optimized for Intel processors
 - May offer better performance on Juno
 - Commercial (but available on cluster)
@@ -573,20 +577,24 @@ command version
 ### MPI Implementations
 
 **OpenMPI**: 
+
 - Most common, good compatibility
 - Active development
 
 **Intel MPI**: 
+
 - Optimized for Intel architecture
 - Good for large-scale jobs
 
 **MPICH**: 
+
 - Reference implementation
 - Lightweight
 
 ### Library Choices
 
 **OpenBLAS**:
+
 - Open source alternative
 - Good performance
 

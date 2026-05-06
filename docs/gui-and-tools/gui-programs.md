@@ -21,21 +21,25 @@ Open OnDemand provides a web-based interface to access Juno resources without in
 ### Dashboard Features
 
 **Files**
+
 - Browse your home directory
 - Upload/download files
 - Edit text files directly in browser
 - Create new directories
 
 **Jobs**
+
 - View active jobs
 - Job composer for creating job scripts
 - Job templates
 
 **Clusters**
+
 - Shell access (web-based terminal)
 - No SSH client needed
 
 **Interactive Apps**
+
 - Pre-configured GUI applications
 - Launch with a few clicks
 
@@ -44,6 +48,7 @@ Open OnDemand provides a web-based interface to access Juno resources without in
 #### Available Applications
 
 Common interactive apps include:
+
 - Jupyter Notebook/Lab
 - RStudio
 - Desktop (full Linux desktop environment)
@@ -98,12 +103,14 @@ Launch → Connect to RStudio
 ### Managing Interactive Sessions
 
 **View Active Sessions**:
+
 - Go to "My Interactive Sessions"
 - See all running interactive apps
 - Click "Delete" to end session early
 - Click application link to reconnect
 
 **Best Practices**:
+
 - Request only the resources you need
 - End sessions when finished (don't waste resources)
 - Sessions automatically end when time expires

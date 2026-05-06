@@ -5,6 +5,7 @@
 This guide covers essential Linux commands for working on Juno. While not comprehensive, it provides the minimum knowledge needed to navigate and work effectively on the HPC cluster.
 
 For deeper Linux knowledge, consider:
+
 - Online tutorials: [linuxcommand.org](https://linuxcommand.org)
 - Books: "The Linux Command Line" by William Shotts
 - Man pages: `man command_name`
@@ -71,6 +72,7 @@ cd ../other         # Go up one level, then to other/
 ```
 
 **Special directories**:
+
 - `.` = current directory
 - `..` = parent directory
 - `~` = home directory
@@ -280,6 +282,7 @@ chmod -R 755 directory/
 ```
 
 **Common permission codes**:
+
 - `644`: Standard file (rw-r--r--)
 - `755`: Executable file or directory (rwxr-xr-x)
 - `700`: Private file/directory (rwx------)

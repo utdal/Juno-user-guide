@@ -180,6 +180,7 @@ apptainer run mycontainer.sif arg1 arg2
 ## Directory Binding
 
 By default, Singularity binds:
+
 - Home directory (`$HOME`)
 - Current directory (`$PWD`)
 - `/tmp`

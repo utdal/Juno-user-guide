@@ -51,6 +51,7 @@ Contact support if you need a quota increase.
 ### How do I transfer large files to Juno?
 
 **Best options**:
+
 - **rsync**: For synchronization
 - **scp/sftp**: For smaller transfers
 
@@ -80,6 +81,7 @@ squeue --me
 ```
 
 Common reasons:
+
 - **Resources**: No available nodes with requested resources
 - **Priority**: Other jobs have higher priority (fair share)
 - **QOSLimit**: You've hit resource limits
@@ -89,12 +91,14 @@ Common reasons:
 ### Can I run programs directly on the login node?
 
 Only for **light tasks**:
+
 - ✓ Editing files
 - ✓ Compiling code  
 - ✓ Small file operations
 - ✓ Submitting jobs
 
 **Never** on login nodes:
+
 - ✗ Running simulations
 - ✗ Processing large datasets
 - ✗ Long-running computations
@@ -153,6 +157,7 @@ See [SLURM Guide](../running-programs/slurm.md) for GPU job examples.
 ### Can I run multiple jobs simultaneously?
 
 Yes. Per-user limits are:
+
 - **Max 4 running jobs** at a time
 - **Max 8 submitted jobs** (queued + running)
 
@@ -195,6 +200,7 @@ Check [Module System Guide](../working-on-juno/modules.md).
 ### Can I install my own software?
 
 Yes! You can install software in:
+
 - Your home directory: `$HOME/software` (not recommended due to limited space)
 - Your work and group directories (recommended) using:
     - Conda/mamba environments (recommended)
@@ -270,6 +276,7 @@ Request a [consultation](../support/getting-help.md) for optimization help.
 ### Should I request more CPUs or more memory?
 
 Depends on your workload:
+
 - **CPU-bound**: Computation-heavy → request more CPUs
 - **Memory-bound**: Large datasets → request more memory
 
@@ -278,6 +285,7 @@ Monitor with `seff JOBID` after jobs complete.
 ### How many CPUs should I request?
 
 Start with what your program can effectively use:
+
 - Serial programs: 1 CPU
 - Parallel programs: Check documentation for scaling
 - Don't request more than your code can utilize
@@ -412,6 +420,7 @@ Host juno
 ### Should I run many small jobs or one big job?
 
 Depends on your workflow:
+
 - **Independent tasks**: Use job arrays (more efficient)
 - **Sequential pipeline**: One job with dependencies
 - **True parallel work**: One large parallel job
@@ -425,11 +434,13 @@ See [High Throughput guide](../running-programs/launcher.md).
 ### What's the acceptable use policy?
 
 Resources must be used for:
+
 - Academic research
 - Coursework (if approved)
 - UT Dallas affiliated work
 
 Not allowed:
+
 - Personal projects
 - Commercial work (without agreement)
 - Cryptocurrency mining
@@ -448,6 +459,7 @@ Not allowed:
 ### What happens when I graduate/leave?
 
 Notify HPC support. You'll have grace period to:
+
 - Download data
 - Complete ongoing computations
 - Transfer projects to another user
