@@ -19,7 +19,23 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 
 **Concept**: Multiple threads share the same memory space
 
-![OpenMP shared-memory model — multiple threads on a single node, all reading and writing a shared memory space with one address space.](../images/parallelism-openmp.png)
+```
+  Single Node  (#SBATCH -N 1  -c 16  +  export OMP_NUM_THREADS=16)
+  ┌────────────────────────────────────────────────────────────────┐
+  │  Thread 0    Thread 1    Thread 2   ...   Thread N-1           │
+  │  ┌────────┐  ┌────────┐  ┌────────┐      ┌────────┐           │
+  │  │ core 0 │  │ core 1 │  │ core 2 │      │ core N │           │
+  │  └───┬────┘  └───┬────┘  └───┬────┘      └───┬────┘           │
+  │      │           │           │               │                 │
+  │      └───────────┴───────────┴───────────────┘                 │
+  │                              │                                 │
+  │                  ┌───────────┴────────────┐                    │
+  │                  │     Shared Memory      │                    │
+  │                  │   (one address space)  │                    │
+  │                  └────────────────────────┘                    │
+  └────────────────────────────────────────────────────────────────┘
+  All threads read/write the same memory — no network communication.
+```
 
 **Best for**:
 
@@ -37,7 +53,21 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 
 **Concept**: Multiple processes with separate memory, communicate via message passing
 
-![MPI distributed-memory model — multiple nodes each with their own memory, passing messages between processes over a network interconnect.](../images/parallelism-mpi.png)
+```
+  Node 1          Node 2          Node 3          Node 4
+  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐
+  │  Rank 0    │  │  Rank 1    │  │  Rank 2    │  │  Rank 3    │
+  │ ┌────────┐ │  │ ┌────────┐ │  │ ┌────────┐ │  │ ┌────────┐ │
+  │ │Memory 0│ │  │ │Memory 1│ │  │ │Memory 2│ │  │ │Memory 3│ │
+  │ └────────┘ │  │ └────────┘ │  │ └────────┘ │  │ └────────┘ │
+  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘  └─────┬──────┘
+        │               │               │               │
+        └───────────────┴───────────────┴───────────────┘
+                         HDR100 InfiniBand
+              MPI_Send / MPI_Recv / MPI_Bcast / MPI_Reduce
+  Each process has private memory — data must be explicitly sent.
+  (#SBATCH -N 4  -n 64  →  srun ./my_mpi_program)
+```
 
 **Best for**:
 
@@ -55,7 +85,22 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 
 **Concept**: Combines MPI across nodes with OpenMP within nodes
 
-![Hybrid MPI+OpenMP layout — MPI ranks communicate between nodes while OpenMP threads spread across cores within each node, combining both models.](../images/parallelism-hybrid.png)
+```
+  Node 1                                Node 2
+  ┌─────────────────────────────────┐   ┌─────────────────────────────────┐
+  │  MPI Rank 0                     │   │  MPI Rank 1                     │
+  │  ┌───────┬───────┬───────┬──────┐│  │  ┌───────┬───────┬───────┬──────┐│
+  │  │ thd 0 │ thd 1 │ thd 2 │thd 3 ││  │  │ thd 0 │ thd 1 │ thd 2 │thd 3 ││
+  │  └───────┴───────┴───────┴──────┘│  │  └───────┴───────┴───────┴──────┘│
+  │        OpenMP shared memory       │  │        OpenMP shared memory       │
+  └────────────────┬────────────────┘   └────────────────┬────────────────┘
+                   │                                      │
+                   └──────────── MPI messages ────────────┘
+                                 (InfiniBand)
+
+  (#SBATCH -N 2  --ntasks-per-node=1  --cpus-per-task=16)
+  (export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK  →  srun ./my_hybrid_program)
+```
 
 **Best for**:
 

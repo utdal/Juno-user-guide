@@ -89,11 +89,18 @@ The kernel indicator updates and your notebook now runs inside your conda enviro
 Use this method when you want to launch JupyterLab directly from within a conda environment — useful for workflows that depend on a tightly controlled software stack or where registering a kernel is not practical.
 
 ```
-Your browser  ──SSH tunnel──  juno-l-01 (login node)  ──internal net──  g-05-01 (compute node)
-localhost:8888                                                            JupyterLab :8888
+  Your machine          Login node            Compute node
+  ┌────────────┐        ┌─────────────┐       ┌──────────────────────┐
+  │            │        │             │       │                      │
+  │  Browser   │        │  juno-l-01  │       │  g-05-01  (SLURM)    │
+  │            │        │             │       │                      │
+  │ localhost  │  SSH   │             │ net   │  JupyterLab          │
+  │   :8888    │◄──────►│             │◄─────►│    :8888             │
+  │            │ tunnel │             │       │                      │
+  └────────────┘        └─────────────┘       └──────────────────────┘
+  Your browser talks to localhost; the SSH tunnel forwards traffic
+  through the login node to JupyterLab on the compute node.
 ```
-
-![SSH port forwarding connection diagram — your local browser connects to localhost:8888, which tunnels through the login node to a JupyterLab instance running on the allocated compute node.](../images/jupyter-port-forwarding.png)
 
 ### Prerequisites
 

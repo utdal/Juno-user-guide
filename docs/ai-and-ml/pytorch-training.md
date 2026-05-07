@@ -164,7 +164,30 @@ if __name__ == '__main__':
 
 PyTorch's `DistributedDataParallel` (DDP) is the standard approach for using multiple GPUs. Each GPU runs a full copy of the model; gradients are synchronized across all GPUs after each backward pass via `AllReduce`.
 
-![PyTorch DDP AllReduce — each GPU holds a full model copy and processes a data shard; after the backward pass, gradients are averaged across all GPUs via AllReduce before the optimizer step.](../images/pytorch-ddp-allreduce.png)
+```
+  Each GPU holds a full model copy and processes a different data shard:
+
+   GPU 0           GPU 1           GPU 2           GPU 3
+  ┌───────────┐   ┌───────────┐   ┌───────────┐   ┌───────────┐
+  │ model (=) │   │ model (=) │   │ model (=) │   │ model (=) │
+  │           │   │           │   │           │   │           │
+  │  batch 0  │   │  batch 1  │   │  batch 2  │   │  batch 3  │
+  │     ▼     │   │     ▼     │   │     ▼     │   │     ▼     │
+  │  grad_0   │   │  grad_1   │   │  grad_2   │   │  grad_3   │
+  └─────┬─────┘   └─────┬─────┘   └─────┬─────┘   └─────┬─────┘
+        │               │               │               │
+        └───────────────┴───────────────┴───────────────┘
+                                 │
+                    AllReduce: avg(grad_0 … grad_3)
+                    via NCCL over NVLink / PCIe
+                                 │
+        ┌────────────────────────┴────────────────────────┐
+        ▼               ▼               ▼               ▼
+   optimizer       optimizer       optimizer       optimizer
+   step GPU 0      step GPU 1      step GPU 2      step GPU 3
+
+  All four model copies receive identical averaged gradients → stay in sync.
+```
 
 !!! tip "DDP vs. DataParallel"
     Use DDP, not the older `DataParallel`. DDP runs each GPU in its own process (no GIL bottleneck), uses efficient NCCL `AllReduce` for gradient sync, and scales to multiple nodes.

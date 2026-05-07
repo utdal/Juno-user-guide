@@ -86,7 +86,23 @@ echo "All tasks completed."
 - Runs tasks until all complete
 - Automatic load balancing
 
-![Launcher task distribution — a task list is spread across all cores on all allocated nodes; each core pulls the next available task when it finishes, ensuring full utilization.](../images/launcher-task-distribution.png)
+```
+  tasks.txt              Launcher distributes work across all allocated cores
+  ─────────────          ─────────────────────────────────────────────────────
+  python sim.py 001       Node 1  ├─ core  0 ─►  python sim.py 001
+  python sim.py 002               ├─ core  1 ─►  python sim.py 002
+  python sim.py 003               ├─ core  2 ─►  python sim.py 003
+  ...                             │  ...
+  python sim.py 128               └─ core 63 ─►  python sim.py 064
+
+  (128 tasks total)       Node 2  ├─ core  0 ─►  python sim.py 065
+                                  ├─ core  1 ─►  python sim.py 066
+                                  │  ...
+                                  └─ core 63 ─►  python sim.py 128
+
+  When a core finishes its task it immediately pulls the next one.
+  No manual assignment — Launcher handles load balancing automatically.
+```
 
 ## Advanced Usage
 

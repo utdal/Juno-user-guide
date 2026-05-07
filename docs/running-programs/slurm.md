@@ -55,7 +55,20 @@ Fair share is a system that remembers who has been running jobs recently:
 - Complete recovery takes two weeks
 - Fair Share value is reset at the beginning of the month
 
-![Fair share priority over time — two users' fair share values diverge after usage then converge back toward 1.0 over two weeks of inactivity.](../images/slurm-fair-share.png)
+```
+  Fair Share  (higher value = higher scheduling priority)
+
+              User A   User B   Who runs next?
+  ──────────────────────────────────────────────────────
+  Initially   ████████ ████████  1.0 vs 1.0  —  equal
+  After A     ████▌    ████████  0.6 vs 1.0  —  B wins
+  After B     ████▌    ████      0.6 vs 0.5  —  A wins
+  +1 week     ██████   █████▌    0.8 vs 0.7  —  A wins
+  +2 weeks    ████████ ████████  1.0 vs 1.0  —  equal
+  ──────────────────────────────────────────────────────
+              0────────────────1
+  Both users recover to 1.0 after ~2 weeks of inactivity.
+```
 
 ### Checking Your Fair Share
 
@@ -69,7 +82,27 @@ sshare -a
 
 Look for your username in the second column and check the last column for your fair share value.
 
-![SLURM job lifecycle — a job moves from PENDING (waiting for resources) to RUNNING (executing on compute nodes) to COMPLETED, FAILED, or TIMEOUT.](../images/slurm-job-lifecycle.png)
+```
+                     sbatch job.sh
+                           │
+                           ▼
+                 ┌─────────────────┐
+                 │    PENDING      │  waiting for resources / priority
+                 └────────┬────────┘
+                          │  resources allocated
+                          ▼
+                 ┌─────────────────┐
+                 │    RUNNING      │  executing on compute node(s)
+                 └────────┬────────┘
+                          │
+            ┌─────────────┼─────────────┐
+            ▼             ▼             ▼
+     ┌───────────┐  ┌──────────┐  ┌──────────┐
+     │ COMPLETED │  │  FAILED  │  │ TIMEOUT  │
+     │  exit 0   │  │ exit ≠ 0 │  │ walltime │
+     └───────────┘  └──────────┘  │ exceeded │
+                                   └──────────┘
+```
 
 ## Ways to Run Jobs
 
@@ -89,18 +122,45 @@ Look for your username in the second column and check the last column for your f
 
 ```bash
 # Step 1: Request resources
-salloc -p normal -N 1 -n 1 -c 4 --mem=2GB
+salloc -p normal -N 1 -n 1 -c 4 --mem=20GB
 
 # Step 2: Start interactive session
 srun --pty bash
 ```
 
-Your prompt changes from `juno-l-01` (login node) to something like `c-04-01` (compute node).
+Example session:
+
+```
+[dal281726@juno-l-02 ~]$ salloc -p normal -N 1 -n 1 -c 4 --mem=20GB
+salloc: Granted job allocation 195702
+Disk quotas for user dal281726, inode (file) count and disk usage:
+=========================  ====================  ================  ============
+Disk                       Usage                 Soft Limit        Hard Limit
+=========================  ====================  ================  ============
+/home/dal281726            70k|48GB              300k|50GB         320k|55GB
+/work/dal281726            107k|641GB            3.0M|1.0TB        3.1M|1.1TB
+=========================  ====================  ================  ============
+[dal281726@juno-l-02 ~]$ srun --pty bash
+Disk quotas for user dal281726, inode (file) count and disk usage:
+=========================  ====================  ================  ============
+Disk                       Usage                 Soft Limit        Hard Limit
+=========================  ====================  ================  ============
+/home/dal281726            70k|48GB              300k|50GB         320k|55GB
+/work/dal281726            107k|641GB            3.0M|1.0TB        3.1M|1.1TB
+=========================  ====================  ================  ============
+[dal281726@c-03-15 ~]$ squeue --me
+           JOBID    PARTITION               NAME      USER ST       TIME  NODES PRIORITY NODELIST(REASON)
+          195511       normal sys/dashboard/sys/ dal281726  R      54:43      1    98906 c-03-13
+          195702       normal        interactive dal281726  R       0:20      1    98831 c-03-15
+[dal281726@c-03-15 ~]$
+```
+
+Notice the prompt changed from `juno-l-02` (login node) to `c-03-15` (compute node) after `srun --pty bash`. The quota summary prints automatically on each node login. Use `squeue --me` to confirm your job is running and see which node you landed on.
 
 **Common options for salloc**:
 
 - `-p` or `--partition`: Specify partition (normal, h100, a30, etc.)
-- `--mem`: Memory allocation (e.g., `2GB`, `16GB`)
+- `--mem`: Memory allocation (e.g., `2GB`, `16GB`). **Default is 64 GB** if omitted — always set this explicitly, or your job may be memory-bound without warning.
 - `-c` or `--cpus-per-task`: Number of CPUs
 - `-t` or `--time`: Time limit (e.g., `1:00:00` for 1 hour)
 - `-N` or `--nodes`: Number of nodes
@@ -130,7 +190,7 @@ Create a file named `job.sh`:
 #SBATCH -N 1                  # Number of nodes
 #SBATCH -n 1                  # Number of tasks
 #SBATCH -c 1                  # CPUs per task
-#SBATCH --mem=2GB             # Memory
+#SBATCH --mem=2GB             # Memory (default is 64 GB if omitted)
 #SBATCH -t 1:00:00            # Time limit (hh:mm:ss)
 
 # Your commands here
@@ -265,7 +325,10 @@ squeue -j 12345
 squeue -p normal
 ```
 
-![Screenshot of terminal output from "squeue --me" showing a table with columns JOBID, PARTITION, NAME, USER, ST, TIME, NODES, and NODELIST(REASON) for a user's queued and running jobs.](../images/screenshot-squeue-output.png)
+```
+             JOBID    PARTITION               NAME      USER ST       TIME  NODES PRIORITY NODELIST(REASON)
+            195511       normal sys/dashboard/sys/ dal281726  R       3:47      1    98906 c-03-13
+```
 
 **Output columns**:
 
@@ -442,6 +505,8 @@ sinfo -o "%P %l"
    - Archive completed results
 
 ## Partitions Overview
+
+![Juno cluster partitions — how the 101 compute nodes are divided across dev, normal, h100, h100-94gb, h100-2.47gb, a30, a30-2.12gb, a30-4.6gb, and vdi partitions.](../images/slurm-partitions.png)
 
 | Partition name | Time limit | Nodes | Max nodes/job | Cores/node | Memory/node | GPUs/node                 | VRAM/GPU | Best used for |
 |----------------|------------|-------|----------------|------------|-------------|---------------------------|----------|---------------|

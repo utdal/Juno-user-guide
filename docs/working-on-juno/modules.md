@@ -46,7 +46,53 @@ module avail python
 module avail gnu14
 ```
 
-![Screenshot of terminal output from "module avail" showing color-coded module names grouped by category, with default versions marked (D).](../images/screenshot-module-avail.png)
+Example output:
+
+```
+-------------------------------------------------------- /opt/ohpc/pub/moduledeps/gnu14-openmpi5 ---------------------------------------------------------
+   adios2/2.10.1    fftw/3.3.10     mumps/5.2.1                 omb/7.5                phdf5/1.14.6        scalapack/2.2.2    slepc/3.18.0
+   boost/1.88.0     hypre/2.33.0    netcdf-cxx/4.3.1            opencoarrays/2.10.2    pnetcdf/1.14.0      scalasca/2.6.2     superlu_dist/6.4.0
+   dimemas/5.4.2    imb/2021.3      netcdf-fortran/4.6.2 (D)    otf2/3.1.1             ptscotch/7.0.7      scorep/9.0         tau/2.31.1
+   extrae/3.8.3     mfem/4.4        netcdf/4.9.3                petsc/3.18.1           py3-mpi4py/3.1.5    sionlib/1.7.7      trilinos/13.4.0
+
+------------------------------------------------------------- /opt/ohpc/pub/moduledeps/gnu14 -------------------------------------------------------------
+   R/4.5.0        gotcha/1.0.8        likwid/5.4.1       mpich/3.4.3-ucx (D)    openmpi4/4.1.6          plasma/24.8.7       superlu/7.0.0
+   cubelib/4.9    gsl/2.8             metis/5.1.0        opari2/2.0.9           openmpi5/5.0.7   (L)    py3-numpy/1.26.4
+   cubew/4.9      hdf5/1.14.6  (D)    mpich/3.4.3-ofi    openblas/0.3.29        pdtoolkit/3.25.1        scotch/7.0.7
+
+--------------------------------------------------------------- /opt/ohpc/pub/modulefiles ----------------------------------------------------------------
+   EasyBuild/5.0.0                code-server/4.100.2          hwloc/2.12.0               (L)    openmpi-aocc/5.0.6
+   abaqus/2023                    code-server/4.108.2   (D)    intel/2023.2.0                    orca/6.0.1
+   abaqus/2026             (D)    comsol/6.4                   intel/2025.0               (D)    orca/6.1.1                (D)
+   afni/25.3.03                   cplex/22.1.2                 java/11                           os
+   amber/24-beta                  cuda-q/0.12.0                jobstats/1.0                      papi/6.0.0
+   amber/24                (D)    cuda/11.7                    jq/1.7.1                          pmix/4.2.9
+   amduprof/5.1.7                 cuda/12.4                    julia/1.11.3                      prun/2.2                  (L)
+   ansys/2025R1                   cuda/12.6                    kempnerpulse/0.4.1                python/3.11.11
+   ansys2024R2/ansys2024R2        cuda/13.0             (D)    launcher/3.9                      python/3.12.2             (D)
+   ansys2024R2/AnsysEM            cyberworkbench/10.1.7        libfabric/1.18.0           (L)    qchem/6.2.2
+   ansys2024R2/autodyn            diagham/0.01                 lichem/lichem                     qchem/6.3                 (D)
+   ansys2024R2/fluent             filetools/1.0                lua/5.4.7                         qe/7.3.1
+   ansys2024R2/Workbench   (D)    fsl/6.0.7.19                 matlab/r2024b                     rosetta/3.15
+   ansys2025R1/ansys2025R1        fvcom/5.0.1                  miniconda/24.11.1                 siesta/5.2.1-parallel
+   ansys2025R1/AnsysEM            gaussian/16                  namd/3.0.1                        siesta/5.4.2-wannier90    (D)
+   ansys2025R1/autodyn            gnu11/11.3.0                 nccl-tests/cuda12.4               spack/0.23.1
+   ansys2025R1/fluent             gnu12/12.4.0                 nccl/2.29.2-1-cuda12.4            stata/19.5
+   ansys2025R1/Workbench   (D)    gnu13/13.2.0                 netcdf-c/4.9.2-nvhpc              szip/2.1.1-nvhpc
+   aocc/5.0                       gnu14/14.2.0          (L)    netcdf-fortran/4.6.1-nvhpc        tcad-silvaco/243422
+   apptainer/1.3.4                gnu5/5.5.0                   nonlinloc/7.1.04                  tinker/9
+   autodock_vina/1.2.7            gnu8/8.5.0                   nvhpc/24.11                       ucx/1.18.0                (L)
+   autotools               (L)    gnu9/9.3.0                   nvshmem/3.5.19-cuda12.4           valgrind/3.24.0
+   bcl/4.3.1                      gnuplot/6.0.4                ohpc                       (L)    vasp/6.4.2-upgrade
+   castep/25.12                   gromacs/2024.5-plumed        ollama/12                         vasp/6.4.2-wannier90-only (D)
+   charliecloud/0.15              gurobi/12.0.1                ollama/15
+   cmake/4.0.0                    hdf5/1.13.2-nvhpc            ollama/21                  (D)
+   code-server/3.10.2             hpcc/1.5                     openfoam/2512
+
+  Where:
+   D:  Default Module
+   L:  Module is loaded
+```
 
 ### Load a Module
 
@@ -170,7 +216,25 @@ exit
 
 Some module systems use hierarchies where loading a compiler unlocks additional software:
 
-![Module dependency hierarchy — loading a compiler (gnu14) unlocks MPI modules; loading MPI unlocks MPI-dependent libraries like netcdf, forming a layered dependency tree.](../images/modules-hierarchy.png)
+```
+                ┌──────────┐              ┌──────────┐
+                │  gnu14   │              │  intel   │   compilers
+                └────┬─────┘              └────┬─────┘
+                     │ unlocks                 │ unlocks
+                     ▼                         ▼
+                ┌──────────┐              ┌──────────┐
+                │ openmpi5 │  (or mpich)  │   MKL    │   MPI / math libs
+                └────┬─────┘              └──────────┘
+                     │ unlocks
+          ┌──────────┼──────────┬──────────┐
+          ▼          ▼          ▼          ▼
+     ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
+     │  hdf5   │ │ netcdf  │ │  petsc  │ │   ...   │  MPI-dependent libs
+     └─────────┘ └─────────┘ └─────────┘ └─────────┘
+
+  Load in order: compiler first, then MPI, then MPI-dependent libraries.
+  Wrong order → "module not found" or silent ABI mismatch at runtime.
+```
 
 ```bash
 # Load compiler first

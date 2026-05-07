@@ -24,8 +24,6 @@ dev             up    2:00:00      1  inval c-02-06
 dev             up    2:00:00      5   idle c-02-[01-05]
 ```
 
-![Screenshot of "sinfo" terminal output showing partitions color-coded by node state (idle in green, mix in yellow, alloc in red).](../images/screenshot-sinfo-output.png)
-
 ### Node States
 
 | State | Meaning |
@@ -311,8 +309,6 @@ $ jobstats 189709
     directive. This will lower your queue times and allow the Slurm job
     scheduler to work more effectively for all users.
 ```
-
-![Screenshot of jobstats output showing job summary with CPU utilization bar at 96%, memory usage bar at 41%, and a Notes section suggesting a shorter --time request.](../images/screenshot-jobstats-output.png)
 
 **How to read the output:**
 

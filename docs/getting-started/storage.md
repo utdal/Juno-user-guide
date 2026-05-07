@@ -39,6 +39,19 @@ Juno has two storage tiers:
 mfsgetquota -H ~
 ```
 
+Example output:
+```
+/home/dal281726:
+soft quota grace period: 1w (default)
+          |  curr |  soft | percent |  hard | percent |
+ inodes   |   70k |  300k |   23.35 |  320k |   21.89 |
+ length   |  44GB |     - |       - |     - |       - |
+ size     |  48GB |  50GB |   96.43 |  55GB |   87.66 |
+ realsize | 145GB |     - |       - |     - |       - |
+```
+
+`size` is the quota-enforced limit. `realsize` is the actual disk space consumed after replication — on IO2, data is mirrored 3×, so realsize ≈ 3× size.
+
 ### Work Directory
 
 **Path**: `~/work`

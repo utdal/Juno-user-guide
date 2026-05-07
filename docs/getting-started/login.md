@@ -4,7 +4,20 @@
 
 This guide covers the different methods to access Juno HPC cluster.
 
-![Juno connection overview — SSH and Open OnDemand both land you on a login node, which is the gateway to compute nodes and shared storage.](../images/login-connection-flow.png)
+```
+  Your laptop / workstation             Juno HPC Cluster
+  ┌──────────────────────┐              ┌──────────────────────────────────────────┐
+  │                      │   SSH        │  ┌──────────────────────────────────────┐│
+  │  $ ssh netID@juno…   │─────────────►│  │     Login Node  (juno-l-01)          ││
+  │                      │              │  └────────────────┬─────────────────────┘│
+  │  Browser:            │   HTTPS      │                   │  sbatch / srun        │
+  │  juno-ood.hpc…       │─────────────►│                   ▼                      │
+  │                      │              │  ┌──────────────────────────────────────┐│
+  └──────────────────────┘              │  │          Compute Nodes               ││
+                                        │  │   normal │ h100 │ a30 │ dev │ vdi    ││
+                                        │  └──────────────────────────────────────┘│
+                                        └──────────────────────────────────────────┘
+```
 
 ## SSH Login (Command Line)
 

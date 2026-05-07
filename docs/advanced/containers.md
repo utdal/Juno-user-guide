@@ -28,7 +28,22 @@ Containers are lightweight, portable software packages that include an applicati
 
 On HPC systems, we use **Singularity** (now called **Apptainer**) instead of Docker for security reasons.
 
-![Container lifecycle — build or pull a container image on your local machine or from a registry, transfer the SIF file to Juno, then run it on compute nodes via SLURM.](../images/containers-lifecycle.png)
+```
+  ┌──────────────────────┐        ┌──────────────┐        ┌──────────────────────┐
+  │  1. Build / Pull     │        │  2. Transfer │        │  3. Run on Juno      │
+  │  (local or cloud)    │        │              │        │                      │
+  │                      │        │              │        │  $ sbatch job.sh     │
+  │  apptainer pull      │        │  scp         │        │                      │
+  │    docker://…        │──────► │  myapp.sif   │──────► │  apptainer exec \    │
+  │                      │        │  netID@juno… │        │    myapp.sif \       │
+  │  sudo apptainer      │        │  :~/scratch/ │        │    script.py         │
+  │    build myapp.sif   │        │              │        │                      │
+  │    myapp.def         │        │              │        │  (on compute node    │
+  │                      │        │              │        │   via SLURM)         │
+  └──────────────────────┘        └──────────────┘        └──────────────────────┘
+         myapp.sif  ─────────────────────────────────────────►  myapp.sif
+        (SIF image)                                           runs unprivileged
+```
 
 ### Key Differences from Docker
 
