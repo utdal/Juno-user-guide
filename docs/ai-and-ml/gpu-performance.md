@@ -19,6 +19,8 @@ nvidia-smi --query-gpu=index,name,utilization.gpu,utilization.memory,memory.used
            --format=csv -l 2
 ```
 
+![Screenshot of "nvidia-smi" output showing GPU index, name, temperature, power draw, memory used/total, and GPU utilization percentage for each GPU on the node.](../images/screenshot-nvidia-smi.png)
+
 **What to look for:**
 
 | Metric | Healthy range | If low... |

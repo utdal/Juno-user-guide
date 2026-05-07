@@ -4,6 +4,8 @@
 
 This guide covers the different methods to access Juno HPC cluster.
 
+![Juno connection overview — SSH and Open OnDemand both land you on a login node, which is the gateway to compute nodes and shared storage.](../images/login-connection-flow.png)
+
 ## SSH Login (Command Line)
 
 ### Basic Login
@@ -59,6 +61,8 @@ After successful login, you'll be on a **login node**. The prompt will show some
 ```
 [netID@juno-l-01 ~]$
 ```
+
+![Screenshot of a terminal window showing the SSH login sequence — host key confirmation prompt, password prompt, and the Juno welcome banner followed by the login node prompt.](../images/screenshot-login-terminal.png)
 
 ## SSH Key Authentication (Recommended)
 

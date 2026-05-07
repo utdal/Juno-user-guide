@@ -46,6 +46,8 @@ module avail python
 module avail gnu14
 ```
 
+![Screenshot of terminal output from "module avail" showing color-coded module names grouped by category, with default versions marked (D).](../images/screenshot-module-avail.png)
+
 ### Load a Module
 
 ```bash
@@ -168,6 +170,8 @@ exit
 
 Some module systems use hierarchies where loading a compiler unlocks additional software:
 
+![Module dependency hierarchy — loading a compiler (gnu14) unlocks MPI modules; loading MPI unlocks MPI-dependent libraries like netcdf, forming a layered dependency tree.](../images/modules-hierarchy.png)
+
 ```bash
 # Load compiler first
 module load gnu14
@@ -242,9 +246,6 @@ module load matlab/r2024b
 
 # Gaussian 16
 module load gaussian/16
-
-# Jupyter
-module load jupyter
 ```
 
 ### Libraries and Tools

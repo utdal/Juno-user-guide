@@ -211,7 +211,7 @@ python matrix_multiplication.py
 
 **NumPy/SciPy** (use system-optimized versions):
 ```bash
-module load python/3.9
+module load python/3.12.2
 # NumPy linked with optimized BLAS (MKL or OpenBLAS)
 
 python -c "import numpy; numpy.show_config()"
@@ -362,7 +362,7 @@ if __name__ == '__main__':
 #SBATCH --mem=32GB
 #SBATCH -t 2:00:00
 
-module load python/3.9
+module load python/3.12.2
 
 # Python will use $SLURM_CPUS_PER_TASK cores
 python parallel_script.py
@@ -405,7 +405,7 @@ result = df.groupby('category')['value'].mean().compute()
 #SBATCH -n 32
 #SBATCH -t 4:00:00
 
-module load python/3.9
+module load python/3.12.2
 
 python dask_script.py
 ```
@@ -433,7 +433,7 @@ client = Client(cluster)
 ### Installation
 
 ```bash
-module load python/3.9
+module load python/3.12.2
 module load openmpi5
 pip install --user mpi4py
 ```
@@ -473,7 +473,7 @@ if rank == 0:
 #SBATCH -n 16
 #SBATCH -t 2:00:00
 
-module load python/3.9
+module load python/3.12.2
 module load openmpi5
 
 mpirun -np $SLURM_NTASKS python mpi_script.py
@@ -485,7 +485,7 @@ mpirun -np $SLURM_NTASKS python mpi_script.py
 
 **Installation**:
 ```bash
-module load python/3.9
+module load python/3.12.2
 module load cuda/12.4
 pip install --user cupy-cuda11x
 ```

@@ -28,6 +28,8 @@ Containers are lightweight, portable software packages that include an applicati
 
 On HPC systems, we use **Singularity** (now called **Apptainer**) instead of Docker for security reasons.
 
+![Container lifecycle — build or pull a container image on your local machine or from a registry, transfer the SIF file to Juno, then run it on compute nodes via SLURM.](../images/containers-lifecycle.png)
+
 ### Key Differences from Docker
 
 | Feature | Docker | Singularity |
@@ -47,7 +49,7 @@ On HPC systems, we use **Singularity** (now called **Apptainer**) instead of Doc
 module avail apptainer
 
 # Load module
-module load apptainer
+module load apptainer/1.3.4
 
 # Verify installation
 apptainer --version
@@ -251,7 +253,7 @@ apptainer pull docker://tensorflow/tensorflow:2.14.0-gpu
 #SBATCH -t 2:00:00
 
 # Load apptainer
-module load apptainer
+module load apptainer/1.3.4
 
 # Run containerized application
 apptainer exec ~/scratch/mycontainer.sif \
@@ -269,7 +271,7 @@ apptainer exec ~/scratch/mycontainer.sif \
 #SBATCH --mem=32GB
 #SBATCH -t 4:00:00
 
-module load apptainer
+module load apptainer/1.3.4
 
 # Run with GPU support
 apptainer exec --nv \
@@ -287,7 +289,7 @@ apptainer exec --nv \
 #SBATCH -n 32
 #SBATCH -t 2:00:00
 
-module load apptainer
+module load apptainer/1.3.4
 module load openmpi5
 
 # Run MPI application in container
@@ -339,7 +341,7 @@ apptainer pull docker://nvcr.io/nvidia/pytorch:22.12-py3
 #SBATCH --gres=gpu:1
 #SBATCH -t 8:00:00
 
-module load apptainer
+module load apptainer/1.3.4
 
 # Pull TensorFlow container (first time only)
 # apptainer pull docker://tensorflow/tensorflow:latest-gpu
@@ -363,7 +365,7 @@ apptainer exec --nv \
 #SBATCH --mem=32GB
 #SBATCH -t 4:00:00
 
-module load apptainer
+module load apptainer/1.3.4
 
 # Pull BLAST container
 BLAST_CONTAINER=~/scratch/containers/blast.sif
@@ -427,7 +429,7 @@ apptainer exec scientific-python.sif python analysis.py
 #SBATCH --mem=16GB
 #SBATCH -t 4:00:00
 
-module load apptainer
+module load apptainer/1.3.4
 
 # Pull RStudio container
 apptainer pull docker://rocker/rstudio:latest
@@ -546,7 +548,7 @@ module load cuda
 **Solution**:
 ```bash
 # Load singularity module
-module load apptainer
+module load apptainer/1.3.4
 
 # Check availability
 module avail apptainer

@@ -619,7 +619,7 @@ alias l='ls -CF'
 export PS1='\u@\h:\w\$ '
 
 # Load modules by default
-module load python/3.9
+module load python/3.12.2
 ```
 
 **Apply changes**:

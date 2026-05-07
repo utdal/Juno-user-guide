@@ -24,6 +24,8 @@ dev             up    2:00:00      1  inval c-02-06
 dev             up    2:00:00      5   idle c-02-[01-05]
 ```
 
+![Screenshot of "sinfo" terminal output showing partitions color-coded by node state (idle in green, mix in yellow, alloc in red).](../images/screenshot-sinfo-output.png)
+
 ### Node States
 
 | State | Meaning |
@@ -135,8 +137,8 @@ This is useful for finding out why a node shows as `mix` — you can see exactly
 ```bash
 $ scontrol show job 186552
 JobId=186552 JobName=TESS_EBs_5_5-3
-   UserId=kxp174430(592517) GroupId=ph(333) MCS_label=N/A
-   Priority=1305 Nice=0 Account=kpenev QOS=normal
+   UserId=utd000000(123456) GroupId=ph(333) MCS_label=N/A
+   Priority=1305 Nice=0 Account=hpcre QOS=normal
    JobState=RUNNING Reason=None Dependency=(null)
    Requeue=1 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
    RunTime=1-23:54:15 TimeLimit=2-00:00:00 TimeMin=N/A
@@ -149,11 +151,11 @@ JobId=186552 JobName=TESS_EBs_5_5-3
    ReqTRES=cpu=512,mem=3000G,node=8,billing=512
    AllocTRES=cpu=512,mem=3000G,node=8,billing=512
    MinCPUsNode=64 MinMemoryNode=375G MinTmpDiskNode=0
-   Command=/home/kxp174430/projects/git/TESS_EB_Bayesian/slurm/juno/launcher_5-3.slurm
-   WorkDir=/scratch/juno/kxp174430/TESS_EBs/juno/output
-   StdErr=/scratch/juno/kxp174430/output/TESS_EBs/render_output/slurm.out
-   StdOut=/scratch/juno/kxp174430/output/TESS_EBs/render_output/slurm.out
-   MailUser=kxp174430@utdallas.edu MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
+   Command=/home/utd000000/projects/git/pipeline/slurm/juno/job.slurm
+   WorkDir=/scratch/juno/utd000000/pipeline/juno/output
+   StdErr=/scratch/juno/utd000000/output/pipeline/render_output/slurm.out
+   StdOut=/scratch/juno/utd000000/output/pipeline/render_output/slurm.out
+   MailUser=utd000000@utdallas.edu MailType=INVALID_DEPEND,BEGIN,END,FAIL,REQUEUE,STAGE_OUT
 ```
 
 **Key fields:**
@@ -208,7 +210,7 @@ scontrol release 12345
 $ sacct -j 186552 --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,MaxVMSize
 JobID           JobName      State ExitCode    Elapsed     MaxRSS  MaxVMSize
 ------------ ---------- ---------- -------- ---------- ---------- ----------
-186552       TESS_EBs_+    TIMEOUT      0:0 2-00:00:13
+186552       pipeline_+    TIMEOUT      0:0 2-00:00:13
 186552.batch      batch  CANCELLED     0:15 2-00:00:14     24092K          0
 ```
 
@@ -277,8 +279,8 @@ $ jobstats 189709
                           Slurm Job Statistics
 ================================================================================
          Job ID: 189709
-   User/Account: dal384425/amichels
-       Job Name: ft
+   User/Account: utd000000/hpcre
+       Job Name: test
           State: COMPLETED
           Nodes: 1
       CPU Cores: 20
@@ -309,6 +311,8 @@ $ jobstats 189709
     directive. This will lower your queue times and allow the Slurm job
     scheduler to work more effectively for all users.
 ```
+
+![Screenshot of jobstats output showing job summary with CPU utilization bar at 96%, memory usage bar at 41%, and a Notes section suggesting a shorter --time request.](../images/screenshot-jobstats-output.png)
 
 **How to read the output:**
 

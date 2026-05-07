@@ -18,6 +18,8 @@ Open OnDemand provides a web-based interface to access Juno resources without in
 3. Log in with your Juno credentials
 4. You'll see the Open OnDemand dashboard
 
+![Screenshot of the Open OnDemand dashboard showing the top navigation bar with Files, Jobs, Clusters, and Interactive Apps menus.](../images/screenshot-ood-dashboard.png)
+
 ### Dashboard Features
 
 **Files**
@@ -58,15 +60,22 @@ Common interactive apps include:
 
 1. Click **Interactive Apps** in the top menu
 2. Select your desired application (e.g., "Jupyter Notebook")
+
+   ![Screenshot of the Interactive Apps dropdown menu listing available applications including Jupyter Lab, RStudio, Desktop, and VSCode Server.](../images/screenshot-ood-interactive-apps.png)
+
 3. Fill in the resource request form:
    - **Number of hours**: How long you need (e.g., 2, 4, 8)
    - **Number of cores**: CPUs needed (typically 1-4 for interactive work)
    - **Memory (GB)**: RAM required (e.g., 4, 8, 16)
    - **Partition**: Usually "normal" for CPU, "h100" or "a30" for GPU work
 
+   ![Screenshot of the interactive app resource request form showing fields for hours, cores, memory, and partition.](../images/screenshot-ood-launch-form.png)
+
 4. Click **Launch**
 
 5. Wait for resources to be allocated (you'll see status: Queued → Starting → Running)
+
+   ![Screenshot of the My Interactive Sessions page showing a session card with status transitioning from Queued to Running, and a Connect button.](../images/screenshot-ood-my-sessions.png)
 
 6. Click **Connect to [Application]** when ready
 
@@ -134,6 +143,7 @@ Launch → Connect to RStudio
 3. Make changes in browser
 4. Click **Save**
 
+![Screenshot of the Open OnDemand file manager showing a directory listing with Upload, Download, and Edit buttons, and a breadcrumb navigation bar.](../images/screenshot-ood-file-manager.png)
 
 !!! note
     The upload/download limit is 10GB/file
@@ -213,7 +223,7 @@ If a clock appears on your screen, X11 forwarding is working correctly!
 xclock
 
 # Launch MATLAB (from login node, not recommended for computation)
-module load matlab
+module load matlab/r2024b
 matlab
 ```
 
@@ -233,7 +243,7 @@ squeue --me
 ssh -X c-XX-YY             # Node c-XX-YY was assigned
 
 # Now on compute node, launch GUI program
-module load matlab
+module load matlab/r2024b
 matlab
 ```
 
@@ -246,7 +256,7 @@ Your prompt changes from `juno-l-01` to `c-XX-YY`, indicating you're on a comput
 
 ```bash
 # Load MATLAB module
-module load matlab
+module load matlab/r2024b
 
 # Launch MATLAB GUI
 matlab
@@ -265,7 +275,7 @@ fluent
 #### Stata
 
 ```bash
-module load stata
+module load stata/19.5
 xstata
 
 ```
@@ -419,7 +429,7 @@ Host juno
 3. `salloc -p normal --mem=16GB -c 4 -t 4:00:00`
 4. `squeue --me`
 5. `ssh -X c-XX-YY`
-6. `module load matlab`
+6. `module load matlab/r2024b`
 7. `matlab`
 8. Work in MATLAB GUI
 9. Exit MATLAB

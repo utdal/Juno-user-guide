@@ -6,6 +6,8 @@ Understanding where to store your data and how to move it efficiently is crucial
 
 ## Storage Systems on Juno
 
+![Storage tiers — IO2 (Home, Work, Group) is persistent and backed up daily; Scratch is up to 10× faster for large I/O but is temporary and never backed up.](../images/storage-hierarchy.png)
+
 Juno has two storage tiers:
 
 - **IO2**: High-speed storage for programs and data in active use. Includes Home, Work, and Group directories.

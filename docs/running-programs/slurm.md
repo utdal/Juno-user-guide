@@ -55,6 +55,8 @@ Fair share is a system that remembers who has been running jobs recently:
 - Complete recovery takes two weeks
 - Fair Share value is reset at the beginning of the month
 
+![Fair share priority over time — two users' fair share values diverge after usage then converge back toward 1.0 over two weeks of inactivity.](../images/slurm-fair-share.png)
+
 ### Checking Your Fair Share
 
 ```bash
@@ -66,6 +68,8 @@ sshare -a
 ```
 
 Look for your username in the second column and check the last column for your fair share value.
+
+![SLURM job lifecycle — a job moves from PENDING (waiting for resources) to RUNNING (executing on compute nodes) to COMPLETED, FAILED, or TIMEOUT.](../images/slurm-job-lifecycle.png)
 
 ## Ways to Run Jobs
 
@@ -95,7 +99,7 @@ Your prompt changes from `juno-l-01` (login node) to something like `c-04-01` (c
 
 **Common options for salloc**:
 
-- `-p` or `--partition`: Specify partition (normal, gpu, etc.)
+- `-p` or `--partition`: Specify partition (normal, h100, a30, etc.)
 - `--mem`: Memory allocation (e.g., `2GB`, `16GB`)
 - `-c` or `--cpus-per-task`: Number of CPUs
 - `-t` or `--time`: Time limit (e.g., `1:00:00` for 1 hour)
@@ -134,7 +138,7 @@ echo "Job started on $(hostname) at $(date)"
 echo "Running my program..."
 
 # Load modules if needed
-module load python
+module load python/3.12.2
 
 # Run your program
 python my_script.py
@@ -203,7 +207,7 @@ python analyze_data.py --input data.csv --output results.txt
 #SBATCH --mem=16GB
 #SBATCH -t 12:00:00
 
-module load matlab
+module load matlab/r2024b
 
 matlab -nodisplay -nosplash -r "run('simulation.m'); exit;"
 ```
@@ -221,7 +225,7 @@ matlab -nodisplay -nosplash -r "run('simulation.m'); exit;"
 #SBATCH --mem=32GB
 #SBATCH -t 24:00:00
 
-module load cuda
+module load cuda/12.4
 
 conda activate /path/to/env
 
@@ -260,6 +264,8 @@ squeue -j 12345
 # View all jobs in a partition
 squeue -p normal
 ```
+
+![Screenshot of terminal output from "squeue --me" showing a table with columns JOBID, PARTITION, NAME, USER, ST, TIME, NODES, and NODELIST(REASON) for a user's queued and running jobs.](../images/screenshot-squeue-output.png)
 
 **Output columns**:
 

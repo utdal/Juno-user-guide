@@ -86,6 +86,8 @@ echo "All tasks completed."
 - Runs tasks until all complete
 - Automatic load balancing
 
+![Launcher task distribution — a task list is spread across all cores on all allocated nodes; each core pulls the next available task when it finishes, ensuring full utilization.](../images/launcher-task-distribution.png)
+
 ## Advanced Usage
 
 ### Parametric Job Example
@@ -265,23 +267,21 @@ export LAUNCHER_WORKDIR=$PWD
 $LAUNCHER_DIR/paramrun
 ```
 
-### Example 3: Bioinformatics Pipeline
+### Example 3: Quantum Chemistry Screening
 
-**Scenario**: Process multiple genomic samples
+**Scenario**: Run DFT calculations on multiple molecular structures with ORCA
 
 ```bash
 # tasks.txt
-module load blast; blastp -query sample1.fasta -db nr -out sample1.blast
-module load blast; blastp -query sample2.fasta -db nr -out sample2.blast
-module load bowtie2; bowtie2 -x genome -U sample1.fastq -S sample1.sam
-module load bowtie2; bowtie2 -x genome -U sample2.fastq -S sample2.sam
-module load samtools; samtools view -bS sample1.sam > sample1.bam
-module load samtools; samtools view -bS sample2.sam > sample2.bam
+module load orca/6.1.1; orca mol_001.inp > mol_001.out
+module load orca/6.1.1; orca mol_002.inp > mol_002.out
+module load orca/6.1.1; orca mol_003.inp > mol_003.out
+module load orca/6.1.1; orca mol_004.inp > mol_004.out
 ```
 
 ```bash
 #!/bin/bash
-#SBATCH -J bio_pipeline
+#SBATCH -J orca_screening
 #SBATCH -N 1
 #SBATCH -n 8
 #SBATCH --mem=64GB
@@ -468,11 +468,9 @@ python process.py input_${SLURM_ARRAY_TASK_ID}.dat
 
 ### GNU Parallel
 
-**Shell-level parallelism**:
+**Shell-level parallelism** (no module needed — GNU Parallel is available as a system tool):
 
 ```bash
-module load parallel
-
 # Run commands in parallel
 parallel -j 16 < tasks.txt
 

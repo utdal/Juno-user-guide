@@ -19,7 +19,7 @@ This page covers how to run specific scientific programs on Juno — both as bat
 #SBATCH --mem=16G
 #SBATCH --time=12:00:00
 
-module load matlab
+module load matlab/r2024b
 
 matlab -nodisplay -nosplash -nodesktop -r "run('path/to/your/script.m'); exit;"
 ```
@@ -34,7 +34,7 @@ salloc -p normal --mem=2GB
 srun --pty bash
 
 # Step 3: Load and run MATLAB
-module load matlab
+module load matlab/r2024b
 matlab -nodisplay -nosplash -nodesktop -r "run('path/to/your/script.m'); exit;"
 ```
 
@@ -54,7 +54,7 @@ squeue --me                   # note which node was assigned, e.g. c-04-01
 ssh -X c-04-01
 
 # Load and launch MATLAB GUI
-module load matlab
+module load matlab/r2024b
 matlab
 ```
 
@@ -76,7 +76,7 @@ Or use **Open OnDemand** → Interactive Apps → MATLAB (easiest option).
 #SBATCH --mem=32G
 #SBATCH --time=24:00:00
 
-module load gaussian
+module load gaussian/16
 
 g16 input.com > output.log
 ```
@@ -89,7 +89,7 @@ Gaussian automatically uses `~/scratch` for `.rwf` scratch files during batch jo
 salloc -p normal --mem=2G
 srun --pty bash
 
-module load gaussian
+module load gaussian/16
 g16 input.com > output.log
 ```
 

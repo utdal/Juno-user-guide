@@ -521,6 +521,8 @@ cp -r ~/scratch/results $HOME/
 
 ### Recommended Workflow
 
+![Scratch data lifecycle — stage data in before the job, process on scratch during the job, copy important results to Home/Work after, then clean up scratch.](../images/scratch-data-lifecycle.png)
+
 1. **Copy** data to scratch before job
 2. **Process** data on scratch during job  
 3. **Save** important results to home

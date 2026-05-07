@@ -35,11 +35,15 @@ Navigate to [https://juno-ood.hpcre.utdallas.edu/](https://juno-ood.hpcre.utdall
    | Partition | `normal` | Use `a30` or `h100` for GPU |
    | GPU | 1 *(optional)* | Only for GPU partitions |
 
+   ![Screenshot of the Jupyter Lab launch form in Open OnDemand showing the hours, cores, memory, partition, and GPU fields filled in.](../images/screenshot-ood-jupyter-launch-form.png)
+
 4. Click **Launch**.
 
 ### Step 3 — Connect
 
 The session moves through **Queued → Starting → Running**. When it is ready, click **Connect to Jupyter Lab**. A full JupyterLab interface opens in a new browser tab running on your allocated compute node.
+
+![Screenshot of JupyterLab running in a browser tab showing the launcher page with notebook, console, and terminal options.](../images/screenshot-ood-jupyterlab-interface.png)
 
 > **Session persistence:** if you close the browser tab or lose your connection, your session keeps running. Return to the portal, click **My Interactive Sessions**, and click the link to reconnect.
 
@@ -72,6 +76,8 @@ After connecting to your Open OnDemand session:
 2. Click the kernel name in the top-right corner of the notebook (e.g. "Python 3").
 3. Select your registered kernel from the list (e.g. **Python (myenv)**).
 
+![Screenshot of the JupyterLab kernel selection dropdown showing system Python and registered conda environment kernels such as "Python (myenv)".](../images/screenshot-jupyter-kernel-select.png)
+
 The kernel indicator updates and your notebook now runs inside your conda environment.
 
 > **Kernel not appearing?** The registration only needs to run once, but it must complete before you start the JupyterLab session. If you registered the kernel while a session was already running, restart the JupyterLab server: **File → Hub Control Panel → Stop My Server**, then relaunch from the portal.
@@ -86,6 +92,8 @@ Use this method when you want to launch JupyterLab directly from within a conda 
 Your browser  ──SSH tunnel──  juno-l-01 (login node)  ──internal net──  g-05-01 (compute node)
 localhost:8888                                                            JupyterLab :8888
 ```
+
+![SSH port forwarding connection diagram — your local browser connects to localhost:8888, which tunnels through the login node to a JupyterLab instance running on the allocated compute node.](../images/jupyter-port-forwarding.png)
 
 ### Prerequisites
 

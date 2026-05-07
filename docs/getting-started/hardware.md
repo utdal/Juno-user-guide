@@ -53,6 +53,8 @@ A30 nodes also support virtual GPU slicing into 12 GB and 6 GB configurations.
 | `h100-94gb` | H100 physical (NVL) | 1 per node | 94 GB |
 | `h100-2.47gb` | H100 virtual (half) | 4 per node | 47 GB |
 
+![GPU virtual slicing — a physical A30 or H100 can be divided into multiple virtual GPUs, each with a smaller VRAM slice, for concurrent lightweight workloads.](../images/hardware-gpu-slicing.png)
+
 ## Network Infrastructure
 
 All compute nodes are connected via **HDR100 InfiniBand** for low-latency, high-bandwidth MPI communication.

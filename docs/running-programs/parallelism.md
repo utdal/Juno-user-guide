@@ -19,6 +19,8 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 
 **Concept**: Multiple threads share the same memory space
 
+![OpenMP shared-memory model — multiple threads on a single node, all reading and writing a shared memory space with one address space.](../images/parallelism-openmp.png)
+
 **Best for**:
 
 - Single-node parallel programs
@@ -35,6 +37,8 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 
 **Concept**: Multiple processes with separate memory, communicate via message passing
 
+![MPI distributed-memory model — multiple nodes each with their own memory, passing messages between processes over a network interconnect.](../images/parallelism-mpi.png)
+
 **Best for**:
 
 - Multi-node applications
@@ -50,6 +54,8 @@ Parallelism is the key to leveraging HPC clusters effectively. This guide covers
 ### 3. Hybrid Parallelism (MPI + OpenMP)
 
 **Concept**: Combines MPI across nodes with OpenMP within nodes
+
+![Hybrid MPI+OpenMP layout — MPI ranks communicate between nodes while OpenMP threads spread across cores within each node, combining both models.](../images/parallelism-hybrid.png)
 
 **Best for**:
 
@@ -453,7 +459,7 @@ nvcc vector_add.cu -o vector_add
 #SBATCH -J gpu_job
 #SBATCH -o output_%j.log
 #SBATCH -e error_%j.log
-#SBATCH -p gpu
+#SBATCH -p h100
 #SBATCH -N 1
 #SBATCH --gres=gpu:1            # Request 1 GPU
 #SBATCH -c 4
@@ -514,8 +520,8 @@ all_data = comm.gather(local_data, root=0)
 #SBATCH -N 2
 #SBATCH -n 8
 
-module load python/3.9
-module load openmpi/4.1
+module load python/3.12.2
+module load openmpi5
 
 mpirun -np $SLURM_NTASKS python mpi_script.py
 ```

@@ -41,6 +41,8 @@ Visual Studio Code (VSCode) can be used to develop and edit code on Juno. There 
 
 9. Click **Connect to VSCode** when ready
 
+![Screenshot of VSCode running in a browser via Open OnDemand, showing the file explorer sidebar, an open Python file with syntax highlighting, and the integrated terminal at the bottom.](../images/screenshot-ood-vscode.png)
+
 ### Opening Directories
 
 **Open your project**:
@@ -318,7 +320,8 @@ git push -u origin main
 **Example - Jupyter**:
 ```bash
 # On Juno
-module load python/3.9
+module load miniconda
+conda activate /path/to/myenv
 jupyter notebook --no-browser --port=8888
 
 # Forward port 8888 in VSCode
@@ -566,7 +569,7 @@ Ctrl+Shift+S          Save All
 
 ```bash
 # In VSCode Terminal
-module load python/3.9    # Load software
+module load python/3.12.2    # Load software
 sbatch job.sh             # Submit job
 squeue -u $USER          # Check queue
 tail -f output.log       # Monitor output

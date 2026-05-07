@@ -28,6 +28,8 @@ Juno accounts are available to:
 
 [Submit an account request](https://websites.utdallas.edu/research/hpc-account/)
 
+![Screenshot of the Juno account request form at websites.utdallas.edu/research/hpc-account/ showing the fields for PI name, NetID, department, and funding information.](../images/screenshot-account-request-form.png)
+
 **Required Information**:
 
 - Full name, email adress, and NetID of the principal investigator (PI)
