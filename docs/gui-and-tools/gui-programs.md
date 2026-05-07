@@ -127,17 +127,20 @@ Launch → Connect to RStudio
 ### File Management via Web
 
 **Upload Files**:
+
 1. Click **Files** → **Home Directory**
 2. Navigate to destination folder
 3. Click **Upload** button
 4. Select files from your computer
 
 **Download Files**:
+
 1. Navigate to file location
 2. Check the box next to file(s)
 3. Click **Download**
 
 **Edit Files**:
+
 1. Click on text file
 2. Click **Edit** button
 3. Make changes in browser

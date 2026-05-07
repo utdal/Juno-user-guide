@@ -247,6 +247,7 @@ See [GUI Programs Guide](../gui-and-tools/gui-programs.md).
 ### X11 forwarding isn't working. What's wrong?
 
 **Check**:
+
 1. X server running on your computer (XQuartz/MobaXterm)
 2. Logged in with `ssh -X` (capital X)
 3. Test with `xclock`
@@ -306,6 +307,7 @@ Typical limits: 2-48 hours depending on partition.
 ### How do I use Python packages?
 
 **Options**:
+
 1. Load system Python module + pip install to home
 2. Use conda environments (recommended)
 3. Use Python virtual environments
@@ -319,6 +321,7 @@ Yes! Install Miniconda in your home directory. See [Virtual Environments guide](
 ### My Python job failed with "ModuleNotFoundError"
 
 **Solutions**:
+
 1. Install missing package: `pip install package-name`
 2. Load appropriate Python module
 3. Activate correct conda environment
@@ -342,6 +345,7 @@ Or use RStudio via Open OnDemand.
 ### My job won't start. What's wrong?
 
 **Check**:
+
 1. Resource availability: `sinfo`
 2. Your fair share: `sshare`
 3. Job queue position: `squeue --me`
@@ -350,6 +354,7 @@ Or use RStudio via Open OnDemand.
 ### I can't log in. What should I do?
 
 **Try**:
+
 1. Verify you're using correct username/hostname
 2. Check if you need VPN (off-campus)
 3. Test internet connection: `ping juno.utdallas.edu`

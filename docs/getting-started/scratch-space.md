@@ -405,6 +405,7 @@ cp output/* ~/scratch/results/
 ### Files Disappeared
 
 **If files were purged**:
+
 1. Check access times were too old
 2. Files are **not recoverable**
 3. Check backups on external storage
@@ -425,6 +426,7 @@ du -sh ~/scratch
 ```
 
 **Solutions**:
+
 1. **Delete old files**:
    ```bash
    find ~/scratch -mtime +30 -delete

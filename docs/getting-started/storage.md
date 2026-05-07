@@ -177,6 +177,7 @@ du -sh ~/scratch
 ```
 
 **When approaching limits**:
+
 1. Clean up old files
 2. Compress large files
 3. Move data to scratch
@@ -477,6 +478,7 @@ find ~/scratch -name "*.tmp" -mtime +7 -delete
 ### Data Lifecycle
 
 **Recommended workflow**:
+
 1. **Prepare**: Copy data to scratch
 2. **Compute**: Run jobs, write to scratch
 3. **Review**: Check results
@@ -541,6 +543,7 @@ rsync -avzP --partial source/ destination/
 ### Slow Transfers
 
 **Check**:
+
 1. Network speed: `ping juno.utdallas.edu`
 2. Transfer during off-peak hours
 3. Use compression for text files
