@@ -118,7 +118,7 @@ python analyze.py
 
 **Scratch policy**:
 
-- Files not accessed in **[45 days]** may be purged
+- Files not accessed in **45 days** may be purged
 - System checks **access time** (last read or write)
 - Purge runs automatically on schedule
 - **No recovery possible** after purge
@@ -211,8 +211,8 @@ find ~/scratch -name "*.tmp" -mtime +7 -delete
 find ~/scratch -name "*.log" -mtime +30 -delete
 
 # Archive important data
-rsync -avzP ~/scratchcompleted_projects/ $HOME/archive/
-rm -rf ~/scratchcompleted_projects/
+rsync -avzP ~/scratch/completed_projects/ $HOME/archive/
+rm -rf ~/scratch/completed_projects/
 ```
 
 ### 2. Organize Your Scratch
@@ -539,6 +539,6 @@ cp -r ~/scratch/results $HOME/
 
 ## Need Help?
 
-- **Scratch space questions**: [CircAssist@utdallas.edu](mailto:circ-assist@utdallas.edu)
+- **Scratch space questions**: [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 - **Purge policy details**: Check HPC website or ask support
 - **Quota increase**: Open ticket with justification

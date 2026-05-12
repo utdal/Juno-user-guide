@@ -487,7 +487,7 @@ find ~/scratch -name "*.tmp" -mtime +7 -delete
 
 ### Backup Strategy
 
-**Critical Data:**Never rely solely on HPC storage for critical data. Always maintain backups.
+**Critical Data:** Never rely solely on HPC storage for critical data. Always maintain backups.
 
 **Backup destinations**:
 
@@ -537,8 +537,6 @@ If working with sensitive data (HIPAA, FERPA, export-controlled):
 # Rsync automatically resumes
 rsync -avzP --partial source/ destination/
 ```
-
-**Globus automatically retries** failed transfers.
 
 ### Slow Transfers
 
@@ -594,7 +592,7 @@ du -sh ~/scratch
 
 # Transfer files
 scp file.txt netID@juno.utdallas.edu:~/scratch
-rsync -avzP directory/ netID@juno.utdallas.edu:~/scratchdirectory/
+rsync -avzP directory/ netID@juno.utdallas.edu:~/scratch/directory/
 
 # Compress/decompress
 gzip file.txt
@@ -624,4 +622,3 @@ find ~/scratch -size +1G -ls
 
 - **Data transfer issues**: [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 - **Quota requests**: Open ticket at HPC Services page
-- **Globus setup**: Request assistance via support ticket

@@ -451,7 +451,7 @@ apptainer pull docker://rocker/rstudio:latest
 
 # Start RStudio Server
 apptainer exec \
-  --bind !/scratch:/workspace \
+  --bind ~/scratch:/workspace \
   rstudio_latest.sif \
   rserver --www-address=0.0.0.0 --www-port=8787
 ```

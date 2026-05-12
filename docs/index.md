@@ -72,6 +72,7 @@ New to Juno? Start here to set up your account, log in, and understand the stora
 
 - [How to Request an Account](getting-started/account-request.md)
 - [How to Log In to the System](getting-started/login.md)
+- [SSH Key Authentication](getting-started/ssh-keys.md)
 - [Storage and Data Transfer](getting-started/storage.md)
 - [Scratch Space](getting-started/scratch-space.md)
 - [Hardware Overview](getting-started/hardware.md)

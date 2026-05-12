@@ -35,6 +35,7 @@ nav:
   - Getting Started:
     - Account Request: getting-started/account-request.md
     - Login: getting-started/login.md
+    - SSH Key Authentication: getting-started/ssh-keys.md
     - Storage & Data Transfer: getting-started/storage.md
     - Scratch Space: getting-started/scratch-space.md
     - Hardware Overview: getting-started/hardware.md

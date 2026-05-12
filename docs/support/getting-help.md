@@ -358,7 +358,7 @@ Email suggestions to [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 If your issue isn't being resolved:
 
 1. **Reply to ticket**: Request status update
-2. **Email CircAssist**: Reference ticket number
+2. **Email support**: Reference ticket number
 3. **Request supervisor**: Ask for escalation if needed
 
 We're committed to resolving all issues satisfactorily.

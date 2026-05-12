@@ -258,7 +258,7 @@ See [troubleshooting section](../gui-and-tools/gui-programs.md#troubleshooting-x
 
 ### Can I use VSCode on Juno?
 
-Yes! Use the Remote-SSH extension or Open Ondemand (recommended). See [VSCode Guide](../gui-and-tools/vscode.md).
+Yes! Use the Remote-SSH extension or Open OnDemand (recommended). See [VSCode Guide](../gui-and-tools/vscode.md).
 
 ---
 

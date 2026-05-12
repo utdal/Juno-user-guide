@@ -793,5 +793,5 @@ GPU:                   100-1000x (for suitable problems)
 ## Need Help?
 
 - **Optimization consultation**: Request via [support ticket](../support/getting-help.md)
-- **Python issues**: [CircAssist@utdallas.edu](mailto:circ-assist@utdallas.edu)
+- **Python issues**: [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 - **Package installation**: Open software installation ticket
