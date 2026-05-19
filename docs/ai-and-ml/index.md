@@ -139,6 +139,7 @@ EOF
 
 - [PyTorch Training Jobs](pytorch-training.md) — single-GPU, multi-GPU DDP, and multi-node distributed training
 - [GPU Performance & Monitoring](gpu-performance.md) — profiling, mixed precision, memory optimization
+- [AlphaFold 3](alphafold3.md) — protein structure prediction using the shared container and databases
 
 ---
 

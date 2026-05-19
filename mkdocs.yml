@@ -57,6 +57,7 @@ nav:
     - GPU Computing on Juno: ai-and-ml/index.md
     - PyTorch Training Jobs: ai-and-ml/pytorch-training.md
     - GPU Performance & Monitoring: ai-and-ml/gpu-performance.md
+    - AlphaFold 3: ai-and-ml/alphafold3.md
   - Advanced:
     - Containers: advanced/containers.md
     - Python Optimization: advanced/python-optimization.md
