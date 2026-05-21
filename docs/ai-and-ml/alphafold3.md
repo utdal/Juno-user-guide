@@ -101,11 +101,14 @@ Typical locations (verify before use):
 
 ```bash
 # Shared container image
-AF3_CONTAINER=/groups/shared/containers/alphafold3.sif
+AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
 
 # Shared genetic databases (~600 GB)
-AF3_DB=/groups/shared/alphafold3/databases
+AF3_DB=/scratch/alphafold3/data
 ```
+
+!!! note "These files are not subject to scratch purge"
+    Although the container and databases reside in `/scratch`, they are protected from automatic purging. Administrators have set a higher-priority retention policy on these paths, so you do not need to copy them elsewhere.
 
 Load Apptainer before running any AlphaFold 3 commands:
 
@@ -141,11 +144,13 @@ AlphaFold 3 takes a JSON file describing the sequences you want to fold. A minim
     {
       "protein": {
         "id": "A",
-        "sequence": "MAHHHHHHVGTLSDKPQGPGQRPPSTSPQPASESSQDGSMTPRQPPTSLVDKIGGPQRAALDFLSSLQAAAGKSDQKVLQKLPEPRSLLKSFKASQTDLRRELNLADRQKLWKEVKDHIEALGPEVSLEEVLEAMLKAANSGCSEENPDAVMESLKKLHGELANACETVSQALDKQNLHLHALDQTRALKAYIQEQELAIGAESKVLLYINQTQSIFQKLAQALQSVLQQQGSSEDTLHDFFQDFHEGKQ"
+        "sequence": "MKTVRQERLKSIVRILERSKEPVSGAQLAEELSVSRQVIVQDIAYLRSLGYNIVATPRGYVLAGGSSDKLLDFLREKGAVVDDIIFTAGKLEGYRGITLVNRQGHFAVQHATKLAEIIGLPESHAVKVDISGKVDTPGGITYAVVLKDPSGRYAVRGIDIPMNALDRGIDLELLAEKLGLEPGVTYAALDLLGGGPADSEGTRVTFKLVNSQRRELLPESQFTPMENAAYRAVKEAYAGAKLTAQELAERLGISPAQVSNWFINKRMRQNRPQHQAKIKQPTLLMQGGVDKSVAEILDRAEEAGISVLALKGAIDPDAIVKHIDDAGISPHQVAGYAVANARGITPDQVARWLGLSPETVRGLLAEKGFTVQELAERLGISPAQVSNWFINKRMRQNRPQHQAKIKQPTLLMQGGVDKSVAEILDRAEEAGISVLALKGAIDPDAIVKHIDDAGISPHQVAGYAVANARGITPDQVARWLGLSPETVRGLLAEKGFTVQGADLSGLSGGQRQRVAIARALAMEPDVLLLDEPTSALDPELVGEVLDVIRGLAEEGRTVVVVTHEMGFARHVSSHVVFLHQGKIEEEGAPEQVFGAPQHPRTQQFLAQVLHHHHHHGEFTPPVQAAYQKVVAGVANALAHKYHGSGPGSGSGGSGSGGSMKTVRQERLKSIVRILERSKEPVSGAQLAEELSVSRQVIVQDIAYLRSLGYNIVATPRGYVLAGGSSDKLLDFLREKGAVVDDIIFTAGKLEGYRGITLVNRQGHFAVQHATKLAEIIGLPESHAVKVDISGKVDTPGGITYAVVLKDPSGRYAVRGIDIPMNALDRGIDLELLAEKLGLEPGVTYAALDLLGGGPADSEGTRVTFKLVNSQRRELLPESQFTPMENAAYRAVKEAYAGAKLTAQELAERLGISPAQVSNWFINKRMRQNRPQHQAKIKQPTLLMQGGVDKSVAEILDRAEEAGISVLALKGAIDPDAIVKHIDDAGISPHQVAGYAVANARGITPDQVARWLGLSPETVRGLLAEKGFTVQELAERLGISPAQVSNWFINKRMRQNRPQHQAKIKQPTLLMQGGVDKSVAEILDRAEEAGISVLALKGAIDPDAIVKHIDDAGISPHQVAGYAVANARGITPDQVARWLGLSPETVRGLLAEKGFTVQGADLSGLSGGQRQRVAIARALAMEPDVLLLDEPTSALDPELVGEVLDVIRGLAEEGRTVVVVTHEMGFARHVSSHVVFLHQGKIEEEGAPEQVFGAPQHPRTQQFLAQVLHHHHHHGEFTPPVQAAYQKVVAGVANALAHKYHGSGPGSGSGGSGSGGSMKTVRQERLKSIVRILERSKEPVSGAQLAEELSVSRQVIVQDIAYLRSLGYNIVATPRGYVLAGGSSDKLLDFLREKGAVVDDIIFTAGKLEGYRGITLVNRQGHFAVQHATKLAEIIGLPESHAVKVDISGKVDTPGGITYAVVLKDPSGRYAVRGIDIPMNALDRGIDLELLAEKLGLEPGVTYAALDLLGGGPADSEGT"
       }
     }
   ],
-  "modelSeeds": [1]
+  "modelSeeds": [1],
+  "dialect": "alphafold3",
+  "version": 1
 }
 ```
 
@@ -176,24 +181,24 @@ Split the pipeline and inference stages to make better use of the queue. The CPU
 
 mkdir -p logs
 
-AF3_CONTAINER=/groups/shared/containers/alphafold3.sif
-AF3_DB=/groups/shared/alphafold3/databases
-WORK_DIR=~/work/alphafold3
+AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
+AF3_DB=/scratch/alphafold3/data
+WORK_DIR=${HOME}/work/alphafold3
 
 module load apptainer/1.3.4
 
 apptainer exec \
-  --bind ${WORK_DIR}:/af3_work \
-  --bind ${AF3_DB}:/databases:ro \
-  ${AF3_CONTAINER} \
-  python /app/alphafold3/run_alphafold.py \
-    --input_dir=/af3_work/af_input \
-    --output_dir=/af3_work/af_output \
-    --db_dir=/databases \
-    --run_data_pipeline=true \
-    --run_inference=false \
-    --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
-    --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
+    --bind ${WORK_DIR}:/af3_work \
+    --bind ${AF3_DB}:/databases:ro \
+    ${AF3_CONTAINER} \
+    python /app/alphafold/run_alphafold.py \
+        --input_dir=/af3_work/af_input \
+        --output_dir=/af3_work/af_output \
+        --db_dir=/databases \
+        --run_data_pipeline=true \
+        --run_inference=false \
+        --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
+        --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
 ```
 
 **Stage 2 — Inference (GPU)**
@@ -214,23 +219,29 @@ apptainer exec \
 
 mkdir -p logs
 
-AF3_CONTAINER=/groups/shared/containers/alphafold3.sif
-AF3_DB=/groups/shared/alphafold3/databases
-WORK_DIR=~/work/alphafold3
+AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
+AF3_DB=/scratch/alphafold3/data
+WORK_DIR=${HOME}/work/alphafold3
 
 module load apptainer/1.3.4
 
+# Decompress model params if needed (only run once)
+if [ ! -f "${WORK_DIR}/model_parameter/af3.bin" ]; then
+    zstd -d "${WORK_DIR}/model_parameter/af3.bin.zstd" \
+         -o "${WORK_DIR}/model_parameter/af3.bin"
+fi
+
 apptainer exec --nv \
-  --bind ${WORK_DIR}:/af3_work \
-  --bind ${AF3_DB}:/databases:ro \
-  ${AF3_CONTAINER} \
-  python /app/alphafold3/run_alphafold.py \
-    --input_dir=/af3_work/af_input \
-    --output_dir=/af3_work/af_output \
-    --model_dir=/af3_work/model_parameter \
-    --db_dir=/databases \
-    --run_data_pipeline=false \
-    --run_inference=true
+    --bind ${WORK_DIR}:/af3_work \
+    --bind ${AF3_DB}:/databases:ro \
+    ${AF3_CONTAINER} \
+    python /app/alphafold/run_alphafold.py \
+        --input_dir=/af3_work/af_input \
+        --output_dir=/af3_work/af_output \
+        --model_dir=/af3_work/model_parameter \
+        --db_dir=/databases \
+        --run_data_pipeline=false \
+        --run_inference=true
 ```
 
 Submit the pipeline job first, then the inference job with a dependency:
@@ -262,25 +273,31 @@ If you prefer to run everything in one step, request an H100 node and let it han
 
 mkdir -p logs
 
-AF3_CONTAINER=/groups/shared/containers/alphafold3.sif
-AF3_DB=/groups/shared/alphafold3/databases
-WORK_DIR=~/work/alphafold3
+AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
+AF3_DB=/scratch/alphafold3/data
+WORK_DIR=${HOME}/work/alphafold3
 
 module load apptainer/1.3.4
 
+# Decompress model params if needed (only run once)
+if [ ! -f "${WORK_DIR}/model_parameter/af3.bin" ]; then
+    zstd -d "${WORK_DIR}/model_parameter/af3.bin.zstd" \
+         -o "${WORK_DIR}/model_parameter/af3.bin"
+fi
+
 apptainer exec --nv \
-  --bind ${WORK_DIR}:/af3_work \
-  --bind ${AF3_DB}:/databases:ro \
-  ${AF3_CONTAINER} \
-  python /app/alphafold3/run_alphafold.py \
-    --input_dir=/af3_work/af_input \
-    --output_dir=/af3_work/af_output \
-    --model_dir=/af3_work/model_parameter \
-    --db_dir=/databases \
-    --run_data_pipeline=true \
-    --run_inference=true \
-    --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
-    --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
+    --bind ${WORK_DIR}:/af3_work \
+    --bind ${AF3_DB}:/databases:ro \
+    ${AF3_CONTAINER} \
+    python /app/alphafold/run_alphafold.py \
+        --input_dir=/af3_work/af_input \
+        --output_dir=/af3_work/af_output \
+        --model_dir=/af3_work/model_parameter \
+        --db_dir=/databases \
+        --run_data_pipeline=true \
+        --run_inference=true \
+        --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
+        --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
 ```
 
 ---
