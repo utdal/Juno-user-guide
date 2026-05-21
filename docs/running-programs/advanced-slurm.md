@@ -16,7 +16,6 @@ normal*         up 2-00:00:00      3  drain c-04-02,c-06-[09,11]
 normal*         up 2-00:00:00     16    mix c-01-[04-05,07-09],c-02-[08,13,17],c-03-[01,04-05,07],c-04-[01,04],c-05-09,c-06-08
 normal*         up 2-00:00:00     55  alloc c-01-[06,10-17],c-02-[07,09-12,14-16,18],c-03-[02-03,06,08-18],c-04-[03,05-18],c-05-[01-08]
 normal*         up 2-00:00:00      1   idle c-01-18
-large           up 7-00:00:00     15    mix c-01-[04-05,07-09],c-02-[08,13,17],c-03-[01,04-05,07],c-04-[01,04],c-05-09
 ...
 h100            up 2-00:00:00      3    mix g-04-02,g-05-01,g-06-01
 a30             up 2-00:00:00      2   mix- g-01-01,g-02-01
@@ -189,9 +188,6 @@ scontrol update JobId=12345 TimeLimit=3-00:00:00
 
 # Change memory
 scontrol update JobId=12345 MinMemoryNode=64G
-
-# Change partition
-scontrol update JobId=12345 Partition=large
 
 # Hold and release
 scontrol hold 12345

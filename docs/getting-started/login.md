@@ -5,12 +5,12 @@
 This guide covers the different methods to access Juno HPC cluster.
 
 ```
-  Your laptop / workstation             Juno HPC Cluster
+  Your laptop / workstation                            Juno HPC Cluster
   ┌──────────────────────┐              ┌──────────────────────────────────────────┐
-  │                      │   SSH        │  ┌──────────────────────────────────────┐│
-  │  $ ssh netID@juno…   │─────────────►│  │     Login Node  (juno-l-01)          ││
+  │                      │     SSH      │  ┌──────────────────────────────────────┐│
+  │  $ ssh netID@juno…   │─────────────►│  │ Login Node (juno-l-01 and juno-l-02) ││
   │                      │              │  └────────────────┬─────────────────────┘│
-  │  Browser:            │   HTTPS      │                   │  sbatch / srun        │
+  │  Browser:            │    HTTPS     │                   │  sbatch / srun       │
   │  juno-ood.hpc…       │─────────────►│                   ▼                      │
   │                      │              │  ┌──────────────────────────────────────┐│
   └──────────────────────┘              │  │          Compute Nodes               ││
@@ -32,14 +32,14 @@ Open your terminal and run:
 ssh netID@juno.utdallas.edu
 ```
     
-Replace `netID` with your assigned Juno username.
+Replace `netID` with your netID.
 
 **Windows (PowerShell)**
 
 Open PowerShell and run:
     
 ```bash
-ssh username@juno.utdallas.edu
+ssh netID@juno.utdallas.edu
 ```
 
 **Windows (PuTTY)**
@@ -79,82 +79,19 @@ After successful login, you'll be on a **login node**. The prompt will show some
 
 ## SSH Key Authentication (Recommended)
 
-For password-free login, set up SSH keys:
+SSH keys let you log in without a password and are required by many tools (VS Code Remote, file sync scripts, Jupyter tunnels). For the full setup guide — including key generation, copying your key to Juno, SSH config aliases, and troubleshooting — see:
 
-### Generate SSH Key Pair
-
-**Linux/Mac**
-
-```bash
-# Generate key pair
-ssh-keygen -t ed25519 -C "netID@utdallas.edu"
-    
-# Press Enter to accept default location
-# Enter passphrase (optional but recommended)
-    
-# Copy public key to Juno
-ssh-copy-id netID@juno.utdallas.edu
-```
-
-**Windows (PowerShell)**
-
-```powershell
-# Generate key pair
-ssh-keygen -t ed25519 -C "your_email@utdallas.edu"
-    
-# Copy public key to Juno
-type $env:USERPROFILE\.ssh\id_ed25519.pub | ssh netID@juno.utdallas.edu "cat >> .ssh/authorized_keys"
-```
-
-### Test SSH Key Login
-
-```bash
-ssh netID@juno.utdallas.edu
-```
-
-You should now log in without entering a password (only passphrase if you set one).
+**[SSH Key Authentication →](ssh-keys.md)**
 
 ## Login with X11 Forwarding (for GUI)
 
-To run graphical programs, use X11 forwarding:
-
-### Prerequisites
-
-**Mac**
-
-1. Install [XQuartz](https://www.xquartz.org/)
-2. Log out and back in (required after first install)
-3. Open XQuartz terminal
-
-**Windows**
-
-1. Install [MobaXterm](https://mobaxterm.mobatek.net/) (Home Edition is free)
-2. X server starts automatically
-3. Use MobaXterm's built-in terminal
-
-**Linux**
-
-X11 is usually pre-installed. No additional software needed.
-
-### Login with X11
+To run graphical programs over SSH, add `-X` to your login command:
 
 ```bash
 ssh -X netID@juno.utdallas.edu
 ```
 
-
-!!! note
-    Use capital `-X` (not lowercase `-x`)
-
-### Test X11 Forwarding
-
-After logging in with `-X`:
-
-```bash
-xclock
-```
-
-A clock window should appear on your local screen.
+This requires an X server on your local machine (XQuartz on Mac, MobaXterm on Windows; pre-installed on Linux). For the full setup, testing, and troubleshooting, see [Launching GUI Programs](../gui-and-tools/gui-programs.md). For most interactive GUI work, **Open OnDemand (below) is easier**.
 
 ## Open OnDemand (Web Interface)
 
@@ -209,7 +146,7 @@ If connection times out:
 
 **Wrong password**:
 
-- Verify credentials
+- Verify credentials. If you change your NetID password, use the new password
 - Check Caps Lock
 - Reset password if needed
 

@@ -5,11 +5,11 @@
 SSH key authentication replaces your password with a cryptographic key pair — a **private key** on your machine and a **public key** on Juno. This page explains why SSH keys are recommended, how they work under the hood, and how to set them up on every major platform.
 
 ```
-  Your Machine                              Juno HPC Cluster
+            Your Machine                              Juno HPC Cluster
   ┌─────────────────────────────┐           ┌──────────────────────────────────┐
   │  ~/.ssh/id_ed25519          │           │  ~/.ssh/authorized_keys          │
   │  (private key — stays here) │           │  (your public key lives here)    │
-  │                             │  SSH      │                                  │
+  │                             │    SSH    │                                  │
   │  $ ssh netID@juno…          │──────────►│  ✓ Challenge verified — welcome! │
   │    "prove you have the key" │◄──────────│  "sign this challenge"           │
   └─────────────────────────────┘           └──────────────────────────────────┘

@@ -60,12 +60,12 @@ The weights file is named `af3.bin.zstd` and is approximately **1 GB** compresse
 
 ### GPU Requirements
 
-AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, use the `h100` or `h200` partitions.
+AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, use the `h100` partition. (The higher-VRAM `h200` partition is coming soon — see [GPU Computing on Juno](index.md).)
 
 | Partition | GPU | VRAM | Suitable? |
 |---|---|---|---|
 | `h100` | NVIDIA H100 | 80–94 GB | Yes (recommended) |
-| `h200` | NVIDIA H200 SXM5 | 141 GB | Yes |
+| `h200` | NVIDIA H200 SXM5 | 141 GB | Yes — coming soon |
 | `a30` | NVIDIA A30 | 24 GB | No — insufficient VRAM |
 
 ---

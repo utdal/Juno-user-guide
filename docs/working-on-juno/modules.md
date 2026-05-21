@@ -429,18 +429,6 @@ echo $LD_LIBRARY_PATH
 module show python/3.11.11
 ```
 
-### Checking Module Changes
-
-```bash
-# See what module will do before loading
-module show python/3.11.11
-
-# Shows:
-# - Paths added
-# - Environment variables set
-# - Dependencies loaded
-```
-
 ## Best Practices
 
 ### 1. Always Specify Versions in Job Scripts
@@ -644,67 +632,6 @@ See:
 
 - [Python Optimization Guide](../advanced/python-optimization.md)
 - [Miniconda Guide](../advanced/miniconda.md)
-
-## Checking Module Availability
-
-### Search Strategies
-
-```bash
-# Case-insensitive search
-module avail -i matlab
-
-# List all and grep
-module avail 2>&1 | grep -i tensorflow
-
-# Show module tree
-module avail -t
-```
-
-### Verify Versions
-
-```bash
-# Load and check
-module load python/3.11
-python --version
-
-# Check library versions
-python -c "import numpy; print(numpy.__version__)"
-```
-
-## Common Issues and Solutions
-
-### Issue: Module Command Not Found
-
-```bash
-# Module system not initialized
-# Usually automatic, but if needed:
-source /etc/profile.d/modules.sh
-```
-
-### Issue: Software Doesn't Run After Loading
-
-```bash
-# Verify module loaded
-module list
-
-# Check path
-which python
-
-# Try reloading
-module unload python
-module load python/3.11
-```
-
-### Issue: Need Multiple Conflicting Versions
-
-```bash
-# Use separate sessions/jobs
-# Job 1:
-module load python/3.11
-
-# Job 2 (different job):
-module load python/3.12
-```
 
 ## Next Steps
 

@@ -258,7 +258,7 @@ See [troubleshooting section](../gui-and-tools/gui-programs.md#troubleshooting-x
 
 ### Can I use VSCode on Juno?
 
-Yes! Use the Remote-SSH extension or Open OnDemand (recommended). See [VSCode Guide](../gui-and-tools/vscode.md).
+Yes! Launch VSCode through Open OnDemand so it runs on a compute node with full resources. (Avoid the Remote-SSH extension, which connects to a memory-limited login node.) See [VSCode Guide](../gui-and-tools/vscode.md).
 
 ---
 
@@ -281,7 +281,7 @@ Depends on your workload:
 - **CPU-bound**: Computation-heavy → request more CPUs
 - **Memory-bound**: Large datasets → request more memory
 
-Monitor with `seff JOBID` after jobs complete.
+Monitor with `jobstats JOBID` after jobs complete (run `module load jobstats` first). See [Monitoring Jobs and Cluster State](../running-programs/advanced-slurm.md).
 
 ### How many CPUs should I request?
 
@@ -316,7 +316,7 @@ See [Miniconda Guide](../advanced/miniconda.md).
 
 ### Can I use conda on Juno?
 
-Yes! Install Miniconda in your home directory. See [Virtual Environments guide](../advanced/miniconda.md).
+Yes! Load the system Miniconda module with `module load miniconda` — no install needed. Create environments in `~/work` or `/groups` (not home, which has limited space). See the [Virtual Environments guide](../advanced/miniconda.md).
 
 ### My Python job failed with "ModuleNotFoundError"
 
@@ -406,7 +406,7 @@ Host juno
 ### What are some general best practices?
 
 1. **Test small first**: Run short test jobs before large ones
-2. **Monitor resources**: Use `seff` to check efficiency
+2. **Monitor resources**: Use `jobstats` to check efficiency
 3. **Clean up**: Remove old output files regularly
 4. **Document**: Comment your code and scripts
 5. **Version control**: Use git for code

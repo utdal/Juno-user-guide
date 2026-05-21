@@ -6,12 +6,12 @@ Understanding where to store your data and how to move it efficiently is crucial
 
 ## Storage Systems on Juno
 
-![Storage tiers — IO2 (Home, Work, Group) is persistent and backed up daily; Scratch is up to 10× faster for large I/O but is temporary and never backed up.](../images/storage-hierarchy.png)
+![Storage tiers — Io (Home, Work, Group) is persistent and backed up daily; Scratch is up to 10× faster for large I/O but is temporary and never backed up.](../images/storage-hierarchy.png)
 
 Juno has two storage tiers:
 
-- **IO2**: High-speed storage for programs and data in active use. Includes Home, Work, and Group directories.
-- **Scratch**: Very high-performance storage for I/O-intensive batch jobs. Scratch is up to **10× faster** than IO2 for large I/O.
+- **Io**: High-speed storage for programs and data in active use. Includes Home, Work, and Group directories.
+- **Scratch**: Very high-performance storage for I/O-intensive batch jobs. Scratch is up to **10× faster** than Io for large I/O.
 
 ### Home Directory
 
@@ -50,7 +50,7 @@ soft quota grace period: 1w (default)
  realsize | 145GB |     - |       - |     - |       - |
 ```
 
-`size` is the quota-enforced limit. `realsize` is the actual disk space consumed after replication — on IO2, data is mirrored 3×, so realsize ≈ 3× size.
+`size` is the quota-enforced limit. `realsize` is the actual disk space consumed after replication — on Io, data is mirrored 3×, so realsize ≈ 3× size.
 
 ### Work Directory
 
@@ -89,7 +89,6 @@ mfsgetquota -H ~/work
 - ✓ Persistent storage
 - ✓ Backed up daily
 - ✓ Can be used for batch jobs with light to moderate I/O
-- ✗ Requires PI request
 
 **Best for**:
 
@@ -97,7 +96,7 @@ mfsgetquota -H ~/work
 - Group software installations
 - Collaborative project results
 
-**Request group storage**: Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
+**Request group storage upgrade**: Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
 
 ### Scratch Space
 
@@ -109,18 +108,10 @@ mfsgetquota -H ~/work
 
 - ✓ Quota: 30 TB (soft limit)
 - ✓ Up to 10× faster than Home/Work/Group for large I/O
-- ✓ Private to your account
 - ✗ **Never backed up**
-- ✗ Purged regularly — files not accessed for 45 days may be deleted
-- ✗ Not suitable for long-term storage
+- ✗ Files not accessed for 45 days may be purged
 
-**Best for**:
-
-- Large input/output files during active jobs
-- Intermediate computation results
-- Any job requiring heavy I/O
-
-See [Scratch Space Guide](scratch-space.md) for details and usage patterns.
+See [Scratch Space Guide](scratch-space.md) for usage patterns, purge policy, and best practices.
 
 
 ## Storage Best Practices
@@ -356,134 +347,19 @@ rsync -avzP ~/scratch/large_output/ \
 
 ### Compression Tools
 
-**gzip (fast, good compression)**:
-```bash
-# Compress
-gzip largefile.txt          # Creates largefile.txt.gz
-
-# Decompress
-gunzip largefile.txt.gz     # Restores largefile.txt
-
-# Keep original
-gzip -k largefile.txt
-```
-
-**bzip2 (slower, better compression)**:
-```bash
-# Compress
-bzip2 largefile.txt         # Creates largefile.txt.bz2
-
-# Decompress
-bunzip2 largefile.txt.bz2
-```
-
-**tar archives**:
-```bash
-# Create compressed tar archive
-tar czf archive.tar.gz directory/      # gzip compression
-tar cjf archive.tar.bz2 directory/     # bzip2 compression
-
-# Extract
-tar xzf archive.tar.gz
-tar xjf archive.tar.bz2
-
-# List contents without extracting
-tar tzf archive.tar.gz
-```
-
-**zip (for cross-platform compatibility)**:
-```bash
-# Create zip archive
-zip -r archive.zip directory/
-
-# Extract
-unzip archive.zip
-
-# List contents
-unzip -l archive.zip
-```
-
-## Working with Data in Jobs
-
-### Reading from Scratch in Job Script
+For the command syntax of `gzip`, `bzip2`, `tar`, and `zip`, see the [compression reference in the Linux Commands guide](../working-on-juno/linux-commands.md#compression-and-archives). A common pattern before transferring a directory:
 
 ```bash
-#!/bin/bash
-#SBATCH -J process_data
-#SBATCH -o output_%j.log
-#SBATCH -p normal
-#SBATCH --mem=16GB
-#SBATCH -t 4:00:00
-
-# Input data on scratch
-INPUT_DIR=~/scratch/project/input
-OUTPUT_DIR=~/scratch/project/output
-
-# Create output directory
-mkdir -p $OUTPUT_DIR
-
-# Process data
-module load python
-python analyze.py --input $INPUT_DIR --output $OUTPUT_DIR
-
-# Copy important results to home
-cp $OUTPUT_DIR/summary.txt $HOME/results/
-```
-
-### Using $TMPDIR for Node-Local Storage
-
-Some nodes have fast local storage:
-
-```bash
-#!/bin/bash
-#SBATCH -J fast_io
-#SBATCH -o output_%j.log
-#SBATCH -p normal
-#SBATCH --mem=16GB
-#SBATCH -t 2:00:00
-
-# Copy input to node-local storage
-cp ~/scratch/input_data.txt $TMPDIR/
-
-# Process using local storage (fast I/O)
-cd $TMPDIR
-python process.py input_data.txt output_data.txt
-
-# Copy results back to scratch
-cp output_data.txt ~/scratch/results/
+tar czf data.tar.gz large_dataset/    # archive + compress
+scp data.tar.gz netID@juno.utdallas.edu:~/scratch
+ssh netID@juno.utdallas.edu 'cd ~/scratch && tar xzf data.tar.gz'
 ```
 
 ## Data Management Best Practices
 
-### Regular Cleanup
-
-**Set reminders** to clean up:
-
-- Old job output files
-- Intermediate results
-- Scratch space (before purge)
-
-**Find old files**:
-```bash
-# Files not accessed in 30 days
-find ~/scratch -atime +30 -type f
-
-# Files larger than 1GB
-find ~/scratch -size +1G
-
-# Delete old temporary files
-find ~/scratch -name "*.tmp" -mtime +7 -delete
-```
-
 ### Data Lifecycle
 
-**Recommended workflow**:
-
-1. **Prepare**: Copy data to scratch
-2. **Compute**: Run jobs, write to scratch
-3. **Review**: Check results
-4. **Archive**: Copy important results to home or external storage
-5. **Clean**: Remove scratch data
+A typical workflow stages data into scratch, computes there, then saves results to backed-up storage. See [Scratch Space](scratch-space.md#recommended-workflow) for the full lifecycle and cleanup commands.
 
 ### Backup Strategy
 

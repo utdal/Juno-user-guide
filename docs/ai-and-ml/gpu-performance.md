@@ -259,7 +259,7 @@ sacct -j $JOBID --format=JobID,State,ExitCode
 2. Enable AMP (`bfloat16`) to halve activation memory
 3. Enable gradient checkpointing
 4. Use gradient accumulation (keep batch_size small, accumulate steps)
-5. Switch to a partition with more VRAM (e.g., `h200` instead of `a30`)
+5. Switch to a partition with more VRAM (e.g., `h100` (80 GB) instead of `a30` (24 GB); the higher-VRAM `h200` is coming soon)
 
 ### DDP job hangs at startup
 

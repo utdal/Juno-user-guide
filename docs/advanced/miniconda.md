@@ -1,4 +1,4 @@
-# Virtual Environment with Miniconda
+# Virtual Environments with Miniconda
 
 ## What is Miniconda?
 
@@ -240,12 +240,11 @@ conda remove -p /path/to/myenv --all
 #SBATCH --mem=16GB
 #SBATCH -t 2:00:00
 
-# Initialize conda
+# Load conda
 module load miniconda
-source ~/.bashrc
 
-# Activate environment
-conda activate path/to/myenv
+# Activate environment (use the full path)
+conda activate /path/to/myenv
 
 # Run Python script
 python script.py
@@ -261,7 +260,6 @@ conda deactivate
 #SBATCH -J multi_env_job
 
 module load miniconda
-source ~/.bashrc
 
 # Preprocessing with one environment
 conda activate /path/to/preprocess_env

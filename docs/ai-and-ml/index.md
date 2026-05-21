@@ -12,10 +12,12 @@ Juno provides several GPU partitions suited to different workloads, from interac
 | `a30-2.12gb` | 1 | 4 (virtual, half-A30) | NVIDIA A30 | 12 GB | 2 days | Multiple concurrent small jobs |
 | `a30-4.6gb` | 1 | 8 (virtual, quarter-A30) | NVIDIA A30 | 6 GB | 2 days | Light GPU jobs, debugging |
 | `h100` | 3 | 4 | NVIDIA H100 80GB / H100 NVL | 80–94 GB | 2 days | Large models, high-throughput training |
-| `h200` | 26 | 2 | NVIDIA H200 SXM5 | 141 GB | 2 days | Very large models, distributed AI training |
+| `h200` *(coming soon)* | 26 | 2 | NVIDIA H200 SXM5 | 141 GB | 2 days | Very large models, distributed AI training |
 
-!!! info "New: H200 Nodes"
-    Juno has 26 new H200 nodes (52 GPUs total). The NVIDIA H200 carries **141 GB of HBM3e memory** — nearly double the H100 — and 3.35 TB/s of memory bandwidth. This makes it ideal for training and serving large language models that don't fit on older GPUs. Nodes are connected via NVLink 4.0 for fast intra-node GPU communication.
+!!! warning "Coming soon: H200 Nodes (expected June 2026)"
+    Juno is adding 26 H200 nodes (52 GPUs total). The NVIDIA H200 carries **141 GB of HBM3e memory** — nearly double the H100 — and 3.35 TB/s of memory bandwidth, making it ideal for training and serving large language models that don't fit on older GPUs. Nodes will be connected via NVLink 4.0 for fast intra-node GPU communication.
+
+    **These nodes are not yet available.** The `h200` partition does not exist until the rollout completes — jobs submitted to it will fail. Until then, use the `h100` partition for large-GPU work. This page is documented ahead of time so it's ready when the nodes go live.
 
 ---
 
@@ -76,7 +78,7 @@ See the [Miniconda Guide](../advanced/miniconda.md) for more on managing Conda e
 
 ```bash
 # See GPU partition status
-sinfo -p h100,h200,a30,a30-2.12gb,a30-4.6gb
+sinfo -p h100,a30,a30-2.12gb,a30-4.6gb
 
 # Detailed view of a specific GPU node
 scontrol show node g-05-01

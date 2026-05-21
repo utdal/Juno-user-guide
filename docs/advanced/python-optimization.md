@@ -194,13 +194,14 @@ Example SLURM script:
 
 ```bash
 #SBATCH -N 1
-#SBATCH --cpus-per-node=64
+#SBATCH --cpus-per-task=64
 #SBATCH -p normal
 #SBATCH --mem=5GB
 #SBATCH --time=00:10:00
 
+module load miniconda
 conda activate /path/to/env
-export OMP_NUM_THREADS=64
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 python matrix_multiplication.py
 
 ```
@@ -481,55 +482,18 @@ mpirun -np $SLURM_NTASKS python mpi_script.py
 
 ## GPU Acceleration
 
-### CuPy (NumPy for GPU)
+For data-parallel workloads, moving arrays to a GPU can give large speedups. The main options in Python are **CuPy** (a drop-in NumPy replacement), **Numba** (`@cuda.jit` kernels), and **PyTorch**:
 
-**Installation**:
-```bash
-module load python/3.12.2
-module load cuda/12.4
-pip install --user cupy-cuda11x
-```
-
-**Usage**:
 ```python
 import cupy as cp
-
-# GPU array
-x_gpu = cp.random.rand(1000000)
-
-# Operations run on GPU
-result = cp.sum(x_gpu ** 2)
-
-# Transfer back to CPU if needed
-result_cpu = cp.asnumpy(result)
+x_gpu = cp.random.rand(1_000_000)
+result = cp.asnumpy(cp.sum(x_gpu ** 2))   # compute on GPU, copy back
 ```
 
-### PyTorch
+Setup, GPU partitions, library installation, profiling, and memory tuning for GPU work are covered in detail in the AI & ML section:
 
-```python
-import torch
-
-# Move data to GPU
-x = torch.rand(1000000, device='cuda')
-
-# Computations on GPU
-result = torch.sum(x ** 2)
-```
-
-**SLURM job**:
-```bash
-#!/bin/bash
-#SBATCH -p h100
-#SBATCH --gres=gpu:1
-#SBATCH -c 4
-#SBATCH --mem=16GB
-#SBATCH -t 2:00:00
-
-module load cuda/12.4
-
-conda activate /path/to/env
-python gpu_script.py
-```
+- [GPU Computing on Juno](../ai-and-ml/index.md) — environment setup and partitions
+- [GPU Performance & Monitoring](../ai-and-ml/gpu-performance.md) — CuPy, Numba, vLLM, and memory optimization
 
 ## Memory Optimization
 

@@ -24,7 +24,7 @@ The simplest case: one job, one GPU.
 #SBATCH -J train_single_gpu
 #SBATCH -o logs/train_%j.out
 #SBATCH -e logs/train_%j.err
-#SBATCH -p h100                  # or h200, a30
+#SBATCH -p h100                  # or a30 (h200 coming soon)
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:1
@@ -202,7 +202,7 @@ When you multiply the number of GPUs by N, multiply the learning rate by N as we
 #SBATCH -J train_ddp_1node
 #SBATCH -o logs/ddp_1node_%j.out
 #SBATCH -e logs/ddp_1node_%j.err
-#SBATCH -p h100                  # or h200
+#SBATCH -p h100                  # 4 GPUs per node
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=4      # one process per GPU
 #SBATCH --gres=gpu:4             # request all 4 GPUs on the node
@@ -415,8 +415,8 @@ if __name__ == '__main__':
 | 1 | 1 | ~4,000 samples/sec | Baseline |
 | 2 | 1 | ~7,500 samples/sec | ~1.9× — NVLink keeps overhead low |
 | 4 | 1 | ~14,000 samples/sec | ~3.5× — slight communication overhead |
-| 2 | 2 | ~7,000 samples/sec | Slightly less than 2× single-node — inter-node bandwidth |
-| 8 | 4 | ~25,000 samples/sec | ~6× — InfiniBand overhead grows with node count |
+| 2 | 2 | ~7,000 samples/sec | Slightly less than 2× single-node — inter-node bandwidth (a30) |
+| 8 | 4 | ~25,000 samples/sec | ~6× — InfiniBand overhead grows with node count (requires h200, coming soon) |
 
 Numbers will vary by GPU model and network interconnect.
 
@@ -426,6 +426,9 @@ Numbers will vary by GPU model and network interconnect.
 
 Scaling across multiple nodes uses the same `train_ddp.py` script. The SLURM script changes to request multiple nodes and set the right NCCL variables for inter-node communication.
 
+!!! note "Which partition for multi-node GPU jobs?"
+    Today, multi-node GPU training runs on the **`a30`** partition (up to 2 nodes, 2 GPUs each = 4 GPUs). The `h100` partition is limited to a single node per job. The larger **`h200`** partition (coming soon — see [GPU Computing on Juno](index.md)) will support bigger multi-node runs. The example below uses `a30` so it runs on current hardware.
+
 ### SLURM script
 
 ```bash
@@ -433,9 +436,9 @@ Scaling across multiple nodes uses the same `train_ddp.py` script. The SLURM scr
 #SBATCH -J train_ddp_multinode
 #SBATCH -o logs/ddp_multinode_%j.out
 #SBATCH -e logs/ddp_multinode_%j.err
-#SBATCH -p h200                  # H200 nodes — good for large multi-node runs
-#SBATCH -N 4                     # number of nodes
-#SBATCH --ntasks-per-node=2      # 2 GPUs per H200 node = 8 GPUs total
+#SBATCH -p a30                   # multi-node GPU partition (h200 coming soon for larger runs)
+#SBATCH -N 2                     # number of nodes
+#SBATCH --ntasks-per-node=2      # 2 GPUs per a30 node = 4 GPUs total
 #SBATCH --gres=gpu:2
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=256GB
@@ -473,12 +476,12 @@ srun python train_ddp.py \
 
 The `train_ddp.py` script above already handles multi-node through SLURM's environment variables:
 
-| Variable | What it sets | Example (4 nodes × 2 GPUs) |
+| Variable | What it sets | Example (2 nodes × 2 GPUs) |
 |---|---|---|
-| `SLURM_PROCID` | Global rank of this process | 0–7 |
-| `SLURM_NTASKS` | Total number of processes (world size) | 8 |
+| `SLURM_PROCID` | Global rank of this process | 0–3 |
+| `SLURM_NTASKS` | Total number of processes (world size) | 4 |
 | `SLURM_LOCALID` | Local GPU index on this node | 0 or 1 |
-| `MASTER_ADDR` | Hostname of rank-0 node (set in script) | `g-07-01` |
+| `MASTER_ADDR` | Hostname of rank-0 node (set in script) | `g-01-01` |
 | `MASTER_PORT` | Port for the rendezvous (set in script) | `29500` |
 
 No code changes are needed to go from single-node to multi-node — only the SLURM directives change.

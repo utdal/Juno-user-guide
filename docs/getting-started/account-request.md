@@ -32,7 +32,7 @@ Juno accounts are available to:
 
 **Required Information**:
 
-- Full name, email adress, and NetID of the principal investigator (PI)
+- Full name, email address, and NetID of the principal investigator (PI)
 - Full name and NetID of the user
 - Department/College affiliation
 - Funding information (if applicable)
@@ -54,18 +54,14 @@ After approval, you will receive:
 - A welcome email with your Juno username
 - Instructions for initial login
 - An invite to a virtual Juno orientation session
+- Onboarding assistance (for new PI/research groups)
 - Information about available resources
 
 ## Initial Setup
 
 ### First Login
 
-Upon receiving your credentials:
-
-1. Follow the [login instructions](login.md)
-2. Change your temporary password (if provided)
-3. Set up two-factor authentication (if required)
-4. Review the acceptable use policy
+Upon receiving your credentials, follow the [login instructions](login.md)
 
 ### Orientation
 
@@ -92,7 +88,6 @@ Users must:
 
 - Accounts remain active as long as you're affiliated with UT Dallas
 - Graduate student accounts may require annual faculty sponsor renewal
-- Inactive accounts (no login for 6+ months) may be deactivated
 
 ### Data Retention
 
@@ -100,7 +95,7 @@ Upon account deactivation, contact [circ-assist@utdallas.edu](mailto:circ-assist
 
 **As a PI**: If you wish to retain data from a former group member, contact support promptly after their departure.
 
-**As a graduating student**: Back up any important data from your home, work, and group directories before your account is deactivated. Scratch space is never backed up and is subject to the purge policy regardless of account status.
+**As a graduating student**: Back up any important data from your `home`, `work`, and `/groups` directories before your account is deactivated. Scratch space is never backed up and is subject to the purge policy regardless of account status.
 
 ## Troubleshooting
 

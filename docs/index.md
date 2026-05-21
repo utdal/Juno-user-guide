@@ -99,8 +99,9 @@ Run GPU workloads, train PyTorch models, and optimize GPU performance.
 - [GPU Computing on Juno](ai-and-ml/index.md)
 - [PyTorch Training Jobs](ai-and-ml/pytorch-training.md)
 - [GPU Performance & Monitoring](ai-and-ml/gpu-performance.md)
+- [AlphaFold 3](ai-and-ml/alphafold3.md)
 
-### GUI & Development Tools
+### GUI & Tools
 Access graphical interfaces and modern development environments.
 
 - [Launching GUI Programs](gui-and-tools/gui-programs.md)

@@ -483,9 +483,9 @@ sinfo -o "%P %l"
    - Run test jobs to determine needs
 
 2. **Use appropriate partitions**:
-   - `normal` for CPU jobs
-   - `gpu` for GPU jobs
-   - Check available partitions with `sinfo`
+   - `normal` for CPU jobs, `dev` for short test jobs
+   - `h100` / `a30` (and their virtual-slice variants) for GPU jobs
+   - See the [partitions table](#partitions-overview) or run `sinfo`
 
 3. **Organize output files**:
    ```bash
