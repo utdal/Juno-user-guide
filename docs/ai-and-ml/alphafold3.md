@@ -325,7 +325,7 @@ Once Stage 1 completes, you can re-run Stage 2 with different random seeds witho
 
 ```bash
 # Add --model_seeds to try multiple seeds in one inference run
-python /app/alphafold3/run_alphafold.py \
+python /app/alphafold/run_alphafold.py \
   --run_data_pipeline=false \
   --run_inference=true \
   --model_seeds=1,2,3,4,5 \
