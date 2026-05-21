@@ -30,9 +30,9 @@ This usually happens after multiple failed login attempts. Email [circ-assist@ut
 
 | Location | Path | Best For |
 |----------|------|----------|
-| Home (IO2) | `~` | Config files, scripts, small data |
-| Work (IO2) | `~/work` | Large software, data, results |
-| Group (IO2) | `/groups/<pi-name>` | Shared group data |
+| Home (Io) | `~` | Config files, scripts, small data |
+| Work (Io) | `~/work` | Large software, data, results |
+| Group (Io) | `/groups/<pi-name>` | Shared group data |
 | Scratch | `~/scratch` | High-speed I/O during batch jobs |
 
 See the [Storage Guide](../getting-started/storage.md) for details.

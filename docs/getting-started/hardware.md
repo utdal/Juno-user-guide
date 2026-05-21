@@ -82,9 +82,9 @@ See [Storage and Data Transfer](storage.md) and [Scratch Space](scratch-space.md
 
 | System | Path | Quota | Backup | Use For |
 |--------|------|-------|--------|---------|
-| Home (IO2) | `~` | 50 GB | Daily | Config files, scripts, small data |
-| Work (IO2) | `~/work` | 1 TB | Daily | Large software, data, results |
-| Group (IO2) | `/groups/<pi-name>` | 1 TB+ | Daily | Shared group data |
+| Home (Io) | `~` | 50 GB | Daily | Config files, scripts, small data |
+| Work (Io) | `~/work` | 1 TB | Daily | Large software, data, results |
+| Group (Io) | `/groups/<pi-name>` | 1 TB+ | Daily | Shared group data |
 | Scratch | `~/scratch` | 30 TB | Never | High-speed I/O during batch jobs |
 
 Scratch is up to **10× faster** for large I/O than home, work, or group directories.
