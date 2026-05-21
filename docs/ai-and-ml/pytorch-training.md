@@ -192,6 +192,15 @@ PyTorch's `DistributedDataParallel` (DDP) is the standard approach for using mul
 !!! tip "DDP vs. DataParallel"
     Use DDP, not the older `DataParallel`. DDP runs each GPU in its own process (no GIL bottleneck), uses efficient NCCL `AllReduce` for gradient sync, and scales to multiple nodes.
 
+!!! note "When does NVLink matter? Target `g-04-02` for communication-heavy jobs"
+    NVLink gives roughly **10× the GPU-to-GPU bandwidth** of PCIe, but it only helps jobs bottlenecked on **inter-GPU communication within a node**. On Juno, only `g-04-02` (the 4× H100 node) has NVLink — requesting all 4 GPUs (`-p h100 --gres=gpu:4`, as in the script above) lands you there.
+
+    **Benefits most** (worth targeting `g-04-02`): tensor-parallel LLM serving or training (e.g. vLLM `tensor_parallel_size>1`), FSDP / ZeRO-3, and large-model DDP where gradient sync dominates step time.
+
+    **Barely benefits** (any GPU node is fine): single-GPU jobs, independent per-GPU work (hyperparameter sweeps, array jobs), and compute-bound training with small models or heavy gradient accumulation.
+
+    Inter-node traffic always travels over InfiniBand, so NVLink only ever applies to single-node, multi-GPU jobs.
+
 ### Scaling rule
 When you multiply the number of GPUs by N, multiply the learning rate by N as well (the *linear scaling rule*). Batch size per GPU stays the same, so effective batch size scales with GPU count.
 
@@ -225,9 +234,10 @@ conda activate gpu-env
 export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
 export MASTER_PORT=29500
 
-# Disable direct peer-to-peer if GPUs are not NVLink-connected
-export NCCL_P2P_DISABLE=1
-export NCCL_IB_DISABLE=1
+export NCCL_IB_DISABLE=1     # single node — no InfiniBand needed
+# Note: the 4× H100 node (g-04-02) has NVLink, so leave peer-to-peer ENABLED
+# for fast GPU-to-GPU communication. Only set NCCL_P2P_DISABLE=1 on multi-GPU
+# nodes WITHOUT NVLink (the 94 GB H100 NVL and A30 nodes — see below).
 
 srun python train_ddp.py \
     --epochs 20 \
@@ -500,7 +510,7 @@ srun hostname | sort    # prints all allocated hostnames
 
 | Variable | When to use |
 |---|---|
-| `NCCL_P2P_DISABLE=1` | GPUs on the same node are NOT connected by NVLink (prevents failed P2P attempts) |
+| `NCCL_P2P_DISABLE=1` | GPUs on the same node are NOT connected by NVLink (prevents failed P2P attempts). On Juno, only `g-04-02` (4× H100) has NVLink — set this on other multi-GPU nodes, but **not** on `g-04-02` |
 | `NCCL_IB_DISABLE=1` | Disable InfiniBand (use only for single-node jobs or debugging) |
 | `NCCL_IB_DISABLE=0` | Enable InfiniBand for multi-node communication (default on Juno) |
 | `NCCL_DEBUG=INFO` | Print detailed NCCL transport selection — useful when debugging hang/timeout |

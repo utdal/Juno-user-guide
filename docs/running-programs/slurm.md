@@ -519,10 +519,13 @@ sinfo -o "%P %l"
 | `a30-2.12gb`     | 2 days     | 1     | 1              | 128        | 1,024 GB    | 4 half-A30 (virtual)      | 12 GB    | GPU jobs with moderate memory needs |
 | `a30-4.6gb`      | 2 days     | 1     | 1              | 128        | 1,024 GB    | 8 quarter-A30 (virtual)   | 6 GB     | GPU jobs with minimal memory requirements |
 | `vdi`            | 8 hours    | 2     | 1              | 64         | 384 GB      | –                         | –        | GUI-interactive workloads |
+| `h200` ‡         | 2 days ‡   | 26    | TBD            | TBD        | TBD         | 2 H200 NVL                | 141 GB   | Very large models, distributed AI training |
 
 \* `dev` partition shares nodes with the `normal` partition.
 
 † Up to 8 nodes/job. Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu) to request more nodes for jobs that demonstrate efficient parallel scaling.
+
+‡ The `h200` partition is **coming soon (expected June 2026)** and is not yet available — these values are provisional and will be finalized before launch. Jobs submitted to `h200` will fail until then. The H200 NVL cards have no NVLink (GPUs connect via PCIe Gen 5.0 within a node, 400 Gb InfiniBand between nodes). See [GPU Computing on Juno](../ai-and-ml/index.md).
 
 **Per-user limits**: max 4 running jobs, max 8 submitted jobs at a time. These limits can be relaxed for specific projects — contact support with evidence of efficient scaling.
 

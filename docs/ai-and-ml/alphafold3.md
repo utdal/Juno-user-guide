@@ -65,7 +65,7 @@ AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, u
 | Partition | GPU | VRAM | Suitable? |
 |---|---|---|---|
 | `h100` | NVIDIA H100 | 80–94 GB | Yes (recommended) |
-| `h200` | NVIDIA H200 SXM5 | 141 GB | Yes — coming soon |
+| `h200` | NVIDIA H200 NVL | 141 GB | Yes — coming soon |
 | `a30` | NVIDIA A30 | 24 GB | No — insufficient VRAM |
 
 ---
