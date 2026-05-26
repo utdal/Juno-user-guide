@@ -4,6 +4,8 @@
 
 Parallelism is the key to using an HPC cluster effectively. This page explains the parallelism models available on Juno, when to use each, and how to compile and submit jobs for them. It focuses on the Juno-specific mechanics — for the APIs themselves, links to upstream tutorials are provided at the end.
 
+![Screenshot of 3 basic parallelism modes](../images/parallelism.png)
+
 ## Choosing a Model
 
 ```
@@ -35,9 +37,9 @@ Multiple threads share one address space on a **single node**. Best for loop par
   Single Node  (#SBATCH -N 1  -c 16  +  export OMP_NUM_THREADS=16)
   ┌────────────────────────────────────────────────────────────────┐
   │  Thread 0    Thread 1    Thread 2   ...   Thread N-1           │
-  │  ┌────────┐  ┌────────┐  ┌────────┐      ┌────────┐           │
-  │  │ core 0 │  │ core 1 │  │ core 2 │      │ core N │           │
-  │  └───┬────┘  └───┬────┘  └───┬────┘      └───┬────┘           │
+  │  ┌────────┐  ┌────────┐  ┌────────┐      ┌────────┐            │
+  │  │ core 0 │  │ core 1 │  │ core 2 │      │ core N │            │
+  │  └───┬────┘  └───┬────┘  └───┬────┘      └───┬────┘            │
   │      └───────────┴───────────┴───────────────┘                 │
   │                  ┌────────────────────────┐                    │
   │                  │     Shared Memory      │                    │
@@ -116,6 +118,19 @@ srun ./my_mpi_program           # srun is preferred; mpirun -np $SLURM_NTASKS al
 
 SLURM sets `$SLURM_NTASKS`, `$SLURM_NNODES`, and `$SLURM_CPUS_PER_TASK` for you — use these instead of hard-coding counts.
 
+> **`srun` vs `mpirun`**
+>
+> Both can launch MPI jobs, but they work differently inside a SLURM allocation:
+>
+> | | `srun` | `mpirun` |
+> |---|---|---|
+> | **SLURM-aware** | Yes — reads `-N`/`-n`/`-c` from the allocation automatically | No — you must pass `-np $SLURM_NTASKS` explicitly |
+> | **CPU binding** | Enforced by SLURM; integrates with `--cpu-bind` | Library-managed; may conflict with SLURM's affinity settings |
+> | **Process accounting** | Tracked by SLURM cgroup | May escape SLURM tracking on some configurations |
+> | **Startup** | Uses PMI2/PMIx; generally faster at scale | Uses its own wire-up protocol; can be slower at high rank counts |
+>
+> **Prefer `srun` on Juno.** It inherits your allocation, respects CPU binding, and keeps processes inside SLURM's accounting. Use `mpirun -np $SLURM_NTASKS` only if a specific library requires it — and test that process counts and bindings are what you expect.
+
 ---
 
 ## 3. Hybrid Parallelism (MPI + OpenMP)
@@ -126,12 +141,12 @@ Combines MPI **across** nodes with OpenMP **within** each node. Fewer MPI ranks 
   Node 1                                Node 2
   ┌─────────────────────────────────┐   ┌─────────────────────────────────┐
   │  MPI Rank 0                     │   │  MPI Rank 1                     │
-  │  ┌───────┬───────┬───────┬──────┐│  │  ┌───────┬───────┬───────┬──────┐│
-  │  │ thd 0 │ thd 1 │ thd 2 │thd 3 ││  │  │ thd 0 │ thd 1 │ thd 2 │thd 3 ││
-  │  └───────┴───────┴───────┴──────┘│  │  └───────┴───────┴───────┴──────┘│
-  │        OpenMP shared memory       │  │        OpenMP shared memory       │
+  │ ┌───────┬───────┬───────┬──────┐│   │ ┌───────┬───────┬───────┬──────┐│
+  │ │ thd 0 │ thd 1 │ thd 2 │thd 3 ││   │ │ thd 0 │ thd 1 │ thd 2 │thd 3 ││
+  │ └───────┴───────┴───────┴──────┘│   │ └───────┴───────┴───────┴──────┘│
+  │      OpenMP shared memory       │   │      OpenMP shared memory       │
   └────────────────┬────────────────┘   └────────────────┬────────────────┘
-                   └──────────── MPI messages ────────────┘
+                   └──────────── MPI messages ───────────┘
                                  (InfiniBand)
 ```
 
@@ -165,6 +180,7 @@ Offload massively data-parallel work to a GPU. Best for dense linear algebra, de
 **Compile and run on Juno:**
 
 ```bash
+module purge				# Default gnu compiler causes conflicts, hence should be unloaded
 module load cuda/12.6
 nvcc vector_add.cu -o vector_add
 ```
