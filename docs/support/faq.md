@@ -231,7 +231,7 @@ Or use `module purge` to start fresh.
 
 ### Can I use Jupyter notebooks on Juno?
 
-Yes! Use [Open OnDemand](../gui-and-tools/gui-programs.md):
+Yes! Use [Open OnDemand](../gui-and-tools/open-ondemand.md):
 1. Interactive Apps → JupyterLab
 2. Request resources
 3. Connect when ready

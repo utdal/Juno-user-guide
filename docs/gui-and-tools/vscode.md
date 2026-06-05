@@ -30,7 +30,7 @@ Visual Studio Code can run on Juno through **Open OnDemand**, which launches a b
 
 ![Screenshot of VSCode running in a browser via Open OnDemand, showing the file explorer sidebar, an open Python file with syntax highlighting, and the integrated terminal at the bottom.](../images/screenshot-ood-vscode.png)
 
-For general Open OnDemand usage (managing sessions, file uploads), see [Launching GUI Programs](gui-programs.md).
+For general Open OnDemand usage (managing sessions, file uploads), see [Open OnDemand](open-ondemand.md).
 
 ## Working in VSCode
 

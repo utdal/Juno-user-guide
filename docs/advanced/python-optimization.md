@@ -180,15 +180,15 @@ python matrix_multiplication.py
 
 ```
 
- Number of CPU cores (threads) | Execution time (s) 
- ---| ---
- 1 | 0.1537 
- 2 | 0.0831 
- 4 | 0.0464 
- 8 | 0.0253 
- 16 | 0.0142 
- 32 | 0.0081 
- 64 | 0.0060 
+| Number of CPU cores (threads) | Execution time (s) |
+|---|---|
+| 1 | 0.1537 |
+| 2 | 0.0831 |
+| 4 | 0.0464 |
+| 8 | 0.0253 |
+| 16 | 0.0142 |
+| 32 | 0.0081 |
+| 64 | 0.0060 |
 
 Example SLURM script:
 

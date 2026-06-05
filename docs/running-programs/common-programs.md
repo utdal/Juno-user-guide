@@ -58,7 +58,7 @@ module load matlab/r2024b
 matlab
 ```
 
-Or use **Open OnDemand** → Interactive Apps → MATLAB (easiest option).
+Or use [**Open OnDemand**](../gui-and-tools/open-ondemand.md) → Interactive Apps → MATLAB (easiest option).
 
 ---
 
@@ -194,7 +194,7 @@ Rscript analysis.R
 
 ### Interactive (RStudio via Open OnDemand)
 
-Open OnDemand → Interactive Apps → RStudio Server — this is the easiest way to use R interactively.
+[Open OnDemand](../gui-and-tools/open-ondemand.md) → Interactive Apps → RStudio Server — this is the easiest way to use R interactively.
 
 ---
 

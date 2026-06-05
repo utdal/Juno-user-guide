@@ -114,7 +114,7 @@ Access Juno through your web browser:
 !!! tip
     Open OnDemand is perfect for users who prefer graphical interfaces or need to access Juno from networks that block SSH.
 
-For detailed Open OnDemand usage, see [Launching GUI Programs](../gui-and-tools/gui-programs.md).
+For detailed Open OnDemand usage, see [Open OnDemand](../gui-and-tools/open-ondemand.md).
 
 ## Connection Issues
 
@@ -174,7 +174,7 @@ tmux attach -t mysession
 
 ## Login Node Best Practices
 
-**Important:**
+!!! warning "Important"
     Login nodes are shared resources. **Do not run computational work on login nodes.**
 
 **Acceptable on login nodes**:

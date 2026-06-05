@@ -52,6 +52,12 @@ soft quota grace period: 1w (default)
 
 `size` is the quota-enforced limit. `realsize` is the actual disk space consumed after replication — on Io, data is mirrored 3×, so realsize ≈ 3× size.
 
+!!! warning "Don't let your home directory fill up"
+
+    When you hit the **soft limit**, the file system gives you a 7-day grace period to clean up and free space so you can keep storing data. After 7 days, if nothing changes, you will no longer be able to write any new files, and any additional files you try to transfer in will be **corrupted**.
+
+    A full home directory is especially problematic because it affects your other sessions, such as SSH login and Open OnDemand. Please be mindful of your usage.
+
 ### Work Directory
 
 **Path**: `~/work`
@@ -392,17 +398,22 @@ chmod 700 private_directory/
 
 # Group-readable
 chmod 640 shared_data.txt
+
+# Group-executable and readable (if you want to share a program/package with your group members)
+chmod 750 program.exe
 ```
 
 ### Sensitive Data
 
-If working with sensitive data (HIPAA, FERPA, export-controlled):
+Juno is not approved for HIPAA-, FERPA-, or export-controlled data. The cluster uses standard POSIX permissions and does not provide encryption at rest, so sensitive data cannot be adequately protected by the system alone.
 
-1. **Verify approval** to use HPC for this data
-2. **Encrypt** sensitive files
-3. **Limit access** with proper permissions
-4. **Follow institutional policies**
-5. **Contact support** for guidance
+If you need to work with this type of data, encryption must be handled by you or your organization before transferring files to the cluster. For institutional guidance on security and compliance, visit [data.utdallas.edu/security-compliance](data.utdallas.edu/security-compliance).
+
+If you are unsure whether your data qualifies as sensitive, please reach out to us before proceeding.
+
+### Prohibited Technologies
+
+Juno is a state-owned system, so Texas law prohibits certain foreign-owned applications and hardware (e.g., TikTok, WeChat, DeepSeek and other PRC AI tools, Kaspersky) from being installed, run, or stored on the cluster. Before downloading unfamiliar software or models, see [Prohibited Technologies & Covered Applications](../support/prohibited-technologies.md).
 
 ## Troubleshooting
 
@@ -437,7 +448,7 @@ chmod 755 filename
 
 ```bash
 # Check usage
-quota -s
+mfsgetquota -H ~
 
 # Find large files
 du -sh /home/$USER/* | sort -h

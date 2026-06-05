@@ -357,7 +357,7 @@ print(outputs[0].outputs[0].text)
 
 ```bash
 pip install vllm
-export HF_HOME=/scratch/juno/$USER/hf_cache   # cache models in scratch
+export HF_HOME=~/scratch/hf_cache   # cache models in scratch
 ```
 
 Use `tensor_parallel_size=N` to split a model across N GPUs when it doesn't fit on one.

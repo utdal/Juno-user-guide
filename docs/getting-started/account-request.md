@@ -61,7 +61,7 @@ After approval, you will receive:
 
 ### First Login
 
-Upon receiving your credentials, follow the [login instructions](login.md)
+Upon receiving your credentials, follow the [login instructions](login.md).
 
 ### Orientation
 

@@ -168,7 +168,7 @@ apptainer shell mycontainer.sif
 apptainer shell --nv tensorflow.sif
 
 # Bind additional directories
-apptainer shell --bind /scratch/$USER:/data mycontainer.sif
+apptainer shell --bind ~/scratch:/data mycontainer.sif
 ```
 
 ### Execute Commands
@@ -280,7 +280,7 @@ apptainer exec ~/scratch/mycontainer.sif \
 ```bash
 #!/bin/bash
 #SBATCH -J gpu_container
-#SBATCH -p a30			# or h100
+#SBATCH -p a30                  # or h100
 #SBATCH --gres=gpu:1
 #SBATCH -c 4
 #SBATCH --mem=32GB

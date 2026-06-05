@@ -180,7 +180,7 @@ Offload massively data-parallel work to a GPU. Best for dense linear algebra, de
 **Compile and run on Juno:**
 
 ```bash
-module purge				# Default gnu compiler causes conflicts, hence should be unloaded
+module purge                    # the default GNU compiler conflicts with nvcc, so unload it first
 module load cuda/12.6
 nvcc vector_add.cu -o vector_add
 ```

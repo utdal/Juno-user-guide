@@ -11,7 +11,9 @@ Juno provides several GPU partitions suited to different workloads, from interac
 | `a30` | 2 | 2 | NVIDIA A30 | 24 GB | 2 days | Medium GPU workloads, inference, development |
 | `a30-2.12gb` | 1 | 4 (virtual, half-A30) | NVIDIA A30 | 12 GB | 2 days | Multiple concurrent small jobs |
 | `a30-4.6gb` | 1 | 8 (virtual, quarter-A30) | NVIDIA A30 | 6 GB | 2 days | Light GPU jobs, debugging |
-| `h100` | 3 | 4 | NVIDIA H100 80GB / H100 NVL | 80–94 GB | 2 days | Large models, high-throughput training |
+| `h100` | 1 | 4 | NVIDIA H100 (80GB HBM3) | 80 GB | 2 days | Large models, high-throughput / multi-GPU training |
+| `h100-94gb` | 1 | 1 | NVIDIA H100 NVL | 94 GB | 2 days | Single high-memory GPU jobs |
+| `h100-2.47gb` | 1 | 4 (virtual, half-H100) | NVIDIA H100 | 47 GB | 2 days | Concurrent moderate-memory GPU jobs |
 | `h200` *(coming soon)* | 26 | 2 | NVIDIA H200 NVL | 141 GB | 2 days | Very large models, distributed AI training |
 
 !!! warning "Coming soon: H200 Nodes (expected June 2026)"
@@ -78,7 +80,7 @@ See the [Miniconda Guide](../advanced/miniconda.md) for more on managing Conda e
 
 ```bash
 # See GPU partition status
-sinfo -p h100,a30,a30-2.12gb,a30-4.6gb
+sinfo -p h100,h100-94gb,h100-2.47gb,a30,a30-2.12gb,a30-4.6gb
 
 # Detailed view of a specific GPU node
 scontrol show node g-05-01

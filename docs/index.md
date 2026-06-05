@@ -33,7 +33,7 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
     ---
 
-    Request an account and learn how to log in to Juno
+    Request an account, learn how to log in, and transfer data on Juno
 
     [Request Account](getting-started/account-request.md)
 
@@ -41,17 +41,17 @@ For full hardware specifications, see the [Hardware Overview](getting-started/ha
 
     ---
 
-    Learn to submit and manage jobs on the cluster
+    Learn to request and use resources on the cluster
 
     [SLURM Guide](running-programs/slurm.md)
 
--   **GUI Programs**
+-   **Graphical User Interface (GUI) Programs**
 
     ---
 
     Launch graphical applications using Open OnDemand or X11
 
-    [GUI Guide](gui-and-tools/gui-programs.md)
+    [Open OnDemand](gui-and-tools/open-ondemand.md)
 
 -   **Get Help**
 
@@ -93,7 +93,7 @@ Master job submission and execution on Juno.
 - [Parallelism Models](running-programs/parallelism.md)
 - [High Throughput Processing with Launcher](running-programs/launcher.md)
 
-### AI & Machine Learning
+### GPU computing, AI, and Machine Learning
 Run GPU workloads, train PyTorch models, and optimize GPU performance.
 
 - [GPU Computing on Juno](ai-and-ml/index.md)
@@ -104,7 +104,8 @@ Run GPU workloads, train PyTorch models, and optimize GPU performance.
 ### GUI & Tools
 Access graphical interfaces and modern development environments.
 
-- [Launching GUI Programs](gui-and-tools/gui-programs.md)
+- [Open OnDemand](gui-and-tools/open-ondemand.md)
+- [Launching GUI Programs (X11)](gui-and-tools/gui-programs.md)
 - [JupyterLab on Juno](gui-and-tools/jupyter.md)
 - [VSCode on Juno](gui-and-tools/vscode.md)
 

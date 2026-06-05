@@ -139,7 +139,7 @@ pip install package_name
 conda list
 
 # List packages in specific environment
-conda list -n path/to/myenv
+conda list -p /path/to/myenv
 
 # Search for package
 conda search numpy
@@ -214,14 +214,14 @@ conda env update -f environment.yml --prune
 
 ```bash
 # Clone existing environment
-conda create --name /path/to/newenv --clone /path/to/oldenv
+conda create -p /path/to/newenv --clone /path/to/oldenv
 ```
 
 ### Remove Environment
 
 ```bash
 # Remove environment
-conda env remove -n /path/to/myenv
+conda env remove -p /path/to/myenv
 
 # Or
 conda remove -p /path/to/myenv --all
@@ -676,7 +676,7 @@ conda env export > environment.yml
 conda env create -f environment.yml
 
 # Remove environment
-conda env remove -n myenv
+conda env remove -p /path/to/myenv
 
 # Clean up
 conda clean --all

@@ -111,7 +111,7 @@ Press **Enter** to accept the default path.
 Enter passphrase (empty for no passphrase):
 ```
 
-**A passphrase is strongly recommended.** It encrypts your private key so it cannot be used if your machine is ever compromised. You'll only type it once per session (see [Using ssh-agent](#using-ssh-agent--skip-the-passphrase-prompt)).
+**A passphrase is strongly recommended.** It encrypts your private key so it cannot be used if your machine is ever compromised. You'll only type it once per session (see [Using ssh-agent](#using-ssh-agent-skip-the-passphrase-prompt)).
 
 After completion, two files are created:
 
@@ -400,7 +400,7 @@ If it's not offering `id_ed25519`, specify it explicitly:
 ssh -i ~/.ssh/id_ed25519 netID@juno.utdallas.edu
 ```
 
-Or add `IdentityFile ~/.ssh/id_ed25519` to your `~/.ssh/config` (see [SSH Config File](#step-4--set-up-an-ssh-config-file-optional-but-recommended)).
+Or add `IdentityFile ~/.ssh/id_ed25519` to your `~/.ssh/config` (see [SSH Config File](#step-4-set-up-an-ssh-config-file-optional-but-recommended)).
 
 ### Bad permissions on private key
 
@@ -482,7 +482,7 @@ Host juno
 
 After setting up SSH key authentication:
 
-1. [Set up an SSH Config alias for faster logins →](#step-4--set-up-an-ssh-config-file-optional-but-recommended)
+1. [Set up an SSH Config alias for faster logins →](#step-4-set-up-an-ssh-config-file-optional-but-recommended)
 2. [Connect VS Code directly to Juno →](../gui-and-tools/vscode.md)
 3. [Transfer files with rsync or scp →](storage.md)
 4. [Submit your first job →](../running-programs/slurm.md)

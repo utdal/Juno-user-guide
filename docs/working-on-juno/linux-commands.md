@@ -51,7 +51,7 @@ ls -lt               # Sort by modification time
 ls -ltr              # Sort by time, reverse (oldest first)
 
 # Change directory
-cd /scratch/$USER    # Go to specific path
+cd ~/scratch    # Go to specific path
 cd ~                 # Go to home directory
 cd -                 # Go to previous directory
 cd ..                # Go up one level
@@ -103,7 +103,7 @@ mkdir dir1 dir2 dir3
 cp source.txt destination.txt
 
 # Copy file to directory
-cp file.txt /scratch/$USER/
+cp file.txt ~/scratch/
 
 # Copy directory recursively
 cp -r source_dir/ destination_dir/
@@ -122,7 +122,7 @@ cp file1.txt file2.txt file3.txt /destination/
 mv oldname.txt newname.txt
 
 # Move file to different directory
-mv file.txt /scratch/$USER/
+mv file.txt ~/scratch/
 
 # Move directory
 mv source_dir/ /new/location/
@@ -811,7 +811,7 @@ Try these to get comfortable:
    cd ~
    pwd
    ls -la
-   cd /scratch/$USER
+   cd ~/scratch
    ```
 
 2. **Create and manipulate files**:

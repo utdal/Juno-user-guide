@@ -314,6 +314,7 @@ ssh -N -L 8888:g-05-01:8888 juno
 
 ## Related guides
 
-- [Launching GUI Programs →](gui-programs.md)
+- [Open OnDemand →](open-ondemand.md)
+- [Launching GUI Programs (X11) →](gui-programs.md)
 - [Virtual Environments with Miniconda →](../advanced/miniconda.md)
 - [SLURM Job Scheduler →](../running-programs/slurm.md)
