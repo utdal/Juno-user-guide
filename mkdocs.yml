@@ -40,6 +40,7 @@ nav:
     - SSH Key Authentication: getting-started/ssh-keys.md
     - Storage & Data Transfer: getting-started/storage.md
     - Scratch Space: getting-started/scratch-space.md
+    - Saturn Research Data Storage: getting-started/saturn.md
     - Hardware Overview: getting-started/hardware.md
   - Working on Juno:
     - Linux Commands: working-on-juno/linux-commands.md

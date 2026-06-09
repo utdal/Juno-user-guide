@@ -4,15 +4,25 @@
 
 Scratch is Juno's high-performance temporary filesystem, designed for fast I/O during job execution. It is up to **10× faster** than the Io storage system (`~`, `~/work`, `/groups`) for large I/O, but it is **never backed up** and is subject to an automatic purge policy.
 
+!!! danger "Scratch is never backed up"
+
+    There are **no backups, snapshots, or recovery** of any kind for scratch. Anything that is deleted, purged, lost to a hardware failure, or overwritten is **gone permanently** — Juno staff cannot get it back. Treat scratch as disposable working space only: keep the authoritative copy of anything you care about in `~/work`, `/groups`, or your own external storage, and copy results off scratch as soon as a job finishes.
+
 | Property | Value |
 |---|---|
 | Path | `~/scratch` |
 | Quota | 30 TB (soft limit) |
 | Performance | Up to 10× faster than Io for large I/O |
 | Backup | **None** |
-| Purge | Files not accessed in **45 days** may be deleted |
+| Purge | Files not accessed in **45 days** will be purged |
 
 For an overview of all storage tiers and how to move data between them, see [Storage and Data Transfer](storage.md).
+
+!!! warning "Soft limit vs. hard limit"
+
+    The 30 TB quota is a **soft limit**. When you cross it, the file system gives you a 7-day grace period to clean up and free space so you can keep writing. After 7 days, if nothing changes, you hit the **hard limit**: you will no longer be able to write any new files, and any additional files you try to transfer in will be **corrupted**.
+
+    Check your scratch usage with `du -sh ~/scratch` and stay well under the limit — and remember that scratch is **never backed up**, so freeing space by deleting files is permanent.
 
 ## When to Use Scratch
 
@@ -31,7 +41,7 @@ For an overview of all storage tiers and how to move data between them, see [Sto
 
 ## Purge Policy
 
-Files **not accessed in 45 days** may be automatically purged. There is **no recovery** after a purge.
+Files **not accessed in 45 days** will be automatically purged. There is **no recovery** after a purge.
 
 The purge is based on **access time** (the last time a file was read or written):
 

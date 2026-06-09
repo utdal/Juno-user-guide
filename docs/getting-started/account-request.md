@@ -18,11 +18,13 @@ Juno accounts are available to:
 
 ### Step 1: Determine Your Access Type
 
-**Faculty and Staff**: Direct access eligibility
+**Faculty**: Direct access eligibility
 
-**Students**: Requires faculty sponsor approval
+**Staff, Graduate, and Undergraduate Students**: Requires faculty sponsor approval
 
 **External Collaborators**: Requires faculty sponsor and approval
+
+Please contact us if you don't fall under any of these categories.
 
 ### Step 2: Submit Request
 
@@ -43,16 +45,16 @@ Juno accounts are available to:
 Once submitted, your request will be reviewed by:
 
 1. Your faculty sponsor (if applicable)
-2. HPC support team
+2. HPC team
 
-**Processing Time**: Typically 1-3 business days for standard requests
+**Processing Time**: Up to 5 business days for standard requests
 
 ### Step 4: Receive Credentials
 
 After approval, you will receive:
 
-- A welcome email with your Juno username
-- Instructions for initial login
+- A welcome email
+- An email with your credentials and instructions for initail login
 - An invite to a virtual Juno orientation session
 - Onboarding assistance (for new PI/research groups)
 - Information about available resources
@@ -95,7 +97,7 @@ Upon account deactivation, contact [circ-assist@utdallas.edu](mailto:circ-assist
 
 **As a PI**: If you wish to retain data from a former group member, contact support promptly after their departure.
 
-**As a graduating student**: Back up any important data from your `home`, `work`, and `/groups` directories before your account is deactivated. Scratch space is never backed up and is subject to the purge policy regardless of account status.
+**As a graduating student**: Back up data from your `home`, `work`, and `/groups` directories before your account is deactivated. Scratch space is never backed up and is subject to the purge policy regardless of account status.
 
 ## Troubleshooting
 

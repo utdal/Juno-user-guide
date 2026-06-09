@@ -34,7 +34,7 @@ ssh netID@juno.utdallas.edu
     
 Replace `netID` with your netID.
 
-**Windows (PowerShell)**
+**Windows terminal (PowerShell)**
 
 Open PowerShell and run:
     
@@ -94,6 +94,8 @@ ssh -X netID@juno.utdallas.edu
 This requires an X server on your local machine (XQuartz on Mac, MobaXterm on Windows; pre-installed on Linux). For the full setup, testing, and troubleshooting, see [Launching GUI Programs](../gui-and-tools/gui-programs.md). For most interactive GUI work, **Open OnDemand (below) is easier**.
 
 ## Open OnDemand (Web Interface)
+
+Open OnDemand is a web portal that gives you access to Juno entirely through your browser — no SSH client or terminal setup required. From a single dashboard you can manage files, open a shell, and launch interactive graphical applications such as Jupyter and RStudio. It is the easiest way to get started and works well from networks that restrict SSH.
 
 Access Juno through your web browser:
 
@@ -162,14 +164,14 @@ chmod 644 ~/.ssh/id_ed25519.pub
 
 If your connection frequently drops:
 
-**Use `tmux` or `screen`**:
+**Use `screen`**:
 ```bash
-# Start tmux session
-tmux new -s mysession
+# Start screen session
+screen -S mysession
 
 # Your work continues even if disconnected
 # Reconnect with:
-tmux attach -t mysession
+screen -r mysession
 ```
 
 ## Login Node Best Practices
@@ -183,7 +185,7 @@ tmux attach -t mysession
 - Compiling code
 - Transferring small files
 - Submitting jobs
-- Light testing
+- Light testing and mini-programs
 
 **Not acceptable on login nodes**:
 
@@ -213,9 +215,6 @@ mfsgetquota -H ~
 
 # See who else is logged in
 who
-
-# Check system load
-uptime
 
 # View your jobs
 squeue --me

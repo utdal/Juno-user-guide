@@ -6,7 +6,7 @@ Understanding where to store your data and how to move it efficiently is crucial
 
 ## Storage Systems on Juno
 
-![Storage tiers — Io (Home, Work, Group) is persistent and backed up daily; Scratch is up to 10× faster for large I/O but is temporary and never backed up.](../images/storage-hierarchy.png)
+![Storage tiers — Io (Home, Work, Group) is persistent with active user login, and backed up daily; Scratch is up to 10× faster for large I/O but is temporary and never backed up.](../images/storage-hierarchy.png)
 
 Juno has two storage tiers:
 
@@ -92,7 +92,7 @@ mfsgetquota -H ~/work
 
 - ✓ Shared among group members
 - ✓ Quota: 1 TB or more (varies by group)
-- ✓ Persistent storage
+- ✓ Shared with Ganymede 2 `/groups`, i.e. you can fetch the same data from both clusters
 - ✓ Backed up daily
 - ✓ Can be used for batch jobs with light to moderate I/O
 
@@ -102,7 +102,7 @@ mfsgetquota -H ~/work
 - Group software installations
 - Collaborative project results
 
-**Request group storage upgrade**: Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu)
+**Request group storage upgrade**: [Storage Increase Request](https://atlas.utdallas.edu/TDClient/30/Portal/Requests/ServiceOffering/1212/Increase-Storage-Allocation/Request)
 
 ### Scratch Space
 
@@ -115,9 +115,17 @@ mfsgetquota -H ~/work
 - ✓ Quota: 30 TB (soft limit)
 - ✓ Up to 10× faster than Home/Work/Group for large I/O
 - ✗ **Never backed up**
-- ✗ Files not accessed for 45 days may be purged
+- ✗ Files not accessed for 45 days will be purged
 
 See [Scratch Space Guide](scratch-space.md) for usage patterns, purge policy, and best practices.
+
+### Saturn (Research Data Storage)
+
+The tiers above are Juno's own storage and are sized for active HPC work — Home (50 GB), Work (1 TB), and Group (1 TB+) are deliberately modest. When a research group needs far more persistent capacity than these provide, **Saturn** is UTD's enterprise research-data NAS, with allocations from 10 TB up to 30 TB.
+
+Saturn is **not** a Juno filesystem — it is a separate campus storage service that can be connected to HPC workflows (for example, as a large, redundant home for active datasets or as a backup destination outside the cluster). It complements, rather than replaces, the storage tiers above.
+
+See [Saturn Research Data Storage](saturn.md) for capacity tiers, eligibility, and how it fits alongside Juno's storage.
 
 
 ## Storage Best Practices
@@ -180,6 +188,7 @@ du -sh ~/scratch
 3. Move data to scratch
 4. Archive to external storage
 5. Request quota increase (if justified)
+6. Consider requesting a [Saturn allocation](saturn.md) for large, persistent research data
 
 **Request quota increase**:
 
@@ -235,9 +244,13 @@ exit                       # Quit
 - **WinSCP**: Windows only, free
 - **Cyberduck**: Mac/Windows, free
 
+!!! tip "Resuming interrupted transfers in FileZilla"
+
+    Like `rsync -P` (`--partial`), FileZilla can resume transfers after a dropped connection. Interrupted files move to the **Failed transfers** tab, and FileZilla reconnects and resumes from where it left off (downloads, and uploads where the server supports it — Juno's SFTP does). You can tune automatic retries and reconnect behavior under **Settings → Transfers** and **Settings → Connection**.
+
 ### Medium and Large Files (>100MB)
 
-#### Rsync
+#### Rsync (Mac/Linux)
 
 **Advantages**:
 
@@ -314,26 +327,6 @@ cd ~/scratch
 tar xzf data.tar.gz
 ```
 
-### Transfer from Compute Node
-
-For very large transfers that may take hours:
-
-**Submit as a job**:
-```bash
-#!/bin/bash
-#SBATCH -J data_transfer
-#SBATCH -o transfer_%j.log
-#SBATCH -p normal
-#SBATCH -N 1
-#SBATCH -c 1
-#SBATCH --mem=4GB
-#SBATCH -t 12:00:00
-
-# Transfer data
-rsync -avzP ~/scratch/large_output/ \
-  username@remote-server.edu:/data/destination/
-```
-
 ## Data Compression
 
 ### When to Compress
@@ -342,7 +335,6 @@ rsync -avzP ~/scratch/large_output/ \
 
 - Text files (code, logs, CSV)
 - Uncompressed images
-- Before long-term storage
 - Before transfer (if not already compressed)
 
 **Don't compress**:
@@ -365,7 +357,7 @@ ssh netID@juno.utdallas.edu 'cd ~/scratch && tar xzf data.tar.gz'
 
 ### Data Lifecycle
 
-A typical workflow stages data into scratch, computes there, then saves results to backed-up storage. See [Scratch Space](scratch-space.md#recommended-workflow) for the full lifecycle and cleanup commands.
+**You should only store active computation data**. A typical workflow stages data into scratch, computes there, then saves results to backed-up storage. See [Scratch Space](scratch-space.md#recommended-workflow) for the full lifecycle and cleanup commands.
 
 ### Backup Strategy
 
@@ -374,9 +366,9 @@ A typical workflow stages data into scratch, computes there, then saves results 
 **Backup destinations**:
 
 - Personal computer
-- External hard drive
-- UT Dallas cloud storage (Box)
-- Research data repositories
+- UT Dallas cloud storage (Box, OneDrive)
+- [Saturn research data storage](saturn.md) (enterprise NAS for active research data and backups)
+- Departmental storage servers
 - Cloud services (Google Drive, Dropbox, etc.)
 
 ## Data Security
