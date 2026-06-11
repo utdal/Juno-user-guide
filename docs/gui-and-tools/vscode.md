@@ -53,7 +53,7 @@ In VSCode on your laptop or desktop, configure the following Juno node as a Remo
 Connect to the UT Dallas VPN first if you are off-campus.
 
 !!! tip "Password-free login"
-    Alternatively, you can set up SSH keys for a password-free login. See the instructions on the [Linuxize website](https://linuxize.com/post/how-to-setup-passwordless-ssh-login/).
+    Alternatively, you can set up SSH keys for a password-free login. See the [SSH Key Authentication](../getting-started/ssh-keys.md) page for instructions.
 
 ### Limitations of the current system
 

@@ -226,8 +226,8 @@ Some module systems use hierarchies where loading a compiler unlocks additional 
                 │ openmpi5 │  (or mpich)  │   MKL    │   MPI / math libs
                 └────┬─────┘              └──────────┘
                      │ unlocks
-          ┌──────────┼──────────┬──────────┐
-          ▼          ▼          ▼          ▼
+          ┌──────────┴┬───────────┬───────────┐
+          ▼           ▼           ▼           ▼
      ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
      │  hdf5   │ │ netcdf  │ │  petsc  │ │   ...   │  MPI-dependent libs
      └─────────┘ └─────────┘ └─────────┘ └─────────┘

@@ -26,16 +26,16 @@ nvidia-smi --query-gpu=index,name,utilization.gpu,utilization.memory,memory.used
 | GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
 | Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
 |=========================================+========================+======================|
-|   0  NVIDIA H100 80GB HBM3         On  |   00000000:17:00.0 Off |                    0 |
+|   0  NVIDIA H100 80GB HBM3         On   |   00000000:17:00.0 Off |                    0 |
 | N/A   38C    P0            104W / 700W  |   24576MiB /  81920MiB |     87%      Default |
 +-----------------------------------------+------------------------+----------------------+
-|   1  NVIDIA H100 80GB HBM3         On  |   00000000:31:00.0 Off |                    0 |
+|   1  NVIDIA H100 80GB HBM3         On   |   00000000:31:00.0 Off |                    0 |
 | N/A   41C    P0             98W / 700W  |   24576MiB /  81920MiB |     85%      Default |
 +-----------------------------------------+------------------------+----------------------+
-|   2  NVIDIA H100 80GB HBM3         On  |   00000000:B1:00.0 Off |                    0 |
+|   2  NVIDIA H100 80GB HBM3         On   |   00000000:B1:00.0 Off |                    0 |
 | N/A   37C    P0            110W / 700W  |   24576MiB /  81920MiB |     92%      Default |
 +-----------------------------------------+------------------------+----------------------+
-|   3  NVIDIA H100 80GB HBM3         On  |   00000000:CA:00.0 Off |                    0 |
+|   3  NVIDIA H100 80GB HBM3         On   |   00000000:CA:00.0 Off |                    0 |
 | N/A   39C    P0            101W / 700W  |   24576MiB /  81920MiB |     88%      Default |
 +-----------------------------------------+------------------------+----------------------+
 ```

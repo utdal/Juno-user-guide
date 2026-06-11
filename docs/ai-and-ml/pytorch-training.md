@@ -176,12 +176,12 @@ PyTorch's `DistributedDataParallel` (DDP) is the standard approach for using mul
   │  grad_0   │   │  grad_1   │   │  grad_2   │   │  grad_3   │
   └─────┬─────┘   └─────┬─────┘   └─────┬─────┘   └─────┬─────┘
         │               │               │               │
-        └───────────────┴───────────────┴───────────────┘
-                                 │
+        └───────────────┴───────┬───────┴───────────────┘
+                                │
                     AllReduce: avg(grad_0 … grad_3)
                     via NCCL over NVLink / PCIe
-                                 │
-        ┌────────────────────────┴────────────────────────┐
+                                │
+        ┌───────────────┬───────┴───────┬───────────────┐
         ▼               ▼               ▼               ▼
    optimizer       optimizer       optimizer       optimizer
    step GPU 0      step GPU 1      step GPU 2      step GPU 3

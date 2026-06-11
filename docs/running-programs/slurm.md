@@ -83,9 +83,9 @@ sshare -a
 Look for your username in the second column and check the last column for your fair share value.
 
 ```
-                     sbatch job.sh
-                           │
-                           ▼
+                    sbatch job.sh
+                          │
+                          ▼
                  ┌─────────────────┐
                  │    PENDING      │  waiting for resources / priority
                  └────────┬────────┘
@@ -97,11 +97,11 @@ Look for your username in the second column and check the last column for your f
                           │
             ┌─────────────┼─────────────┐
             ▼             ▼             ▼
-     ┌───────────┐  ┌──────────┐  ┌──────────┐
-     │ COMPLETED │  │  FAILED  │  │ TIMEOUT  │
-     │  exit 0   │  │ exit ≠ 0 │  │ walltime │
-     └───────────┘  └──────────┘  │ exceeded │
-                                   └──────────┘
+      ┌───────────┐ ┌───────────┐ ┌───────────┐
+      │ COMPLETED │ │  FAILED   │ │  TIMEOUT  │
+      │  exit 0   │ │ exit ≠ 0  │ │ walltime  │
+      └───────────┘ └───────────┘ │ exceeded  │
+                                  └───────────┘
 ```
 
 ## Ways to Run Jobs
