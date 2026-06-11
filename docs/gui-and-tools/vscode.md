@@ -4,8 +4,8 @@
 
 Visual Studio Code can run on Juno through **Open OnDemand**, which launches a browser-based VSCode (`code-server`) on a compute node with full CPU, memory, and GPU resources.
 
-!!! warning "Use Open OnDemand, not Remote-SSH"
-    The VSCode **Remote-SSH** extension connects to a **login node**, which is limited to ~8 GB of RAM and is not meant for running code or development tools. Indexing a project, opening large files, or running extensions there can crash your session and degrade the login node for everyone. Always use the Open OnDemand method below.
+!!! warning "Don't point Remote-SSH at a login node"
+    Don't aim the VSCode **Remote-SSH** extension at a regular **login node** — these are limited to ~8 GB of RAM and are not meant for running code or development tools. Indexing a project, opening large files, or running extensions there can crash your session and degrade the login node for everyone. Use [Open OnDemand](#launching-vscode-via-open-ondemand) for the full IDE-on-a-compute-node experience, or, if you specifically need Remote-SSH, connect to the dedicated [`juno-vscode` node](#remote-ssh-to-the-dedicated-vscode-node) described below.
 
 ## Why VSCode on Juno?
 
@@ -31,6 +31,41 @@ Visual Studio Code can run on Juno through **Open OnDemand**, which launches a b
 ![Screenshot of VSCode running in a browser via Open OnDemand, showing the file explorer sidebar, an open Python file with syntax highlighting, and the integrated terminal at the bottom.](../images/screenshot-ood-vscode.png)
 
 For general Open OnDemand usage (managing sessions, file uploads), see [Open OnDemand](open-ondemand.md).
+
+## Remote-SSH to the dedicated VSCode node
+
+If you prefer to run VSCode on **your own laptop or desktop** and connect to Juno over SSH, use the dedicated `juno-vscode` node. Unlike a login node, this host is provisioned specifically for the Remote-SSH workflow.
+
+!!! warning "Testing phase"
+    `juno-vscode.utdallas.edu` is in a **testing phase**, so expect issues or sub-optimal performance. Please report your experience (see [How to test and report](#how-to-test-and-report) below).
+
+### Configure the SSH host
+
+In VSCode on your laptop or desktop, configure the following Juno node as a Remote-SSH host:
+
+| Setting | Value |
+| --- | --- |
+| **Server** | `juno-vscode.utdallas.edu` |
+| **Username** | `<your-NetID>` |
+| **Password** | `<your-NetID-password>` |
+| **Remote SSH command** | `ssh <your-NetID>@juno-vscode.utdallas.edu` |
+
+Connect to the UT Dallas VPN first if you are off-campus.
+
+!!! tip "Password-free login"
+    Alternatively, you can set up SSH keys for a password-free login. See the instructions on the [Linuxize website](https://linuxize.com/post/how-to-setup-passwordless-ssh-login/).
+
+### Limitations of the current system
+
+- **VSCode only.** Only use `juno-vscode.utdallas.edu` for VSCode — don't use it as a regular node.
+- **No programs.** Do not run programs on this system. Run those on the compute nodes (submit them via Slurm from the integrated terminal).
+- **Resource caps.** The system limits the amount of memory you can use and the number of processes you can create. Run `ulimit -a` to see the limits.
+- **Testing phase.** Expect issues or sub-optimal performance while the node is being tested.
+- **Zombie processes.** Remote-SSH leaves zombie processes on the server, which we routinely run scripts to clean up. As a result, your VSCode session may hang or disconnect; it will then restart the remote processes and resume the session.
+
+### How to test and report
+
+Run through your VSCode workflows and note your experience — both successes and failures, including all error messages. Please report your experience to [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu). In particular, we're interested in your experience if you **use AI for coding**.
 
 ## Working in VSCode
 

@@ -395,13 +395,23 @@ chmod 640 shared_data.txt
 chmod 750 program.exe
 ```
 
-### Sensitive Data
+### Data Protection
 
-Juno is not approved for HIPAA-, FERPA-, or export-controlled data. The cluster uses standard POSIX permissions and does not provide encryption at rest, so sensitive data cannot be adequately protected by the system alone.
+Please manage your research data according to your Data Management Plan (available at https://data.utdallas.edu/). See the [Security and Compliance page](https://data.utdallas.edu/security-compliance/) for data classifications, security restrictions, regulations, and the research data security checklist.
 
-If you need to work with this type of data, encryption must be handled by you or your organization before transferring files to the cluster. For institutional guidance on security and compliance, visit [data.utdallas.edu/security-compliance](data.utdallas.edu/security-compliance).
+The following information will help you comply with UTD's data protection standards:
 
-If you are unsure whether your data qualifies as sensitive, please reach out to us before proceeding.
+- Juno is not approved for storage or processing of HIPAA/PHI or FERPA-protected data.
+
+- Juno uses standard POSIX permissions based on your UNIX group memberships. You can grant or restrict access to specified individuals by setting up the required groups and permissions.
+
+	In most cases, you can directly set permissions for your research group. For more granular permission management, we can create new UNIX groups as needed.
+
+- Data is not stored in encrypted form on Juno. If your data requires encryption, you must encrypt it yourself.
+
+- Data can be transferred via secure, encrypted channels using SCP, RSYNC over SSH, or direct SSH connections.
+
+If you are unsure about the data protections needed for your data, please contact us for assistance.
 
 ### Prohibited Technologies
 
