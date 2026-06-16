@@ -379,6 +379,6 @@ The repository includes benchmarked examples comparing NumPy vs. CuPy vs. Numba 
 ## Related Pages
 
 - [GPU Computing on Juno](index.md) — GPU partitions and environment setup
-- [PyTorch Training Jobs](pytorch-training.md) — single-GPU, multi-GPU, and multi-node job scripts
+- [PyTorch Training Tutorial](pytorch-training.md) — tested single-GPU, multi-GPU DDP, and multi-node example with NCCL explained
 - [Monitoring Jobs and Cluster State](../running-programs/advanced-slurm.md) — `jobstats`, `sacct`, `scontrol`
 - [Containers](../advanced/containers.md) — running GPU workloads in Apptainer containers

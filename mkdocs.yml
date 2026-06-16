@@ -59,7 +59,7 @@ nav:
     - VSCode: gui-and-tools/vscode.md
   - GPU computing, AI, and Machine Learning:
     - GPU Computing on Juno: ai-and-ml/index.md
-    - PyTorch Training Jobs: ai-and-ml/pytorch-training.md
+    - PyTorch Training Tutorial: ai-and-ml/pytorch-training.md
     - GPU Performance & Monitoring: ai-and-ml/gpu-performance.md
     - AlphaFold 3: ai-and-ml/alphafold3.md
   - Advanced:

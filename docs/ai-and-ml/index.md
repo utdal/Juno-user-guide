@@ -141,7 +141,7 @@ EOF
 
 ## What's in This Section
 
-- [PyTorch Training Jobs](pytorch-training.md) — single-GPU, multi-GPU DDP, and multi-node distributed training
+- [PyTorch Training Tutorial](pytorch-training.md) — tested single-GPU, multi-GPU DDP/FSDP, and multi-node example with NCCL explained
 - [GPU Performance & Monitoring](gpu-performance.md) — profiling, mixed precision, memory optimization
 - [AlphaFold 3](alphafold3.md) — protein structure prediction using the shared container and databases
 

@@ -97,7 +97,7 @@ Master job submission and execution on Juno.
 Run GPU workloads, train PyTorch models, and optimize GPU performance.
 
 - [GPU Computing on Juno](ai-and-ml/index.md)
-- [PyTorch Training Jobs](ai-and-ml/pytorch-training.md)
+- [PyTorch Training Tutorial](ai-and-ml/pytorch-training.md)
 - [GPU Performance & Monitoring](ai-and-ml/gpu-performance.md)
 - [AlphaFold 3](ai-and-ml/alphafold3.md)
 

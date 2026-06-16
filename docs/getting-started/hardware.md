@@ -35,7 +35,7 @@ These are the standard compute nodes used for most CPU-based workloads. Submit j
 H100 nodes also support **virtual GPU slicing** — a single physical H100 can be split into multiple virtual GPUs. See the [SLURM partitions table](../running-programs/slurm.md#partitions-overview) for available GPU configurations.
 
 !!! note "NVLink is only on `g-04-02`"
-    Only the **4× H100 (80 GB HBM3)** node, `g-04-02`, has **NVLink** for fast direct GPU-to-GPU communication. Despite the "NVL" in their product name, the 94 GB H100 NVL nodes do **not** have NVLink bridges installed, and the A30 nodes have no NVLink either — on all other nodes, GPUs communicate over PCIe. This matters for multi-GPU jobs (see [PyTorch Training Jobs](../ai-and-ml/pytorch-training.md)).
+    Only the **4× H100 (80 GB HBM3)** node, `g-04-02`, has **NVLink** for fast direct GPU-to-GPU communication. Despite the "NVL" in their product name, the 94 GB H100 NVL nodes do **not** have NVLink bridges installed, and the A30 nodes have no NVLink either — on all other nodes, GPUs communicate over PCIe. This matters for multi-GPU jobs (see [PyTorch Training Tutorial](../ai-and-ml/pytorch-training.md)).
 
 ## GPU Compute Nodes — NVIDIA A30
 
