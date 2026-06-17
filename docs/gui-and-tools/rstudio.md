@@ -74,13 +74,6 @@ Conda package names are the CRAN name prefixed with `r-` and lower-cased (e.g. `
 
 #### Step 2 — Make the environment available to RStudio
 
-When launching RStudio (Step 2 above), select your conda environment in the **R version / environment** field of the form so the session starts with that environment's R and all its packages:
-
-<!-- SCREENSHOT PLACEHOLDER: selecting a conda environment in the RStudio launch form -->
-![Screenshot of the RStudio launch form's environment selector showing a custom conda environment chosen instead of the default system R.](../images/screenshot-ood-rstudio-environment.png)
-
-If the form does not have an environment selector, you can instead make the environment's package library visible to RStudio's R by adding it to your `~/.Renviron` file:
-
 ```bash
 # Run once in a terminal — points R at your conda env's package library
 echo 'R_LIBS_USER=~/work/r-env/lib/R/library' >> ~/.Renviron
@@ -96,9 +89,6 @@ In the RStudio **Console**, confirm R can see the library and load a package:
 .libPaths()              # should list your conda env's library path
 library(tidyverse)       # loads without error if the env is active
 ```
-
-<!-- SCREENSHOT PLACEHOLDER: RStudio console showing .libPaths() and a successful library() call -->
-![Screenshot of the RStudio console showing the output of .libPaths() including the conda environment library and a successful library(tidyverse) call.](../images/screenshot-rstudio-libpaths.png)
 
 > **Packages not found?** Make sure the environment was selected (or `~/.Renviron` was saved) **before** the session started. If you changed it while a session was running, end the session from **My Interactive Sessions** and launch a fresh one.
 

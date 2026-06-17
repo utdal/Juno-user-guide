@@ -130,6 +130,14 @@ matlab
 matlab -nodisplay -nosplash -r "run('script.m'); exit;"
 ```
 
+After running `matlab`, the full MATLAB desktop opens on your local screen via X11, running on the compute node.
+
+<!-- SCREENSHOT PLACEHOLDER: MATLAB GUI launching/splash screen via X11 -->
+![Screenshot of the MATLAB startup splash screen appearing on the local desktop after launching MATLAB over X11 forwarding.](../images/screenshot-x11-matlab-launch.png)
+
+<!-- SCREENSHOT PLACEHOLDER: MATLAB desktop running via X11 -->
+![Screenshot of the full MATLAB desktop (Command Window, Workspace, and editor) running on a Juno compute node and displayed locally via X11 forwarding.](../images/screenshot-x11-matlab-desktop.png)
+
 #### Ansys Fluent
 
 ```bash
