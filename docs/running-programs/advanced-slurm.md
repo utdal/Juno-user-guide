@@ -135,7 +135,7 @@ This is useful for finding out why a node shows as `mix` — you can see exactly
 
 ```bash
 $ scontrol show job 186552
-JobId=186552 JobName=TESS_EBs_5_5-3
+JobId=186552 JobName=TEST
    UserId=utd000000(123456) GroupId=ph(333) MCS_label=N/A
    Priority=1305 Nice=0 Account=hpcre QOS=normal
    JobState=RUNNING Reason=None Dependency=(null)
@@ -206,7 +206,7 @@ scontrol release 12345
 $ sacct -j 186552 --format=JobID,JobName,State,ExitCode,Elapsed,MaxRSS,MaxVMSize
 JobID           JobName      State ExitCode    Elapsed     MaxRSS  MaxVMSize
 ------------ ---------- ---------- -------- ---------- ---------- ----------
-186552       TESS_EBs_+    TIMEOUT      0:0 2-00:00:13
+186552             TEST    TIMEOUT      0:0 2-00:00:13
 186552.batch      batch  CANCELLED     0:15 2-00:00:14     24092K          0
 ```
 
