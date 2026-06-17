@@ -88,6 +88,12 @@ Common reasons:
 
 **Solution**: Reduce resource requests or wait for fair share to recover.
 
+### How can I minimize my wait time and get resources faster?
+
+Right-size your request (memory, cores, and `--time`), check what's free before submitting (`sinfo -t idle,mix`), and let your job run on more than one partition (`sbatch -p normal,dev job.sh`). Accurate requests are easier for the scheduler to backfill and keep your fair-share score high.
+
+For the full set of tips — including the `cluster_monitor.py` script that shows live CPU/memory utilization for every node — see [Tips: Minimizing Wait Time and Getting Resources Faster](../running-programs/advanced-slurm.md#tips-minimizing-wait-time-and-getting-resources-faster).
+
 ### Can I run programs directly on the login node?
 
 Only for **light tasks**:

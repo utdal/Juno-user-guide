@@ -1,6 +1,6 @@
 # Linux Commands Crash Course
 
-## Introduction
+## Overview
 
 This guide covers essential Linux commands for working on Juno. While not comprehensive, it provides the minimum knowledge needed to navigate and work effectively on the HPC cluster.
 

@@ -1,5 +1,12 @@
 # Prohibited Technologies & Covered Applications
 
+!!! info "This page is a summary"
+    This page summarizes the State of Texas prohibited-technology policy for Juno users.
+    The official lists are maintained by the Texas Department of Information Resources
+    (DIR) and may change more often than this page is updated. **The original source
+    always takes precedence** over anything here — when in doubt, confirm against the
+    [authoritative DIR list](#authoritative-source) before installing unfamiliar software.
+
 ## Overview
 
 Juno is a state-owned system operated by UT Dallas. Under Texas law, certain foreign-owned applications and hardware are prohibited from use on state-owned devices and networks. As a Juno user, **you are responsible for not installing, running, or storing prohibited technologies on the cluster**, including in your home, work, scratch, or group directories.

@@ -1,6 +1,6 @@
 # Juno HPC Cluster User Guide
 
-## Introduction
+## Overview
 
 Welcome to Juno, the flagship High Performance Computing (HPC) cluster at UT Dallas. This guide provides essential information for new users to get started with the system.
 
@@ -107,6 +107,7 @@ Access graphical interfaces and modern development environments.
 - [Open OnDemand](gui-and-tools/open-ondemand.md)
 - [Launching GUI Programs (X11)](gui-and-tools/gui-programs.md)
 - [JupyterLab on Juno](gui-and-tools/jupyter.md)
+- [RStudio on Juno](gui-and-tools/rstudio.md)
 - [VSCode on Juno](gui-and-tools/vscode.md)
 
 ### Advanced Topics

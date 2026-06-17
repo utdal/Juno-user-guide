@@ -1,8 +1,8 @@
 # Containers on Juno
 
-## What are Containers?
+## Overview
 
-Containers are lightweight, portable software packages that include an application and all its dependencies. They provide a consistent environment across different systems.
+Containers are lightweight, portable software packages that include an application and all its dependencies, giving you a consistent environment across different systems. On Juno, containers run with **Apptainer** (formerly Singularity). This page covers why and when to use containers on HPC, building or pulling images, binding directories, GPU support, running containers inside SLURM jobs, and converting Docker images to Apptainer.
 
 ## Why Use Containers on HPC?
 
@@ -24,9 +24,9 @@ Containers are lightweight, portable software packages that include an applicati
 - **Python/R environments**: Alternative to conda
 - **Standardized pipelines**: Bioinformatics, ML workflows
 
-## Singularity/Apptainer
+## Apptainer (Singularity)
 
-On HPC systems, we use **Singularity** (now called **Apptainer**) instead of Docker for security reasons.
+On HPC systems, we use **Apptainer** (previously called **Singularity**) instead of Docker to run containers. Apptainer can convert a Docker container into an Apptainer container, and the Apptainer container's binary can be run like a regular Linux command. This makes it easy to run Apptainer containers inside user batch jobs or interactive shells like regular software.
 
 ```
   ┌──────────────────────┐        ┌──────────────┐        ┌──────────────────────┐
@@ -42,14 +42,14 @@ On HPC systems, we use **Singularity** (now called **Apptainer**) instead of Doc
   │                      │        │              │        │   via SLURM)         │
   └──────────────────────┘        └──────────────┘        └──────────────────────┘
          myapp.sif  ─────────────────────────────────────────►  myapp.sif
-        (SIF image)                                           runs unprivileged
+        (SIF image)                                           runs in user account
 ```
 
 ### Key Differences from Docker
 
 | Feature | Docker | Singularity |
 |---------|--------|-------------|
-| **Root access** | Required | Not required |
+| **Root access** | Required to run container | Not required, runs in user account |
 | **HPC friendly** | No | Yes |
 | **Integration** | Isolated | Accesses host filesystem |
 | **User identity** | Root inside | Same user |

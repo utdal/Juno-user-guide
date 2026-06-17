@@ -1,6 +1,6 @@
 # Saturn Research Data Storage
 
-## What is Saturn?
+## Overview
 
 Saturn is UT Dallas's implementation of a Dell Isilon/PowerScale enterprise-grade NAS (network-attached storage) system, offered through the Office of Research and Innovation. It provides centralized, redundant, secure storage for **research data and backups**.
 

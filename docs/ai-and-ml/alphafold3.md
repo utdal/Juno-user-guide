@@ -1,5 +1,7 @@
 # AlphaFold 3
 
+## Overview
+
 AlphaFold 3, developed by Google DeepMind and Isomorphic Labs, predicts the 3D structures of proteins and their interactions with DNA, RNA, ligands, and ions. It is significantly more capable than AlphaFold 2, supporting a broader range of biomolecular complexes in a single model.
 
 ---

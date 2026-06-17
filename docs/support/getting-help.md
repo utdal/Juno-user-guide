@@ -49,6 +49,10 @@ The most efficient way to get help is through our ticketing system.
 
 Your ticket is automatically sorted and assigned to the appropriate team member for quick response.
 
+!!! tip "Want to talk it through?"
+    If you'd prefer to discuss your issue over a **Microsoft Teams call**, just say so in
+    your ticket and we'll set one up with you.
+
 ### Direct Email Support
 
 If you're unsure which service to request or need immediate guidance:

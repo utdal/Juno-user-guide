@@ -1,5 +1,7 @@
 # GPU Computing on Juno
 
+## Overview
+
 Juno provides several GPU partitions suited to different workloads, from interactive prototyping to large-scale distributed AI training. This section covers how to set up a GPU environment, select the right partition, and run jobs efficiently.
 
 ---

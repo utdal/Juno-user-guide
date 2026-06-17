@@ -1,8 +1,8 @@
 # Module System
 
-## What is the Module System?
+## Overview
 
-The module system on Juno provides a way to dynamically load and unload software packages and their dependencies. Instead of having all software available all the time (which would cause conflicts), modules let you selectively enable the software you need.
+The module system on Juno provides a way to dynamically load and unload software packages and their dependencies. Instead of having all software available all the time (which would cause conflicts), modules let you selectively enable the software you need. This page covers the module commands you'll use day to day — searching, loading, listing, and swapping versions — the modules loaded by default, common usage patterns and troubleshooting, and how to manage modules for a research group.
 
 ## Why Use Modules?
 

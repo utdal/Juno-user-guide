@@ -1,5 +1,7 @@
 # Monitoring Jobs and Cluster State
 
+## Overview
+
 This page covers the commands used to inspect the cluster, understand job details, and analyze completed job performance. These tools complement the basics covered in the [SLURM Job Scheduler](slurm.md) page.
 
 ---
@@ -382,10 +384,68 @@ scancel -u $USER -p normal
 
 ---
 
+## Tips: Minimizing Wait Time and Getting Resources Faster
+
+Your time in the queue is driven by two things: **how much you request** and your **fair-share score**. Requesting only what you actually need improves both — accurately-sized jobs are easier for the scheduler to fit (often via *backfill*, where a short job slots into a gap ahead of a larger one), and modest usage keeps your fair share high. The commands on this page let you check what's free and right-size each request.
+
+### 1. Right-size your request
+
+- **Memory (`--mem` / `--mem-per-cpu`)** — request enough, but not far more than you use. Over-requesting memory shrinks the set of nodes that can fit your job. Check a past job's peak usage with `MaxRSS` ([`sacct`](#job-accounting-sacct)) or [`jobstats`](#job-efficiency-jobstats), then set `--mem` a little above it.
+- **Cores (`--ntasks` / `--cpus-per-task`)** — match the core count to what your program can actually use. If `jobstats` reports low CPU utilization, you're holding cores idle *and* waiting longer to get them. See [Nodes, Tasks, and CPUs](slurm.md#nodes-tasks-and-cpus).
+- **Wall time (`--time`)** — request a realistic limit, not the 2-day maximum "just in case." Shorter jobs are eligible for backfill and start sooner; `jobstats` flags jobs that used only a fraction of their requested time.
+
+### 2. Check what's free before you submit
+
+- `sinfo -t idle,mix` — list nodes that can accept work right now (see [Checking Cluster Availability](#checking-cluster-availability-sinfo)).
+- `scontrol show node <node>` — see exactly how many cores and how much memory a `mix` node still has free.
+- `squeue --me --start` — ask SLURM for your pending job's estimated start time.
+
+### 3. Widen where your job can run
+
+- **Submit to multiple partitions** so the job starts wherever capacity frees up first: `sbatch -p normal,dev job.sh` (see [Submitting to Multiple Partitions](slurm.md#submitting-to-multiple-partitions)).
+- **Use `dev` for short jobs** — it shares hardware with `normal` but is sized for quick turnaround (2-hour limit).
+- **Right-size GPU requests** — a full H100 is in high demand, so a [virtual GPU slice](slurm.md#partitions-overview) (`a30-2.12gb`, `h100-2.47gb`) may start much sooner for light GPU work.
+
+### 4. See the whole cluster at a glance — `cluster_monitor.py`
+
+The per-command tools above are precise but narrow. For an at-a-glance picture of **where the free capacity is right now**, the community [`cluster_monitor.py`](../scripts/cluster_monitor.py) script renders a colour-coded CPU/memory utilization bar for every node, plus a one-line cluster summary. Lightly-loaded nodes (shown green) are where your job is most likely to start immediately.
+
+[Download `cluster_monitor.py`](../scripts/cluster_monitor.py), save it on Juno, and run it on a login node (it only needs Python 3 and the standard SLURM commands):
+
+```bash
+python3 cluster_monitor.py             # one snapshot of all nodes
+python3 cluster_monitor.py --watch     # refresh every 5s (Ctrl-C to stop)
+python3 cluster_monitor.py --show-down # also show down/draining nodes
+```
+
+Example snapshot (in the terminal the bars are colour-coded — green = lightly loaded, yellow = busy, red = full):
+
+```
+========================================================================================================================
+SLURM CLUSTER - 2026-06-17 00:06:09
+Nodes: 126 (30 idle, 22 mixed, 66 alloc, 7 down) | CPUs: 5169/8576 (60%) | GPUs: 0 | Jobs: 72
+========================================================================================================================
+
+Node         St    CPU                Mem                  Node         St    CPU                Mem
+------------ ----- ------------------ ------------------   ------------ ----- ------------------ ------------------
+c-01-12      mixed [█████░░░░░]   50%  [████░░░░░░]   43%    c-04-16      mixed [██░░░░░░░░]   25%  [████░░░░░░]   46%
+c-02-01      mixed [██░░░░░░░░]   25%  [███████░░░]   80%    c-04-17      mixed [██░░░░░░░░]   25%  [██░░░░░░░░]   25%
+c-02-13      mixed [██░░░░░░░░]   25%  [████░░░░░░]   50%    g-01-01      mixed [███░░░░░░░]   38%  [██░░░░░░░░]   24%
+c-03-06      mixed [█████░░░░░]   50%  [████░░░░░░]   48%    g-03-01      mixed [█░░░░░░░░░]   11%  [█░░░░░░░░░]   18%
+c-03-09      mixed [█████░░░░░]   50%  [██████░░░░]   60%    g-05-01      mixed [███████░░░]   77%  [████░░░░░░]   46%
+...
+(output continues for every node; idle and mixed nodes are where jobs start soonest)
+========================================================================================================================
+```
+
+!!! tip
+    Combine the script with the strategies above: find a green/`mix` node with free cores and memory, then submit a request that fits within what that node (or partition) has available. Pair it with `--watch` during busy periods to grab capacity the moment it frees up.
+
 ## Quick Reference
 
 | Command | Purpose |
 |---|---|
+| `cluster_monitor.py` | At-a-glance CPU/memory utilization for every node ([download](../scripts/cluster_monitor.py)) |
 | `sinfo` | Cluster-wide node/partition availability |
 | `sinfo -t idle,mix` | Show only nodes with free capacity |
 | `squeue --me` | Your running and pending jobs |

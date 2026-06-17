@@ -1,12 +1,17 @@
 # Open OnDemand
 
+## Overview
+
 Open OnDemand provides a web-based interface to access Juno resources without installing additional software. It's the recommended way to run graphical and interactive applications, and works well even on slow networks or from places that block SSH.
 
 ## Accessing Open OnDemand
 
+!!! note "Off-campus access requires VPN"
+    If you are off campus, connect to the UT Dallas VPN **before** opening the portal — Open OnDemand is not reachable from outside the campus network otherwise.
+
 1. Open your web browser
 2. Navigate to: [https://juno-ood.hpcre.utdallas.edu/](https://juno-ood.hpcre.utdallas.edu/)
-3. Log in with your Juno credentials
+3. A pop-up window will prompt you to enter your NetID credentials. Sign in with your UT Dallas NetID and password.
 4. You'll see the Open OnDemand dashboard
 
 ![Screenshot of the Open OnDemand dashboard showing the top navigation bar with Files, Jobs, Clusters, and Interactive Apps menus.](../images/screenshot-ood-dashboard.png)
@@ -185,6 +190,7 @@ Need a GUI program that isn't available as an interactive app? See [Launching GU
 
 - [Set up VSCode for remote development →](vscode.md)
 - [Launch JupyterLab →](jupyter.md)
+- [Run RStudio →](rstudio.md)
 - [Learn about containerized applications →](../advanced/containers.md)
 
 ## Need Help?

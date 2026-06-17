@@ -1,8 +1,8 @@
 # High Throughput Processing with Launcher
 
-## What is Launcher?
+## Overview
 
-Launcher is a utility for executing multiple serial or small parallel tasks simultaneously on HPC clusters. It's designed for high-throughput computing where you have many independent jobs to run.
+Launcher is a utility for executing multiple serial or small parallel tasks simultaneously on HPC clusters. It's designed for high-throughput computing where you have many independent jobs to run. **We recommend users use Launcher over other techniques for high-throughput jobs.** This page covers when to use Launcher, writing task lists, single- and multi-node job scripts (including multicore tasks), and monitoring and tuning throughput.
 
 ## When to Use Launcher
 
@@ -63,7 +63,8 @@ python process.py data4.csv output4.txt
 #SBATCH --partition=normal
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=64
-#SBATCH --time=00:30:00
+#SBATCH --time=2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 # Load modules
 module load launcher
@@ -104,6 +105,11 @@ echo "All tasks completed."
   No manual assignment — Launcher handles load balancing automatically.
 ```
 
+!!! note "Walltime and memory requests"
+    Every script here sets `--time=2-00:00:00` (2 days, the maximum walltime on `normal`) and requests memory **per core** with `--mem-per-cpu`. Memory per task is therefore `--mem-per-cpu × --cpus-per-task` — so `--mem-per-cpu=4GB` with 2 cores per task gives each task 8 GB.
+
+    **Requesting more memory does not make tasks run faster — it limits how many run at once.** A node has a fixed amount of RAM (384 GB on `normal`), so the number of tasks that fit is capped by cores *and* memory together. At 4 GB/core a 64-core node is core-limited (64 × 4 = 256 GB ≤ 384 GB), but at 12 GB/core that same node fits only 32 tasks — half the cores sit idle and throughput drops. Request close to what a task actually uses: check `MaxRSS` from a short test run (see [Check Job History](slurm.md#check-job-history)). Too low and tasks are killed for running out of memory; too high and you waste concurrency.
+
 ## Advanced Usage
 
 ### Parametric Job Example
@@ -127,7 +133,8 @@ with open('tasks.txt', 'w') as f:
 #SBATCH -o output_%j.log
 #SBATCH -N 2
 #SBATCH -n 32
-#SBATCH -t 4:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 module load launcher
 
@@ -149,7 +156,8 @@ $LAUNCHER_DIR/paramrun
 #SBATCH -J multinode_launcher
 #SBATCH -N 4                    # 4 nodes
 #SBATCH -n 64                   # 64 total cores
-#SBATCH -t 8:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 module load launcher
 
@@ -158,6 +166,42 @@ export LAUNCHER_WORKDIR=$PWD
 
 # Launcher automatically uses all allocated cores
 $LAUNCHER_DIR/paramrun
+```
+
+### Multicore (Multithreaded) Tasks
+
+Some programs are themselves multithreaded — each command needs several cores (OpenMP, threaded BLAS, etc.). Give each task multiple cores with `--cpus-per-task`, and set `OMP_NUM_THREADS` to match so every program uses exactly its share of cores.
+
+This example runs **50 tasks, each using 2 cores (100 cores total)**:
+
+```bash
+#!/bin/bash
+#SBATCH -J multicore_launcher
+#SBATCH -o launcher_%j.log
+#SBATCH -N 2
+#SBATCH -n 50                 # 50 tasks — must equal the number of commands in tasks.txt
+#SBATCH -c 2                  # 2 cores per task → 50 × 2 = 100 cores total
+#SBATCH --time=2-00:00:00
+#SBATCH --mem-per-cpu=4GB     # 4 GB per core → 8 GB per task
+
+module load launcher
+
+# One process per task; let each task's program use its 2 cores
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+export LAUNCHER_JOB_FILE=tasks.txt
+export LAUNCHER_WORKDIR=$PWD
+export LAUNCHER_BIND=1        # bind each task to its own cores
+$LAUNCHER_DIR/paramrun
+```
+
+The key rule for multicore tasks: **`--ntasks` must equal the number of commands in `tasks.txt`**, so every command gets its own task slot and its own `--cpus-per-task` cores. Here `tasks.txt` holds exactly 50 commands, each a 2-thread program — generate it the same way as the other examples:
+
+```python
+# generate_tasks.py — produces exactly 50 commands
+with open('tasks.txt', 'w') as f:
+    for i in range(1, 51):
+        f.write(f"./threaded_solver --input case_{i}.dat --threads 2\n")
 ```
 
 ### Launcher Environment Variables
@@ -237,7 +281,8 @@ with open('tasks.txt', 'w') as f:
 #SBATCH -J data_processing
 #SBATCH -N 2
 #SBATCH -n 32
-#SBATCH -t 4:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 module load launcher
 
@@ -260,7 +305,8 @@ $LAUNCHER_DIR/paramrun
 #SBATCH -J hyperparam_search
 #SBATCH -N 1
 #SBATCH -n 16
-#SBATCH -t 6:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 module load launcher
 
@@ -300,8 +346,8 @@ module load orca/6.1.1; orca mol_004.inp > mol_004.out
 #SBATCH -J orca_screening
 #SBATCH -N 1
 #SBATCH -n 8
-#SBATCH --mem=64GB
-#SBATCH -t 12:00:00
+#SBATCH --mem-per-cpu=8GB
+#SBATCH -t 2-00:00:00
 
 module load launcher
 
@@ -330,7 +376,8 @@ with open('tasks.txt', 'w') as f:
 #SBATCH -J image_processing
 #SBATCH -N 1
 #SBATCH -n 20
-#SBATCH -t 3:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 
 module load launcher
 
@@ -433,10 +480,12 @@ with open('retry_tasks.txt', 'w') as f:
 **Memory per task**:
 
 ```bash
-# If each task needs 4GB and node has 128GB
-#SBATCH -n 32          # 128GB / 4GB = 32 tasks
-#SBATCH --mem=128GB
+# normal nodes have 384 GB; request memory per core with --mem-per-cpu
+#SBATCH -n 64                # one task per core
+#SBATCH --mem-per-cpu=4GB    # 64 × 4 GB = 256 GB, within the 384 GB node
 ```
+
+Requesting more memory per task means fewer tasks fit on a node — see the [note above](#basic-job-script) on how memory affects throughput.
 
 ### I/O Considerations
 
@@ -646,7 +695,8 @@ sbatch << 'EOSLURM'
 #SBATCH -J param_sweep
 #SBATCH -N 2
 #SBATCH -n 48
-#SBATCH -t 8:00:00
+#SBATCH -t 2-00:00:00
+#SBATCH --mem-per-cpu=4GB
 #SBATCH -o sweep_%j.log
 
 module load launcher

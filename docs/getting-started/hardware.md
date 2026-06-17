@@ -1,5 +1,9 @@
 # Hardware Overview
 
+## Overview
+
+This page describes Juno's physical hardware: the overall cluster layout, the different node types (login and head nodes, the four categories of compute node, and the GPU nodes), and the CPUs, memory, networking, and storage that make up each. Use it to understand what resources are available and to choose the right node type and partition for your jobs.
+
 ## Cluster Diagram
 
 ![Juno Cluster Diagram](../images/Juno.png)

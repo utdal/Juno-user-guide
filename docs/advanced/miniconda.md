@@ -1,8 +1,8 @@
 # Virtual Environments with Miniconda
 
-## What is Miniconda?
+## Overview
 
-Miniconda is a lightweight version of Anaconda that provides conda package management and Python environments. It's ideal for creating isolated environments with specific package versions on HPC clusters.
+Miniconda is a lightweight version of Anaconda that provides conda package management and Python environments. It's ideal for creating isolated environments with specific package versions on HPC clusters. This page covers loading Miniconda on Juno, creating and managing environments, using them inside SLURM jobs, sharing environments with your research group, and keeping their storage footprint under control.
 
 ## Why Use Conda on HPC?
 
@@ -226,6 +226,71 @@ conda env remove -p /path/to/myenv
 # Or
 conda remove -p /path/to/myenv --all
 ```
+
+## Sharing Environments with Your Research Group
+
+There are two ways to share a conda environment with others in your group. Sharing a
+**recipe** (`environment.yml`) is the portable, reproducible default; sharing a **single
+installed environment** in group storage saves disk space and guarantees everyone runs
+the exact same build.
+
+### Option 1: Share an environment.yml file (recommended)
+
+Each person creates their own copy of the environment from a shared recipe file. This is
+portable across clusters and keeps each user's environment independent.
+
+```bash
+# 1. You: export the recipe (use --from-history for a minimal, portable file)
+conda env export --from-history > environment.yml
+
+# 2. Put it where the group can read it — group storage or a shared git repo
+cp environment.yml /groups/<pi-name>/envs/myproject-environment.yml
+
+# 3. A colleague: recreate the environment under their own account
+conda env create -f /groups/<pi-name>/envs/myproject-environment.yml
+```
+
+Keeping `environment.yml` in your project's git repository is the most reproducible
+approach — anyone who clones the repo can recreate the environment with one command.
+
+### Option 2: Share one installed environment in group storage
+
+Install the environment **once** in `/groups/<pi-name>` and have everyone activate it by
+full path. This avoids each member installing (and storing) their own copy.
+
+```bash
+# You: create the environment in shared group storage, not your home directory
+conda create -p /groups/<pi-name>/envs/shared-rnaseq python=3.11
+conda activate /groups/<pi-name>/envs/shared-rnaseq
+conda install -c conda-forge numpy pandas scipy
+
+# Anyone in the group: activate it by full path (no install needed)
+module load miniconda      # if not already loaded
+conda activate /groups/<pi-name>/envs/shared-rnaseq
+```
+
+In a job script, reference it the same way:
+
+```bash
+module load miniconda
+conda activate /groups/<pi-name>/envs/shared-rnaseq
+python analysis.py
+```
+
+!!! note "Permissions for shared environments"
+    For others to activate a shared environment, they need read and execute access to
+    its files. Group storage under `/groups/<pi-name>` is shared with your group by
+    default, but if colleagues hit "permission denied," fix the group permissions:
+
+    ```bash
+    # Make the environment readable and traversable by the group
+    chmod -R g+rX /groups/<pi-name>/envs/shared-rnaseq
+    ```
+
+    Treat shared environments as read-only for members other than the owner — if one
+    person `conda install`s into it, the change affects everyone. Designate one
+    maintainer for updates, or have each member use Option 1 instead. See
+    [Storage and Data Transfer](../getting-started/storage.md) for more on group access.
 
 ## Using Conda in Jobs
 

@@ -56,6 +56,7 @@ nav:
     - Open OnDemand: gui-and-tools/open-ondemand.md
     - GUI Programs (X11): gui-and-tools/gui-programs.md
     - JupyterLab: gui-and-tools/jupyter.md
+    - RStudio: gui-and-tools/rstudio.md
     - VSCode: gui-and-tools/vscode.md
   - GPU computing, AI, and Machine Learning:
     - GPU Computing on Juno: ai-and-ml/index.md

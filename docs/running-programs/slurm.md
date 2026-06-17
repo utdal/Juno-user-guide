@@ -1,8 +1,8 @@
 # SLURM Job Scheduler
 
-## What is a Job Scheduler?
+## Overview
 
-Juno has many nodes, and to manage them effectively and ensure jobs get the right resources, we use **Slurm** (Simple Linux Utility for Resource Management). Slurm handles job scheduling and resource allocation automatically.
+Juno has many nodes, and to manage them effectively and ensure jobs get the right resources, we use **SLURM** (Simple Linux Utility for Resource Management). SLURM handles job scheduling and resource allocation automatically. This page covers how SLURM prioritizes and schedules jobs, the ways to run work (interactive and batch), writing and submitting job scripts, monitoring and managing jobs, the available partitions, and the QoS limits that apply.
 
 ## Why Use a Job Scheduler?
 
@@ -206,6 +206,24 @@ python my_script.py
 echo "Job finished at $(date)"
 ```
 
+### Nodes, Tasks, and CPUs
+
+SLURM resource requests are built from a few related concepts, and mixing them up is the most common cause of jobs that waste resources or fail to start:
+
+- **Node** (`-N`, `--nodes`): one physical computer in the cluster. A `normal` node has 64 cores and 384 GB RAM. Asking for multiple nodes only helps if your program can actually communicate across them (e.g. MPI).
+- **Core / CPU**: one physical processing unit on a node. SLURM refers to cores as "CPUs." The number of cores you hold is what limits how many threads or processes can truly run at the same time.
+- **Task** (`-n`, `--ntasks`): one instance of your program — a single process. SLURM can launch several tasks, possibly spread across nodes. MPI ranks map to tasks.
+- **CPUs per task** (`-c`, `--cpus-per-task`): how many cores each task gets. Use this for multi-threaded programs (OpenMP, most threaded Python/NumPy, MATLAB) where one process uses many threads.
+
+The total cores a job reserves is **`ntasks × cpus-per-task`**. Two common patterns:
+
+| Workload | Request | Why |
+|----------|---------|-----|
+| One multi-threaded program (OpenMP, threaded Python, MATLAB) | `-N 1 -n 1 -c 8` | A single process running 8 threads on one node |
+| MPI program with many processes | `-N 2 -n 8 -c 1` | 8 independent processes (ranks), spread across 2 nodes |
+
+When in doubt, most single-program jobs want `-N 1 -n 1` and then set `-c` to the number of threads the program uses. See [Parallelism Models](parallelism.md) for choosing between threaded and multi-process approaches.
+
 ### SBATCH Directives Explained
 
 | Directive | Description | Example |
@@ -233,6 +251,16 @@ You'll receive a job ID:
 ```
 Submitted batch job 12345
 ```
+
+### Submitting to Multiple Partitions
+
+You can list several partitions for one job, and SLURM starts it in whichever can run it first:
+
+```bash
+sbatch -p normal,dev job.sh
+```
+
+This is useful when your job fits on more than one queue — for example a short job that could run on either `dev` or `normal`. SLURM picks the earliest available partition and ignores the rest once the job starts. Only list partitions your job actually fits on (matching cores, memory, GPUs, and time limit).
 
 ### Example Job Scripts
 
@@ -310,6 +338,9 @@ echo "Processing file_${SLURM_ARRAY_TASK_ID}.dat"
 python process.py file_${SLURM_ARRAY_TASK_ID}.dat
 ```
 
+!!! tip "Array jobs vs. Launcher"
+    Array jobs work well when each task is itself a sizeable job. If instead you have **many short or serial tasks** — a large parameter sweep, or processing thousands of small files — bundling them into a single allocation with [Launcher](launcher.md) is usually more efficient and easier on the scheduler.
+
 ## Monitoring Jobs
 
 ### Check Job Queue
@@ -363,6 +394,9 @@ sacct -u $USER --starttime 2024-01-01
 # Detailed format
 sacct -j 12345 --format=JobID,JobName,State,Start,End,Elapsed,MaxRSS
 ```
+
+!!! note "What is MaxRSS?"
+    `MaxRSS` is the **maximum resident set size** — the peak amount of physical RAM the job actually used at any point during its run. Compare it against the `--mem` you requested to right-size future jobs: if `MaxRSS` is far below your request, you're reserving memory you don't need; if your job was killed for running out of memory (exit code 137), `MaxRSS` shows how close it came to the limit. `MaxRSS` is reported per job step, so for multi-step jobs check the `.batch` and `.0` rows rather than the top summary line.
 
 ## Managing Jobs
 
@@ -529,6 +563,36 @@ sinfo -o "%P %l"
 
 **Per-user limits**: max 4 running jobs, max 8 submitted jobs at a time. These limits can be relaxed for specific projects — contact support with evidence of efficient scaling.
 
+## Quality of Service (QoS) and Limits
+
+Alongside partitions, Juno uses **QoS (Quality of Service)** policies to enforce per-user and per-job limits — how many jobs you can run or queue, how many nodes a single job may use, and how usage is charged against fair share. The per-user limits above come from the QoS attached to your jobs.
+
+List the QoS policies and their limits with:
+
+```bash
+sacctmgr show qos
+```
+
+Example output (trimmed to the most relevant columns):
+
+```
+      Name   Priority  UsageFactor    MaxTRES  MaxJobsPU  MaxSubmitPU
+---------- ---------- -----------  ---------- ---------- ------------
+    normal          0     1.000000
+      juno          0     1.000000     node=8          4          100
+     hpcre          0     1.000000     node=2          4            8
+     large          0     1.000000    node=16        150          150
+ fio-bench     200000     1.000000    node=16
+  juno-dev          0     1.000000     node=4          1
+```
+
+Reading the **`normal`** QoS as an example:
+
+- **Priority `0`** — no extra scheduling boost; these jobs are ordered purely by the [fair-share formula](#slurm-scheduling-priorities) above. Only special QoS like `fio-bench` (priority `200000`) jump ahead of normal work.
+- **UsageFactor `1.000000`** — usage is charged at 1× against your fair share. A QoS could set this below 1 to discount certain work, or above 1 to penalize it.
+- **Empty `MaxTRES` / `MaxJobsPU` / `MaxSubmitPU`** — the `normal` QoS itself sets no node cap or per-user job cap. By contrast `juno` limits a single job to `node=8` and each user to 4 running (`MaxJobsPU`) and 100 submitted (`MaxSubmitPU`) jobs; `juno-dev` allows just 1 running job per user.
+
+Other columns you may see: **`GraceTime`** (how long a job may keep running after being signalled to stop), **`Flags` / `PreemptMode`** (whether this QoS can override partition limits or preempt other jobs — note `fio-bench` carries the `OverPartQOS` flag), **`MaxWall`** (maximum walltime), and **`MaxTRESPU`** (total resources one user may hold across all their jobs). A blank column simply means "no limit set."
 
 ## Advanced Topics
 

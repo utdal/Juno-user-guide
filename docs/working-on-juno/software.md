@@ -1,5 +1,7 @@
 # Available Software
 
+## Overview
+
 Software on Juno is managed through the [module system](modules.md). Use `module avail` to browse everything installed, or `module avail <name>` to search for a specific package.
 
 ```bash

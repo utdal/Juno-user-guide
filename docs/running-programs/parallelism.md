@@ -1,6 +1,6 @@
 # Parallelism Models
 
-## Introduction
+## Overview
 
 Parallelism is the key to using an HPC cluster effectively. This page explains the parallelism models available on Juno, when to use each, and how to compile and submit jobs for them. It focuses on the Juno-specific mechanics — for the APIs themselves, links to upstream tutorials are provided at the end.
 

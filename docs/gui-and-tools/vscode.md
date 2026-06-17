@@ -58,7 +58,7 @@ Connect to the UT Dallas VPN first if you are off-campus.
 ### Limitations of the current system
 
 - **VSCode only.** Only use `juno-vscode.utdallas.edu` for VSCode — don't use it as a regular node.
-- **No programs.** Do not run programs on this system. Run those on the compute nodes (submit them via Slurm from the integrated terminal).
+- **No programs.** Do not run programs on this system. Run those on the compute nodes (submit them via SLURM from the integrated terminal).
 - **Resource caps.** The system limits the amount of memory you can use and the number of processes you can create. Run `ulimit -a` to see the limits.
 - **Testing phase.** Expect issues or sub-optimal performance while the node is being tested.
 - **Zombie processes.** Remote-SSH leaves zombie processes on the server, which we routinely run scripts to clean up. As a result, your VSCode session may hang or disconnect; it will then restart the remote processes and resume the session.
@@ -125,6 +125,7 @@ For VSCode features not covered here (debugging, extensions, keybindings), see t
 - [Submit jobs from the integrated terminal →](../running-programs/slurm.md)
 - [Set up Python environments →](../advanced/miniconda.md)
 - [Run JupyterLab on Juno →](jupyter.md)
+- [Run RStudio on Juno →](rstudio.md)
 
 ## Need Help?
 

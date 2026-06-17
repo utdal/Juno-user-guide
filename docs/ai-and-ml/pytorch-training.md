@@ -1,5 +1,7 @@
 # PyTorch Training Tutorial
 
+## Overview
+
 This is a complete, worked PyTorch example that runs **as-is** on Juno's GPUs. It starts on a single GPU, then scales to multiple GPUs on one node, then to multiple nodes — all with the *same* training script. Every script on this page has been run on Juno's H200 nodes and works without modification.
 
 Along the way it explains the parts that usually trip people up on a real cluster: how PyTorch processes find each other (the rendezvous), and the **NCCL environment variables** that control GPU-to-GPU communication — what each one does and why it matters on Juno's specific hardware.

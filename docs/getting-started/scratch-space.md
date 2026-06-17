@@ -1,6 +1,6 @@
 # Scratch Space
 
-## What is Scratch Space?
+## Overview
 
 Scratch is Juno's high-performance temporary filesystem, designed for fast I/O during job execution. It is up to **10× faster** than the Io storage system (`~`, `~/work`, `/groups`) for large I/O, but it is **never backed up** and is subject to an automatic purge policy.
 

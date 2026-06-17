@@ -1,5 +1,7 @@
 # JupyterLab on Juno
 
+## Overview
+
 There are two ways to run JupyterLab on the cluster. Choose based on your workflow:
 
 | Method | Best for |
@@ -315,6 +317,7 @@ ssh -N -L 8888:g-05-01:8888 juno
 ## Related guides
 
 - [Open OnDemand →](open-ondemand.md)
+- [RStudio on Juno →](rstudio.md)
 - [Launching GUI Programs (X11) →](gui-programs.md)
 - [Virtual Environments with Miniconda →](../advanced/miniconda.md)
 - [SLURM Job Scheduler →](../running-programs/slurm.md)

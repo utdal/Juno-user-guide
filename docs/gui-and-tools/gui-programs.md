@@ -10,6 +10,8 @@ Juno supports running graphical user interface (GUI) programs through two main m
 !!! tip "Looking for the web portal?"
     For most interactive GUI work, [Open OnDemand](open-ondemand.md) is easier — just a browser, no setup. Use X11 forwarding (below) when you need a specific GUI program that isn't available as an interactive app.
 
+    Note that X11 does **not** support interactive file management the way Open OnDemand does — for browsing, uploading, downloading, and editing files through a graphical interface, use the [portal's file manager](open-ondemand.md#file-management-via-web).
+
 ## X Window System (X11 Forwarding)
 
 For users who prefer command-line access or need specific GUI programs not available in Open OnDemand.
@@ -47,7 +49,7 @@ Install an X server on your local computer:
 
 **Linux**
 
-X11 is typically pre-installed. No additional software needed.
+X11 is traditionally installed on Linux, so no additional software is needed. Be aware, however, that X11 is legacy software and is **no longer actively supported by its developers** — if you hit problems, prefer [Open OnDemand](open-ondemand.md) instead.
 
 ### Logging In with X11
 
@@ -72,6 +74,9 @@ xclock
 ```
 
 If a clock appears on your screen, X11 forwarding is working correctly!
+
+<!-- SCREENSHOT PLACEHOLDER: xclock running via X11 forwarding -->
+![Screenshot of the xclock application window displayed on the local desktop via X11 forwarding from Juno.](../images/screenshot-x11-xclock.png)
 
 ### Running GUI Programs on Login Node
 
