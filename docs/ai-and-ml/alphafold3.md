@@ -1,64 +1,67 @@
 # AlphaFold 3
-
+ 
 ## Overview
-
+ 
 AlphaFold 3, developed by Google DeepMind and Isomorphic Labs, predicts the 3D structures of proteins and their interactions with DNA, RNA, ligands, and ions. It is significantly more capable than AlphaFold 2, supporting a broader range of biomolecular complexes in a single model.
-
+ 
 ---
-
+ 
 ## Before You Start
-
-### Licensing and Model Weights
-
-!!! warning "Model weights require a separate request"
-    The AlphaFold 3 model parameters are **not bundled with the software**. You must request them directly from Google DeepMind before you can run inference on Juno. Approval is at Google DeepMind's sole discretion.
-
-**Step 1 — Read the policy documents**
-
-Before filling out the form, read all three documents:
-
-- [AlphaFold 3 Weights Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md)
-- [Prohibited Use Policy](https://github.com/google-deepmind/alphafold3/blob/main/PROHIBITED_USE_POLICY.md)
-- [Output Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md)
-
-**Step 2 — Fill out the [model request form](https://forms.gle/svvpY4u2jsHEwWYS6)**
-
-The form has three pages:
-
-*Page 1*
-
-| Field | What to enter |
-|---|---|
-| Email | Your UT Dallas email (`netID@utdallas.edu`) |
-| Google account email | A **personal Gmail address** ending in `@gmail.com` |
-| Organization website | `https://www.utdallas.edu` |
-
-!!! danger "Do not use your UT Dallas email as the Google account"
-    The second email field must be a `@gmail.com` address. Using your institutional address here will result in your request being rejected. If you don't have a personal Gmail account, create one at [gmail.com](https://gmail.com) before starting the form.
-
-*Page 2*
-
-A single question asks whether you will share access to the model parameters with other researchers. **Select No.**
-
-*Page 3*
-
-Review the summary, confirm you understand the terms, and submit.
-
-**Step 3 — Wait for approval and download**
-
-You will receive two emails:
-
-1. An immediate acknowledgment confirming your submission was received.
-2. A second email (within a few hours to several days) containing a **Google Drive download link**.
-
-!!! warning "Download within 7 days"
-    The download link expires **7 days** after the approval email arrives. Download the file promptly and save it to a backed-up location.
-
-The weights file is named `af3.bin.zstd` and is approximately **1 GB** compressed. Place it at:
-
+ 
+### Licensing and access model
+ 
+AlphaFold 3 has two licensing layers, and the access path on Juno reflects this:
+ 
+- **Source code** is open-source (Apache 2.0) and freely installed system-wide. No user action required.
+- **Model parameters (weights)** are gated by Google DeepMind's [Model Parameters Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md) and may only be obtained directly from Google.
+!!! info "UT Dallas holds institutional access"
+    An authorized representative of UT Dallas has obtained the AlphaFold 3 model parameters under Google DeepMind's organizational access provision and agreed to the Terms on behalf of the institution. The weights are maintained centrally on Juno and made available to UTD researchers who meet the eligibility criteria and complete the UT Dallas user agreement.
+ 
+    **Do not submit a personal request to Google DeepMind.** Doing so is unnecessary, may conflict with our institutional agreement, and creates governance ambiguity. Follow the UTD process below.
+ 
+### Eligibility
+ 
+To use AlphaFold 3 on Juno you must confirm **all** of the following:
+ 
+- You are affiliated with UT Dallas as a faculty member, staff member, postdoc, graduate student, or approved collaborator.
+- You are conducting **non-commercial research**. AlphaFold 3 must not be used on behalf of a commercial organization, including sponsored research where the sponsor is a commercial entity and would obtain rights to the outputs.
+- You are not a resident of a country subject to U.S. embargo and you are not otherwise restricted by U.S. export controls.
+- You will not use AlphaFold 3 or its outputs for clinical decision-making or medical advice.
+- You will not use AlphaFold 3 outputs to train, fine-tune, or distill machine learning models for biomolecular structure prediction.
+### Required reading
+ 
+You must read the following documents before requesting access:
+ 
+- [AlphaFold 3 Model Parameters Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_TERMS_OF_USE.md)
+- [AlphaFold 3 Model Parameters Prohibited Use Policy](https://github.com/google-deepmind/alphafold3/blob/main/WEIGHTS_PROHIBITED_USE_POLICY.md)
+- [AlphaFold 3 Output Terms of Use](https://github.com/google-deepmind/alphafold3/blob/main/OUTPUT_TERMS_OF_USE.md)
+### Requesting access on Juno
+ 
+**Step 1 — Submit the UT Dallas user agreement**
+ 
+Complete the UT Dallas AlphaFold 3 user agreement form:
+ 
+> 🔗 **[UT Dallas AlphaFold 3 User Agreement Form](https://forms.office.com/r/ydg8jCDL2G)**
+>
+> *Replace this link with the published form URL before deploying these docs.*
+ 
+The form captures your eligibility attestation, intended use, and acknowledgment of the Google DeepMind Terms. Graduate students and postdocs must have their PI co-sign.
+ 
+**Step 2 — Wait for approval**
+ 
+The HPC team will review your submission. Approval typically takes **1–3 business days**. You will receive an email confirming your account has been added to the `af3_users` group.
+ 
+**Step 3 — Activate group membership**
+ 
+After approval, log out of Juno and log back in (or run `newgrp af3_users`) for the new group membership to take effect. Verify with:
+ 
+```bash
+id -nG | tr ' ' '\n' | grep af3_users
 ```
-~/work/alphafold3/model_parameter/af3.bin.zstd
-```
+ 
+If the command prints `af3_users`, you are ready to run AlphaFold 3.
+ 
+---
 
 ### GPU Requirements
 
