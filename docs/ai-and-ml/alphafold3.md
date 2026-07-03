@@ -77,7 +77,7 @@ AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, u
 
 ## How AlphaFold 3 Works
 
-AlphaFold 3 runs in two sequential stages. You can submit these as separate SLURM jobs or combine them into a single script.
+AlphaFold 3 runs in two sequential stages. The `af3-run` wrapper executes both stages back-to-back in a single job, so you don't manage them separately — the diagram below is just to show what happens under the hood.
 
 ```
   Stage 1: Data Pipeline (CPU)          Stage 2: Inference (GPU)
@@ -98,28 +98,25 @@ AlphaFold 3 runs in two sequential stages. You can submit these as separate SLUR
 
 ## Setup
 
-### Container and Databases
+### The `af3-run` wrapper
 
-Juno provides a shared AlphaFold 3 container image and pre-downloaded databases. Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu) to confirm the current paths and check that you have access.
+You do not need to invoke the container, databases, or model weights directly. Juno provides an `af3-run` wrapper that bundles the shared AlphaFold 3 container image, the pre-downloaded genetic databases, and the centrally-maintained model parameters into a single command. It runs both the data pipeline and inference stages for you.
 
-Typical locations (verify before use):
-
-```bash
-# Shared container image
-AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
-
-# Shared genetic databases (~600 GB)
-AF3_DB=/scratch/alphafold3/data
-```
-
-!!! note "These files are not subject to scratch purge"
-    Although the container and databases reside in `/scratch`, they are protected from automatic purging. Administrators have set a higher-priority retention policy on these paths, so you do not need to copy them elsewhere.
-
-Load Apptainer before running any AlphaFold 3 commands:
+Load the two required modules to make the wrapper available:
 
 ```bash
-module load apptainer/1.3.4
+module load apptainer
+module load alphafold3
 ```
+
+Once loaded, the entire pipeline is just:
+
+```bash
+af3-run --input_dir=<your_input_dir> --output_dir=<your_output_dir>
+```
+
+!!! note "Databases and weights are managed for you"
+    The shared container and the ~600 GB genetic databases live on Juno and are protected from automatic scratch purging. The model parameters are maintained centrally under UT Dallas's institutional access — you do **not** download or decompress any weights yourself. The wrapper points to all of these automatically.
 
 ### Directory Structure
 
@@ -129,14 +126,14 @@ Set up this layout in your work or scratch directory before submitting:
 alphafold3/
 ├── af_input/
 │   └── fold_input.json      # your query (see below)
-├── af_output/               # results written here
-└── model_parameter/
-    └── af3.bin.zstd         # weights you downloaded from Google
+└── af_output/               # results written here
 ```
 
 ```bash
-mkdir -p ~/work/alphafold3/{af_input,af_output,model_parameter}
+mkdir -p ~/work/alphafold3/{af_input,af_output}
 ```
+
+The model weights are supplied by the `af3-run` wrapper, so you do not need a `model_parameter/` directory.
 
 ### Input File
 
@@ -163,104 +160,9 @@ For protein–ligand, protein–DNA, or other complex inputs, see the [AlphaFold
 
 ---
 
-## Batch Jobs
+## Batch Job
 
-### Option 1: Two Separate Jobs (Recommended)
-
-Split the pipeline and inference stages to make better use of the queue. The CPU stage can run on any node while the GPU stage waits for an H100/H200.
-
-**Stage 1 — Data Pipeline (CPU)**
-
-```bash
-#!/bin/bash
-#SBATCH -J af3_pipeline
-#SBATCH -o logs/af3_pipeline_%j.out
-#SBATCH -e logs/af3_pipeline_%j.err
-#SBATCH -p normal
-#SBATCH -N 1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=64GB
-#SBATCH -t 12:00:00
-#SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=netID@utdallas.edu
-
-mkdir -p logs
-
-AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
-AF3_DB=/scratch/alphafold3/data
-WORK_DIR=${HOME}/work/alphafold3
-
-module load apptainer/1.3.4
-
-apptainer exec \
-    --bind ${WORK_DIR}:/af3_work \
-    --bind ${AF3_DB}:/databases:ro \
-    ${AF3_CONTAINER} \
-    python /app/alphafold/run_alphafold.py \
-        --input_dir=/af3_work/af_input \
-        --output_dir=/af3_work/af_output \
-        --db_dir=/databases \
-        --run_data_pipeline=true \
-        --run_inference=false \
-        --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
-        --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
-```
-
-**Stage 2 — Inference (GPU)**
-
-```bash
-#!/bin/bash
-#SBATCH -J af3_inference
-#SBATCH -o logs/af3_inference_%j.out
-#SBATCH -e logs/af3_inference_%j.err
-#SBATCH -p h100
-#SBATCH -N 1
-#SBATCH --gres=gpu:1
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=64GB
-#SBATCH -t 2:00:00
-#SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=netID@utdallas.edu
-
-mkdir -p logs
-
-AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
-AF3_DB=/scratch/alphafold3/data
-WORK_DIR=${HOME}/work/alphafold3
-
-module load apptainer/1.3.4
-
-# Decompress model params if needed (only run once)
-if [ ! -f "${WORK_DIR}/model_parameter/af3.bin" ]; then
-    zstd -d "${WORK_DIR}/model_parameter/af3.bin.zstd" \
-         -o "${WORK_DIR}/model_parameter/af3.bin"
-fi
-
-apptainer exec --nv \
-    --bind ${WORK_DIR}:/af3_work \
-    --bind ${AF3_DB}:/databases:ro \
-    ${AF3_CONTAINER} \
-    python /app/alphafold/run_alphafold.py \
-        --input_dir=/af3_work/af_input \
-        --output_dir=/af3_work/af_output \
-        --model_dir=/af3_work/model_parameter \
-        --db_dir=/databases \
-        --run_data_pipeline=false \
-        --run_inference=true
-```
-
-Submit the pipeline job first, then the inference job with a dependency:
-
-```bash
-JID=$(sbatch af3_pipeline.sh | awk '{print $NF}')
-sbatch --dependency=afterok:${JID} af3_inference.sh
-```
-
----
-
-### Option 2: Single Combined Job
-
-If you prefer to run everything in one step, request an H100 node and let it handle both stages. This is simpler but ties up a GPU while the CPU-only pipeline stage runs (which can take several hours).
+The `af3-run` wrapper handles the full pipeline — data pipeline and inference — in a single GPU job. Save the following as `af3_full.sh`, edit the `--mail-user` and paths for your account, and submit with `sbatch af3_full.sh`.
 
 ```bash
 #!/bin/bash
@@ -269,6 +171,7 @@ If you prefer to run everything in one step, request an H100 node and let it han
 #SBATCH -e logs/af3_full_%j.err
 #SBATCH -p h100
 #SBATCH -N 1
+#SBATCH --ntasks=1
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64GB
@@ -278,32 +181,21 @@ If you prefer to run everything in one step, request an H100 node and let it han
 
 mkdir -p logs
 
-AF3_CONTAINER=/scratch/alphafold3/sif/alphafold3.sif
-AF3_DB=/scratch/alphafold3/data
 WORK_DIR=${HOME}/work/alphafold3
 
-module load apptainer/1.3.4
+module load apptainer
+module load alphafold3
 
-# Decompress model params if needed (only run once)
-if [ ! -f "${WORK_DIR}/model_parameter/af3.bin" ]; then
-    zstd -d "${WORK_DIR}/model_parameter/af3.bin.zstd" \
-         -o "${WORK_DIR}/model_parameter/af3.bin"
-fi
-
-apptainer exec --nv \
-    --bind ${WORK_DIR}:/af3_work \
-    --bind ${AF3_DB}:/databases:ro \
-    ${AF3_CONTAINER} \
-    python /app/alphafold/run_alphafold.py \
-        --input_dir=/af3_work/af_input \
-        --output_dir=/af3_work/af_output \
-        --model_dir=/af3_work/model_parameter \
-        --db_dir=/databases \
-        --run_data_pipeline=true \
-        --run_inference=true \
-        --jackhmmer_n_cpu=${SLURM_CPUS_PER_TASK} \
-        --nhmmer_n_cpu=${SLURM_CPUS_PER_TASK}
+af3-run --input_dir=${WORK_DIR}/af_input --output_dir=${WORK_DIR}/af_output
 ```
+
+Submit it:
+
+```bash
+sbatch af3_full.sh
+```
+
+The job runs the CPU-bound data pipeline followed by GPU inference in one allocation. Because the pipeline stage can take several hours, keep the walltime generous (14 hours above is a safe upper bound for most inputs).
 
 ---
 
@@ -324,18 +216,9 @@ The `model.cif` file can be opened directly in [PyMOL](https://pymol.org/), [Chi
 
 ## Tips
 
-### Reusing Pipeline Results
+### Trying Multiple Seeds
 
-Once Stage 1 completes, you can re-run Stage 2 with different random seeds without redoing the expensive database searches:
-
-```bash
-# Add --model_seeds to try multiple seeds in one inference run
-python /app/alphafold/run_alphafold.py \
-  --run_data_pipeline=false \
-  --run_inference=true \
-  --model_seeds=1,2,3,4,5 \
-  ...
-```
+To sample several predictions, list the seeds you want in the `modelSeeds` field of your `fold_input.json` (e.g. `"modelSeeds": [1, 2, 3, 4, 5]`). AlphaFold 3 reuses the results of the data-pipeline stage across all seeds, so the expensive database searches only run once per input.
 
 ### Monitoring GPU Usage
 
