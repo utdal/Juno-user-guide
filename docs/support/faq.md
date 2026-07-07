@@ -143,7 +143,7 @@ Or check your program for memory leaks.
 ### How do I request GPU resources?
 
 ```bash
-#SBATCH -p h100                 # or a30, h100-94gb, h100-2.47gb, a30-2.12gb, a30-4.6gb
+#SBATCH -p h100                 # or h200, a30, a30-2.12gb, a30-4.6gb
 #SBATCH --gres=gpu:1            # Request 1 GPU
 ```
 
@@ -151,9 +151,8 @@ Choose the partition based on your VRAM needs:
 
 | Partition | GPU | VRAM |
 |-----------|-----|------|
-| `h100` | H100 (physical) | 80 GB |
-| `h100-94gb` | H100 NVL (physical) | 94 GB |
-| `h100-2.47gb` | H100 (virtual half) | 47 GB |
+| `h200` | H200 NVL (physical) | 141 GB |
+| `h100` | H100 (physical or half-slice) | 80 GB, 94 GB NVL, or 47 GB half |
 | `a30` | A30 (physical) | 24 GB |
 | `a30-2.12gb` | A30 (virtual half) | 12 GB |
 | `a30-4.6gb` | A30 (virtual quarter) | 6 GB |

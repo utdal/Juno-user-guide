@@ -10,7 +10,7 @@ This page describes Juno's physical hardware: the overall cluster layout, the di
 
 ## Node Types
 
-Juno consists of **101 compute nodes** organized into four categories, plus login and head nodes. An additional **26 NVIDIA H200 GPU nodes are arriving soon** (see [below](#gpu-compute-nodes-nvidia-h200-coming-soon)).
+Juno consists of **127 compute nodes** — CPU compute nodes plus H100, A30, and [H200](#gpu-compute-nodes-nvidia-h200) GPU nodes — along with login and head nodes.
 
 ## Login and Head Nodes
 
@@ -49,14 +49,14 @@ H100 nodes also support **virtual GPU slicing** — a single physical H100 can b
 
 A30 nodes also support virtual GPU slicing into 12 GB and 6 GB configurations.
 
-## GPU Compute Nodes — NVIDIA H200 (Coming Soon)
+## GPU Compute Nodes — NVIDIA H200
 
-!!! warning "Not yet available — expected June 2026"
-    The H200 nodes are being added to Juno and are **not yet online**. The `h200` partition does not exist until the rollout completes. Specs marked TBD will be finalized before launch. See [GPU Computing on Juno](../ai-and-ml/index.md).
+!!! note "Available"
+    The H200 nodes are online and the `h200` partition is available. See [GPU Computing on Juno](../ai-and-ml/index.md).
 
 | Quantity | CPU | Cores/node | RAM | GPUs | GPU Memory | Network |
 |----------|-----|------------|-----|------|------------|---------|
-| 26 | TBD | TBD | TBD | 2× H200 NVL (141 GB each) | 141 GB | 400 Gb InfiniBand (NDR), PCIe Gen 5.0 |
+| 26 | 2× AMD EPYC 9335 3.0 GHz | 32C/32T per CPU → **64 cores total** | 384 GB | 2× H200 NVL (141 GB each) | 141 GB | 400 Gb InfiniBand (NDR), PCIe Gen 5.0 |
 
 H200 NVL cards have **no NVLink** — GPUs communicate over PCIe Gen 5.0 within a node and over 400 Gb InfiniBand between nodes.
 
@@ -67,18 +67,16 @@ H200 NVL cards have **no NVLink** — GPUs communicate over PCIe Gen 5.0 within 
 | `a30` | A30 physical | 2 per node | 24 GB |
 | `a30-2.12gb` | A30 virtual (half) | 4 per node | 12 GB |
 | `a30-4.6gb` | A30 virtual (quarter) | 8 per node | 6 GB |
-| `h100` | H100 physical | 4 per node | 80 GB |
-| `h100-94gb` | H100 physical (NVL) | 1 per node | 94 GB |
-| `h100-2.47gb` | H100 virtual (half) | 4 per node | 47 GB |
-| `h200` *(coming soon)* | H200 NVL | 2 per node | 141 GB |
+| `h100` | H100 physical / virtual | 4× (80 GB), 1× (94 GB NVL), or 4× half-slice (47 GB) | 80 / 94 / 47 GB |
+| `h200` | H200 NVL | 2 per node | 141 GB |
 
 ![GPU virtual slicing — a physical A30 or H100 can be divided into multiple virtual GPUs, each with a smaller VRAM slice, for concurrent lightweight workloads.](../images/hardware-gpu-slicing.png)
 
 ## Network Infrastructure
 
-All current compute nodes are connected via **HDR100 InfiniBand (100 Gb/s)** for low-latency, high-bandwidth MPI communication, and use **PCIe Gen 4.0** for device (GPU and network card) attachment.
+The CPU, A30, and H100 compute nodes are connected via **HDR100 InfiniBand (100 Gb/s)** for low-latency, high-bandwidth MPI communication, and use **PCIe Gen 4.0** for device (GPU and network card) attachment.
 
-The forthcoming H200 nodes use faster interconnects: **400 Gb InfiniBand (NDR)** between nodes and **PCIe Gen 5.0** for device attachment.
+The H200 nodes use faster interconnects: **400 Gb InfiniBand (NDR)** between nodes and **PCIe Gen 5.0** for device attachment.
 
 ## Storage Systems
 

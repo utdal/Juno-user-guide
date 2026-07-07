@@ -540,28 +540,33 @@ sinfo -o "%P %l"
 
 ## Partitions Overview
 
-![Juno cluster partitions — how the 101 compute nodes are divided across dev, normal, h100, h100-94gb, h100-2.47gb, a30, a30-2.12gb, a30-4.6gb, and vdi partitions.](../images/slurm-partitions.png)
+![Juno cluster partitions — how the compute nodes are divided across dev, normal, h200, h100, a30, a30-2.12gb, a30-4.6gb, and vdi partitions.](../images/slurm-partitions.png)
 
-| Partition name | Time limit | Nodes | Max nodes/job | Cores/node | Memory/node | GPUs/node                 | VRAM/GPU | Best used for |
-|----------------|------------|-------|----------------|------------|-------------|---------------------------|----------|---------------|
-| `dev`            | 2 hours    | 8*    | 1              | 64         | 384 GB      | –                         | –        | Code development, short jobs, benchmarking |
-| `normal`         | 2 days     | 92*   | 8†             | 64         | 384 GB      | –                         | –        | Long jobs, big jobs, production (main) compute workloads |
-| `h100`           | 2 days     | 1     | 1              | 64         | 512 GB      | 4 H100 (physical)         | 80 GB    | Large, long jobs requiring high GPU resources |
-| `h100-94gb`      | 2 days     | 1     | 1              | 64         | 512 GB      | 1 H100 (physical, NVL)    | 94 GB    | Jobs requiring a single high-memory H100 |
-| `h100-2.47gb`    | 2 days     | 1     | 1              | 64         | 512 GB      | 4 half-H100 (virtual)     | 47 GB    | GPU workloads with moderate memory needs |
-| `a30`            | 2 days     | 2     | 2              | 128        | 1,024 GB    | 2 A30 (physical)          | 24 GB    | Large, long jobs requiring medium GPU resources |
-| `a30-2.12gb`     | 2 days     | 1     | 1              | 128        | 1,024 GB    | 4 half-A30 (virtual)      | 12 GB    | GPU jobs with moderate memory needs |
-| `a30-4.6gb`      | 2 days     | 1     | 1              | 128        | 1,024 GB    | 8 quarter-A30 (virtual)   | 6 GB     | GPU jobs with minimal memory requirements |
-| `vdi`            | 8 hours    | 2     | 1              | 64         | 384 GB      | –                         | –        | GUI-interactive workloads |
-| `h200` ‡         | 2 days ‡   | 26    | TBD            | TBD        | TBD         | 2 H200 NVL                | 141 GB   | Very large models, distributed AI training |
+| Partition name | Time limit | Nodes | Max nodes/job | Cores/node | Memory/node | GPUs/node                             | VRAM/GPU   | Best used for |
+|----------------|------------|-------|----------------|------------|-------------|---------------------------------------|------------|---------------|
+| `dev`            | 2 hours    | 8*    | 4              | 64         | 384 GB      | –                                     | –          | Code development, short jobs, benchmarking |
+| `normal`         | 2 days     | 92*   | 8†             | 64         | 384 GB      | –                                     | –          | Long jobs, big jobs, production (main) compute workloads |
+| `h200` ‡         | 2 days     | 26    | 8              | 64         | 384 GB      | 2 H200 NVL (physical)                 | 141 GB     | Very large models, distributed AI training |
+| `h100` ‡         | 2 days     | 3§    | 2 / 1§         | 64         | 512 GB      | 4 H100 (80 GB), 1 H100 NVL (94 GB), or 4 half-H100 virtual (47 GB)§ | 80 / 94 / 47 GB | Large, long jobs requiring high GPU resources |
+| `a30` ‡          | 2 days     | 2     | 2              | 128        | 1,024 GB    | 2 A30 (physical)                      | 24 GB      | Large, long jobs requiring medium GPU resources |
+| `a30-2.12gb` ‡   | 2 days     | 1     | 1              | 128        | 1,024 GB    | 4 half-A30 (virtual)                  | 12 GB      | GPU jobs with moderate memory needs |
+| `a30-4.6gb` ‡    | 2 days     | 1     | 1              | 128        | 1,024 GB    | 8 quarter-A30 (virtual)               | 6 GB       | GPU jobs with minimal memory requirements |
+| `vdi`            | 8 hours    | 2     | 1              | 64         | 384 GB      | –                                     | –          | GUI-interactive workloads (Open OnDemand) |
 
 \* `dev` partition shares nodes with the `normal` partition.
 
 † Up to 8 nodes/job. Contact [circ-assist@utdallas.edu](mailto:circ-assist@utdallas.edu) to request more nodes for jobs that demonstrate efficient parallel scaling.
 
-‡ The `h200` partition is **coming soon (expected June 2026)** and is not yet available — these values are provisional and will be finalized before launch. Jobs submitted to `h200` will fail until then. The H200 NVL cards have no NVLink (GPUs connect via PCIe Gen 5.0 within a node, 400 Gb InfiniBand between nodes). See [GPU Computing on Juno](../ai-and-ml/index.md).
+‡ GPU partitions — pass the `--gres=gpu:<n>` option to `sbatch`/`srun` to request `<n>` GPUs; jobs that omit it are allocated no GPU.
 
-**Per-user limits**: max 4 running jobs, max 8 submitted jobs at a time. These limits can be relaxed for specific projects — contact support with evidence of efficient scaling.
+§ The `h100` partition spans three GPU configurations across its nodes: 4× H100 (80 GB, max 2 nodes/job), 1× H100 NVL (94 GB, max 1 node/job), and 4× half-H100 virtual slices (47 GB, max 1 node/job). The former `h100-94gb` and `h100-2.47gb` partitions have been merged into `h100`.
+
+The `h200` partition is available. The H200 NVL cards have **no NVLink** — GPUs connect via PCIe Gen 5.0 within a node and 400 Gb InfiniBand between nodes. See [GPU Computing on Juno](../ai-and-ml/index.md).
+
+!!! note "Default memory limit"
+    If a job does not request memory (e.g. via `--mem` or `--mem-per-cpu`), a default limit of **64 GB** is applied.
+
+**Per-user limits**: On `normal` and the GPU partitions, max **4 running** jobs and max **100 submitted** jobs at a time. On `dev`, max **1 running** job (unlimited submitted). These limits can be relaxed for specific projects — contact support with evidence of efficient scaling.
 
 ## Quality of Service (QoS) and Limits
 

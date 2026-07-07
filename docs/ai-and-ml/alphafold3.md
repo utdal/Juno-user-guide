@@ -65,12 +65,12 @@ If the command prints `af3_users`, you are ready to run AlphaFold 3.
 
 ### GPU Requirements
 
-AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, use the `h100` partition. (The higher-VRAM `h200` partition is coming soon — see [GPU Computing on Juno](index.md).)
+AlphaFold 3 inference requires a GPU with **at least 80 GB of VRAM**. On Juno, use the `h100` partition, or the higher-VRAM `h200` partition (see [GPU Computing on Juno](index.md)).
 
 | Partition | GPU | VRAM | Suitable? |
 |---|---|---|---|
 | `h100` | NVIDIA H100 | 80–94 GB | Yes (recommended) |
-| `h200` | NVIDIA H200 NVL | 141 GB | Yes — coming soon |
+| `h200` | NVIDIA H200 NVL | 141 GB | Yes |
 | `a30` | NVIDIA A30 | 24 GB | No — insufficient VRAM |
 
 ---
