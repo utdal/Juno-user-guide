@@ -42,8 +42,6 @@ You must read the following documents before requesting access:
 Complete the UT Dallas AlphaFold 3 user agreement form:
  
 > 🔗 **[UT Dallas AlphaFold 3 User Agreement Form](https://forms.office.com/r/ydg8jCDL2G)**
->
-> *Replace this link with the published form URL before deploying these docs.*
  
 The form captures your eligibility attestation, intended use, and acknowledgment of the Google DeepMind Terms. Graduate students and postdocs must have their PI co-sign.
  
