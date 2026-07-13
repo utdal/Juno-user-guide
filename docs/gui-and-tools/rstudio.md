@@ -35,7 +35,6 @@ Navigate to [https://juno-ood.hpcre.utdallas.edu/](https://juno-ood.hpcre.utdall
    | Number of cores | 2–4 | Scale up for parallel work |
    | Memory (GB) | 8–16 | Increase for large datasets |
    | Partition | `normal` | Use `a30` or `h100` for GPU work |
-   | R version / environment | `R/4.5.0` | Or your own conda environment (see below) |
 
    <!-- SCREENSHOT PLACEHOLDER: RStudio launch form -->
    ![Screenshot of the RStudio Server launch form in Open OnDemand showing the hours, cores, memory, partition, and R version/environment fields.](../images/screenshot-ood-rstudio-launch-form.png)
