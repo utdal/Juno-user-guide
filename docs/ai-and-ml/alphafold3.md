@@ -47,17 +47,17 @@ The form captures your eligibility attestation, intended use, and acknowledgment
  
 **Step 2 — Wait for approval**
  
-The HPC team will review your submission. Approval typically takes **1–3 business days**. You will receive an email confirming your account has been added to the `af3_users` group.
+The HPC team will review your submission. Approval typically takes **1–3 business days**. You will receive an email confirming your account has been added to the `alphafold` group.
  
 **Step 3 — Activate group membership**
  
-After approval, log out of Juno and log back in (or run `newgrp af3_users`) for the new group membership to take effect. Verify with:
+After approval, log out of Juno and log back in for the new group membership to take effect. Verify with:
  
 ```bash
-id -nG | tr ' ' '\n' | grep af3_users
+id -nG | tr ' ' '\n' | grep alphafold
 ```
  
-If the command prints `af3_users`, you are ready to run AlphaFold 3.
+If the command prints `alphafold`, you are ready to run AlphaFold 3.
  
 ---
 
