@@ -28,14 +28,18 @@ This usually happens after multiple failed login attempts. Email [circ-assist@ut
 
 ### Where should I store my data?
 
-| Location | Path | Best For |
-|----------|------|----------|
-| Home (Io) | `~` | Config files, scripts, small data |
-| Work (Io) | `~/work` | Large software, data, results |
-| Group (Io) | `/groups/<pi-name>` | Shared group data |
-| Scratch | `~/scratch` | High-speed I/O during batch jobs |
+| Location | Path | Shared with G2 | Best For |
+|----------|------|----------------|----------|
+| Home (Io) | `~` | No | Config files, scripts, small data |
+| Work (Io) | `~/work` | No (Juno only) | Large software, data, results |
+| Group (Io) | `/groups/<pi-name>` | **Yes** | Shared group data |
+| Scratch | `~/scratch` | **Yes** | High-speed I/O during batch jobs |
 
 See the [Storage Guide](../getting-started/storage.md) for details.
+
+### Can I get to my Juno data from Ganymede 2?
+
+Yes, for `/groups/<pi-name>` and `~/scratch` — those are the **same filesystems** on both clusters, with a shared quota, so no copying is needed. Your home directory is separate per cluster, and `~/work` exists only on Juno (on G2, use `/groups/<pi-name>` instead).
 
 ### What's my storage quota?
 
@@ -92,7 +96,7 @@ Common reasons:
 
 Right-size your request (memory, cores, and `--time`), check what's free before submitting (`sinfo -t idle,mix`), and let your job run on more than one partition (`sbatch -p normal,dev job.sh`). Accurate requests are easier for the scheduler to backfill and keep your fair-share score high.
 
-For the full set of tips — including the `cluster_monitor.py` script that shows live CPU/memory utilization for every node — see [Tips: Minimizing Wait Time and Getting Resources Faster](../running-programs/advanced-slurm.md#tips-minimizing-wait-time-and-getting-resources-faster).
+For the full set of tips — including the `cluster_monitor.py` script that shows live CPU, memory, requestable-memory and GPU utilization for every node — see [Tips: Minimizing Wait Time and Getting Resources Faster](../running-programs/advanced-slurm.md#tips-minimizing-wait-time-and-getting-resources-faster).
 
 ### Can I run programs directly on the login node?
 

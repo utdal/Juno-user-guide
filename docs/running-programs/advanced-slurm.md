@@ -408,44 +408,63 @@ Your time in the queue is driven by two things: **how much you request** and you
 
 ### 4. See the whole cluster at a glance — `cluster_monitor.py`
 
-The per-command tools above are precise but narrow. For an at-a-glance picture of **where the free capacity is right now**, the community [`cluster_monitor.py`](../scripts/cluster_monitor.py) script renders a colour-coded CPU/memory utilization bar for every node, plus a one-line cluster summary. Lightly-loaded nodes (shown green) are where your job is most likely to start immediately.
+The per-command tools above are precise but narrow. For an at-a-glance picture of **where the free capacity is right now**, the community [`cluster_monitor.py`](../scripts/cluster_monitor.py) script renders one colour-coded row per node — CPU and memory utilization bars, how much memory a new job could still request, and GPU allocated/idle counts — plus a one-line cluster summary. Lightly-loaded nodes (shown green) are where your job is most likely to start immediately.
 
 [Download `cluster_monitor.py`](../scripts/cluster_monitor.py), save it on Juno, and run it on a login node (it only needs Python 3 and the standard SLURM commands):
 
 ```bash
-python3 cluster_monitor.py             # one snapshot of all nodes
-python3 cluster_monitor.py --watch     # refresh every 5s (Ctrl-C to stop)
-python3 cluster_monitor.py --show-down # also show down/draining nodes
+python3 cluster_monitor.py               # snapshot of all nodes, including idle (default)
+python3 cluster_monitor.py --hide-idle   # only nodes with jobs on them
+python3 cluster_monitor.py --show-down   # also include down/draining nodes
+python3 cluster_monitor.py --watch       # refresh continuously (Ctrl-C to stop)
+python3 cluster_monitor.py --watch --interval 15   # refresh every 15s instead of 5s
 ```
 
-Example snapshot (in the terminal the bars are colour-coded — green = lightly loaded, yellow = busy, red = full):
+**Reading the columns**
+
+| Column | Meaning |
+|---|---|
+| `St` | Node state, abbreviated (`IDLE`, `MIXED`, `ALLOC`, `DRAIN`, …) |
+| `CPU` | Cores allocated by SLURM, as a bar and percentage |
+| `Mem` | Memory actually in use on the node right now (from `FreeMem`) |
+| `ReqAvail` | **Memory still requestable** — `RealMemory − AllocMem`. This is the number that decides whether your `--mem` fits; the `Mem` bar can look busy while `ReqAvail` is still high, and vice versa |
+| `GPU` | Allocated / total GPUs, with idle count. `--` means the node has no GPUs |
+
+!!! tip "`ReqAvail` is the column to plan `--mem` against"
+    `Mem` reflects what the operating system reports in use at this instant, whereas `ReqAvail` reflects what SLURM has already committed to jobs. A job requesting more than `ReqAvail` will queue even if the `Mem` bar suggests the node has room.
+
+Example snapshot (in the terminal the bars and GPU/memory figures are colour-coded — green = plenty free, yellow = busy, red = full). CPU-only nodes show `--` in the GPU column:
 
 ```
 ========================================================================================================================
-SLURM CLUSTER - 2026-06-17 00:06:09
-Nodes: 126 (30 idle, 22 mixed, 66 alloc, 7 down) | CPUs: 5169/8576 (60%) | GPUs: 0 | Jobs: 72
+SLURM CLUSTER - 2026-07-27 16:27:38
+Nodes: 30 (8 idle, 14 mixed, 8 alloc, 0 down) | CPUs: 672/1920 (35%) | Mem avail to request: 8844G/12875G | GPUs: 7/13 allocated (6 idle) | Jobs: 64
 ========================================================================================================================
 
-Node         St    CPU                Mem                  Node         St    CPU                Mem
------------- ----- ------------------ ------------------   ------------ ----- ------------------ ------------------
-c-01-12      mixed [█████░░░░░]   50%  [████░░░░░░]   43%    c-04-16      mixed [██░░░░░░░░]   25%  [████░░░░░░]   46%
-c-02-01      mixed [██░░░░░░░░]   25%  [███████░░░]   80%    c-04-17      mixed [██░░░░░░░░]   25%  [██░░░░░░░░]   25%
-c-02-13      mixed [██░░░░░░░░]   25%  [████░░░░░░]   50%    g-01-01      mixed [███░░░░░░░]   38%  [██░░░░░░░░]   24%
-c-03-06      mixed [█████░░░░░]   50%  [████░░░░░░]   48%    g-03-01      mixed [█░░░░░░░░░]   11%  [█░░░░░░░░░]   18%
-c-03-09      mixed [█████░░░░░]   50%  [██████░░░░]   60%    g-05-01      mixed [███████░░░]   77%  [████░░░░░░]   46%
+Node         St    CPU                Mem                ReqAvail       GPU            Node         St    CPU                Mem                ReqAvail       GPU
+------------ ----- ------------------ ------------------ -------------- ------------   ------------ ----- ------------------ ------------------ -------------- ------------
+c-01-01      MIXED [█████░░░░░]   50%  [████░░░░░░]   42%  188G avail     --             c-03-04      MIXED [█░░░░░░░░░]   12%  [█░░░░░░░░░]   11%  328G avail     --
+c-01-02      ALLOC [██████████]  100%  [████████░░]   85%  0G avail       --             c-03-05      MIXED [██░░░░░░░░]   25%  [██░░░░░░░░]   21%  281G avail     --
+c-01-03      IDLE  [░░░░░░░░░░]    0%  [░░░░░░░░░░]    0%  375G avail     --             c-03-06      ALLOC [██████████]  100%  [████████░░]   85%  0G avail       --
+c-01-04      MIXED [██░░░░░░░░]   25%  [██░░░░░░░░]   21%  281G avail     --             c-04-01      IDLE  [░░░░░░░░░░]    0%  [░░░░░░░░░░]    0%  375G avail     --
 ...
-(output continues for every node; idle and mixed nodes are where jobs start soonest)
+c-02-04      ALLOC [██████████]  100%  [████████░░]   85%  0G avail       --             g-01-01      IDLE  [░░░░░░░░░░]    0%  [░░░░░░░░░░]    0%  1000G avail    0/2G (2 idle)
+c-02-05      IDLE  [░░░░░░░░░░]    0%  [░░░░░░░░░░]    0%  375G avail     --             g-02-01      MIXED [███░░░░░░░]   38%  [█░░░░░░░░░]   15%  812G avail     1/2G (1 idle)
+c-02-06      MIXED [█░░░░░░░░░]   12%  [█░░░░░░░░░]   11%  328G avail     --             g-04-02      ALLOC [█░░░░░░░░░]   12%  [█░░░░░░░░░]   10%  438G avail     4/4G (0 idle)
+c-03-01      IDLE  [░░░░░░░░░░]    0%  [░░░░░░░░░░]    0%  375G avail     --             g-05-01      MIXED [█░░░░░░░░░]   12%  [█░░░░░░░░░]   10%  438G avail     1/2G (1 idle)
+c-03-02      MIXED [█████░░░░░]   50%  [████░░░░░░]   42%  188G avail     --             g-06-01      ALLOC [█░░░░░░░░░]   12%  [█░░░░░░░░░]   10%  438G avail     1/1G (0 idle)
+(output continues for every node; idle and mixed nodes with high ReqAvail are where jobs start soonest)
 ========================================================================================================================
 ```
 
 !!! tip
-    Combine the script with the strategies above: find a green/`mix` node with free cores and memory, then submit a request that fits within what that node (or partition) has available. Pair it with `--watch` during busy periods to grab capacity the moment it frees up.
+    Combine the script with the strategies above: find a node whose `CPU` bar has headroom and whose `ReqAvail` exceeds the `--mem` you need (and, for GPU work, shows idle GPUs), then size your request to fit it. Pair it with `--watch` during busy periods to grab capacity the moment it frees up.
 
 ## Quick Reference
 
 | Command | Purpose |
 |---|---|
-| `cluster_monitor.py` | At-a-glance CPU/memory utilization for every node ([download](../scripts/cluster_monitor.py)) |
+| `cluster_monitor.py` | At-a-glance CPU, memory, requestable-memory and GPU utilization for every node ([download](../scripts/cluster_monitor.py)) |
 | `sinfo` | Cluster-wide node/partition availability |
 | `sinfo -t idle,mix` | Show only nodes with free capacity |
 | `squeue --me` | Your running and pending jobs |

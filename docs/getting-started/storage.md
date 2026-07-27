@@ -13,6 +13,21 @@ Juno has two storage tiers:
 - **Io**: High-speed storage for programs and data in active use. Includes Home, Work, and Group directories.
 - **Scratch**: Very high-performance storage for I/O-intensive batch jobs. Scratch is up to **10× faster** than Io for large I/O.
 
+!!! info "Shared with Ganymede 2: `/groups` and `~/scratch`"
+
+    Both `/groups/<pi-name>` and `~/scratch` are the **same filesystems on Juno and Ganymede 2 (G2)** — a file written from one cluster is immediately visible from the other, with the same quota shared between them. You do not need to copy data between the two clusters; just reference the same path.
+
+    The one difference: Juno additionally provides a **`~/work`** tier (1 TB, backed up). **G2 has no `~/work`.** If you share scripts with colleagues who work on G2, or move your own workflow across, replace `~/work` paths with `/groups/<pi-name>` — that is where G2 users keep the large, persistent data a Juno user would put in `~/work`.
+
+    | Path | Juno | G2 | Shared between them? |
+    |------|------|-----|---------------------|
+    | `~` (Home) | 50 GB | 50 GB | No — separate per cluster |
+    | `~/work` | 1 TB | **not available** | — |
+    | `/groups/<pi-name>` | 1 TB+ | 1 TB (20 TB condo owners) | **Yes** |
+    | `~/scratch` | 30 TB | 30 TB | **Yes** |
+
+    See the [Ganymede 2 user guide](https://utdallas-hpc-g2-ug.readthedocs-hosted.com/) for G2's own storage documentation.
+
 ### Home Directory
 
 **Path**: `~` (i.e., `/home/netID`)
@@ -92,7 +107,7 @@ mfsgetquota -H ~/work
 
 - ✓ Shared among group members
 - ✓ Quota: 1 TB or more (varies by group)
-- ✓ Shared with Ganymede 2 `/groups`, i.e. you can fetch the same data from both clusters
+- ✓ Shared with Ganymede 2 `/groups` — the same filesystem, so the same data is visible from both clusters and the quota is shared between them
 - ✓ Backed up daily
 - ✓ Can be used for batch jobs with light to moderate I/O
 
@@ -114,6 +129,7 @@ mfsgetquota -H ~/work
 
 - ✓ Quota: 30 TB (soft limit)
 - ✓ Up to 10× faster than Home/Work/Group for large I/O
+- ✓ Shared with Ganymede 2 `~/scratch`, i.e. the same files are visible from both clusters
 - ✗ **Never backed up**
 - ✗ Files not accessed for 45 days will be purged
 
@@ -494,12 +510,12 @@ find ~/scratch -size +1G -ls
 
 ### Storage Locations Quick Guide
 
-| Location | Path | Quota | Backup | Use For |
-|----------|------|-------|--------|---------|
-| Home | `~` | 50 GB | Yes (daily) | Config, scripts, small data |
-| Work | `~/work` | 1 TB | Yes (daily) | Large software, data, results |
-| Scratch | `~/scratch` | 30 TB | Never | High-speed I/O during batch jobs |
-| Group | `/groups/<pi-name>` | 1 TB+ | Yes (daily) | Shared group data |
+| Location | Path | Quota | Backup | Shared with G2 | Use For |
+|----------|------|-------|--------|----------------|---------|
+| Home | `~` | 50 GB | Yes (daily) | No | Config, scripts, small data |
+| Work | `~/work` | 1 TB | Yes (daily) | No (Juno only) | Large software, data, results |
+| Scratch | `~/scratch` | 30 TB | Never | **Yes** | High-speed I/O during batch jobs |
+| Group | `/groups/<pi-name>` | 1 TB+ | Yes (daily) | **Yes** | Shared group data |
 
 ## Next Steps
 

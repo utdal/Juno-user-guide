@@ -22,15 +22,65 @@ def run_command(cmd):
             timeout=10
         )
         return result.stdout.strip()
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired,
+            FileNotFoundError) as e:
+        # FileNotFoundError covers running this off-cluster, where scontrol/
+        # squeue aren't in PATH at all - without it the caller's graceful
+        # "could not retrieve node information" message is never reached.
         return None
 
+def parse_gpu_count(gres_str):
+    """
+    Parse a GPU count out of a Gres/GresUsed string, e.g.:
+      'gpu:a100:4(S:0-1)'                    -> 4
+      'gpu:4'                                -> 4
+      'gpu:nvidia_h200_nvl:2(S:3-4)'         -> 2
+      'gpu:nvidia_a30_2g.12gb:4(S:4-5,10-11)' -> 4  (MIG-style type name with a period)
+      '(null)' / 'N/A'                       -> 0
+    Sums across multiple gpu: entries if more than one GPU type is present.
+    """
+    if not gres_str or gres_str in ('(null)', 'N/A', ''):
+        return 0
+
+    total = 0
+    for match in re.finditer(r'gpu:(?:[\w\.\-]+:)?(\d+)', gres_str):
+        total += int(match.group(1))
+    return total
+
+def parse_alloc_gpu_count(alloctres_str):
+    """
+    Parse the number of currently-allocated GPUs out of an AllocTRES string, e.g.:
+      'cpu=48,mem=32G,gres/gpu=2,gres/gpu:nvidia_h200_nvl=2' -> 2
+
+    Some SLURM builds don't populate GresUsed= on 'scontrol show node -o',
+    so AllocTRES is the reliable source for per-node GPU allocation.
+
+    IMPORTANT: AllocTRES lists the same allocated GPUs twice when a type is
+    set - once generically ('gres/gpu=2') and once per-type
+    ('gres/gpu:nvidia_h200_nvl=2'). We must prefer the generic entry and only
+    fall back to summing per-type entries if the generic one is absent,
+    otherwise we'd double-count.
+    """
+    if not alloctres_str or alloctres_str in ('(null)', 'N/A', ''):
+        return 0
+
+    generic_match = re.search(r'(?:^|,)gres/gpu=(\d+)', alloctres_str)
+    if generic_match:
+        return int(generic_match.group(1))
+
+    total = 0
+    for match in re.finditer(r'gres/gpu:[\w\.\-]+=(\d+)', alloctres_str):
+        total += int(match.group(1))
+    return total
+
 def get_node_info():
-    """Get comprehensive node information from SLURM"""
+    """Get comprehensive node information from SLURM (via scontrol, so we can
+    pull both requested/allocated and idle GPU counts per node)"""
     nodes = {}
 
-    # Get node state, CPUs, memory, and job allocation
-    cmd = ['sinfo', '-N', '-h', '-o', '%N|%T|%C|%m|%G|%e|%O']
+    # scontrol show node -o gives one line per node with Key=Value pairs,
+    # including Gres= (total gres) and GresUsed= (currently allocated gres)
+    cmd = ['scontrol', 'show', 'node', '-o']
     output = run_command(cmd)
 
     if not output:
@@ -40,42 +90,66 @@ def get_node_info():
         if not line.strip():
             continue
 
-        parts = line.split('|')
-        if len(parts) >= 6:
-            node = parts[0].strip()
-            state = parts[1].strip()
-            cpus = parts[2].strip()  # Format: allocated/idle/other/total
-            memory = parts[3].strip()  # Total memory in MB
-            gres = parts[4].strip()  # GRES (GPUs)
-            free_mem = parts[5].strip() if len(parts) > 5 else "0"
-            cpu_load = parts[6].strip() if len(parts) > 6 else "N/A"
+        # Parse Key=Value pairs (values assumed to have no internal spaces,
+        # which holds for all the fields we care about here)
+        fields = dict(re.findall(r'(\S+?)=(\S*)', line))
 
-            # Parse CPU allocation
-            cpu_parts = cpus.split('/')
-            if len(cpu_parts) == 4:
-                allocated_cpus = int(cpu_parts[0])
-                idle_cpus = int(cpu_parts[1])
-                total_cpus = int(cpu_parts[3])
-            else:
-                allocated_cpus = idle_cpus = total_cpus = 0
+        node_name = fields.get('NodeName')
+        if not node_name:
+            continue
 
-            # Parse GPU info
-            gpu_count = 0
-            if gres and gres != '(null)':
-                gpu_match = re.search(r'gpu:(\d+)', gres)
-                if gpu_match:
-                    gpu_count = int(gpu_match.group(1))
+        state = fields.get('State', 'UNKNOWN')
 
-            nodes[node] = {
-                'state': state,
-                'allocated_cpus': allocated_cpus,
-                'idle_cpus': idle_cpus,
-                'total_cpus': total_cpus,
-                'total_memory': int(memory) if memory.isdigit() else 0,
-                'free_memory': int(free_mem) if free_mem.isdigit() else 0,
-                'gpu_count': gpu_count,
-                'cpu_load': cpu_load
-            }
+        cpu_alloc = int(fields.get('CPUAlloc', 0) or 0)
+        cpu_tot = int(fields.get('CPUTot', 0) or 0)
+        cpu_idle = max(cpu_tot - cpu_alloc, 0)
+
+        real_memory = int(fields.get('RealMemory', 0) or 0)
+        free_mem_raw = fields.get('FreeMem', '0')
+        free_mem = int(free_mem_raw) if free_mem_raw.isdigit() else 0
+
+        # AllocMem is SLURM's own bookkeeping of memory already committed to
+        # jobs (in MB), as opposed to FreeMem which is OS-level "in use right
+        # now". Requestable/available memory - i.e. how much a new job could
+        # still ask for via --mem before SLURM would refuse/queue it - is
+        # RealMemory - AllocMem, not RealMemory - FreeMem.
+        alloc_mem_raw = fields.get('AllocMem', '0')
+        alloc_mem = int(alloc_mem_raw) if alloc_mem_raw.isdigit() else 0
+        available_requestable_mem = max(real_memory - alloc_mem, 0)
+
+        cpu_load = fields.get('CPULoad', 'N/A')
+
+        gres_total_str = fields.get('Gres', '')
+        gres_used_str = fields.get('GresUsed', '')
+        alloctres_str = fields.get('AllocTRES', '')
+
+        gpu_total = parse_gpu_count(gres_total_str)
+
+        # GresUsed isn't populated by every SLURM build in 'scontrol show
+        # node -o' output (e.g. 24.11.5 in testing leaves it blank even for
+        # nodes with active GPU jobs). AllocTRES is the reliable source, so
+        # prefer it and only use GresUsed as a fallback.
+        if gres_used_str and gres_used_str not in ('(null)', 'N/A'):
+            gpu_allocated = parse_gpu_count(gres_used_str)
+        else:
+            gpu_allocated = parse_alloc_gpu_count(alloctres_str)
+
+        gpu_idle = max(gpu_total - gpu_allocated, 0)
+
+        nodes[node_name] = {
+            'state': state,
+            'allocated_cpus': cpu_alloc,
+            'idle_cpus': cpu_idle,
+            'total_cpus': cpu_tot,
+            'total_memory': real_memory,
+            'free_memory': free_mem,
+            'alloc_mem': alloc_mem,
+            'available_requestable_mem': available_requestable_mem,
+            'gpu_count': gpu_total,
+            'gpu_allocated': gpu_allocated,
+            'gpu_idle': gpu_idle,
+            'cpu_load': cpu_load
+        }
 
     return nodes
 
@@ -139,6 +213,26 @@ def expand_nodelist(nodelist):
 
     return nodes
 
+def format_mem_gb(mb_value):
+    """Format a memory value given in MB as a GB string, e.g. 384000 -> '375G'"""
+    return f"{mb_value / 1024:.0f}G"
+
+def format_avail_mem_display(info):
+    """Format the requestable/available memory column, e.g. '335G avail'"""
+    avail_mb = info['available_requestable_mem']
+    total_mb = info['total_memory']
+    text = f"{format_mem_gb(avail_mb)} avail"
+
+    avail_pct = (avail_mb / total_mb * 100) if total_mb > 0 else 0
+    if avail_pct < 10:
+        color = '\033[91m'  # Red - little room left to oversubscribe
+    elif avail_pct < 30:
+        color = '\033[93m'  # Yellow
+    else:
+        color = '\033[92m'  # Green - plenty of room
+
+    return f'{color}{text:<14}\033[0m'
+
 def create_bar(value, total, width=10):
     """Create a text-based progress bar"""
     if total == 0:
@@ -174,25 +268,57 @@ def colorize_state(state):
     color = state_colors.get(state.lower().split('+')[0], '\033[0m')
     return f'{color}{state:<12}\033[0m'
 
+def classify_node_state(state):
+    """
+    Classify a node into exactly one bucket: 'down', 'idle', 'mixed', 'alloc',
+    or 'other'. SLURM node states can be compound (e.g. 'IDLE+DRAIN',
+    'MIXED+PLANNED', 'IDLE+NOT_RESPONDING'), and naively checking for
+    substrings like 'idle' or 'drain' independently causes a single node to
+    get counted in multiple buckets at once (an 'IDLE+DRAIN' node would match
+    both an idle check and a down/drain check). That mismatch between what
+    gets counted vs what gets filtered is exactly what caused idle totals in
+    the summary to disagree with the number of idle rows actually shown.
+
+    Down/drain takes priority: a node that's idle but draining can't actually
+    be scheduled onto, so it's classified as 'down', not 'idle'.
+    """
+    s = state.lower()
+    if 'down' in s or 'drain' in s or 'fail' in s or 'not_responding' in s:
+        return 'down'
+    elif 'idle' in s:
+        return 'idle'
+    elif 'mix' in s:
+        return 'mixed'
+    elif 'alloc' in s:
+        return 'alloc'
+    else:
+        return 'other'
+
 def print_summary(nodes, node_jobs):
     """Print cluster summary statistics"""
     total_nodes = len(nodes)
-    idle_nodes = sum(1 for n in nodes.values() if 'idle' in n['state'].lower())
-    allocated_nodes = sum(1 for n in nodes.values() if 'alloc' in n['state'].lower())
-    mixed_nodes = sum(1 for n in nodes.values() if 'mix' in n['state'].lower())
-    down_nodes = sum(1 for n in nodes.values() if 'down' in n['state'].lower() or 'drain' in n['state'].lower())
+    idle_nodes = sum(1 for n in nodes.values() if classify_node_state(n['state']) == 'idle')
+    allocated_nodes = sum(1 for n in nodes.values() if classify_node_state(n['state']) == 'alloc')
+    mixed_nodes = sum(1 for n in nodes.values() if classify_node_state(n['state']) == 'mixed')
+    down_nodes = sum(1 for n in nodes.values() if classify_node_state(n['state']) == 'down')
 
     total_cpus = sum(n['total_cpus'] for n in nodes.values())
     used_cpus = sum(n['allocated_cpus'] for n in nodes.values())
 
+    total_mem = sum(n['total_memory'] for n in nodes.values())
+    available_requestable_mem = sum(n['available_requestable_mem'] for n in nodes.values())
+
     total_gpus = sum(n['gpu_count'] for n in nodes.values())
+    allocated_gpus = sum(n['gpu_allocated'] for n in nodes.values())
+    idle_gpus = sum(n['gpu_idle'] for n in nodes.values())
     total_jobs = sum(len(jobs) for jobs in node_jobs.values())
 
     print(f"\n{'='*120}")
     print(f"SLURM CLUSTER - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Nodes: {total_nodes} ({idle_nodes} idle, {mixed_nodes} mixed, {allocated_nodes} alloc, {down_nodes} down) | "
           f"CPUs: {used_cpus}/{total_cpus} ({100*used_cpus/total_cpus if total_cpus > 0 else 0:.0f}%) | "
-          f"GPUs: {total_gpus} | Jobs: {total_jobs}")
+          f"Mem avail to request: {format_mem_gb(available_requestable_mem)}/{format_mem_gb(total_mem)} | "
+          f"GPUs: {allocated_gpus}/{total_gpus} allocated ({idle_gpus} idle) | Jobs: {total_jobs}")
     print(f"{'='*120}\n")
 
 def print_node_details(nodes, node_jobs, show_idle=False, show_down=False):
@@ -200,14 +326,14 @@ def print_node_details(nodes, node_jobs, show_idle=False, show_down=False):
     # Filter nodes based on flags
     filtered_nodes = []
     for node_name, info in sorted(nodes.items(), key=lambda x: x[0]):
-        state = info['state'].lower()
+        category = classify_node_state(info['state'])
 
         # Skip idle nodes if not requested
-        if not show_idle and 'idle' in state:
+        if not show_idle and category == 'idle':
             continue
 
-        # Skip down nodes if not requested
-        if not show_down and ('down' in state or 'drain' in state):
+        # Skip down/drain nodes if not requested
+        if not show_down and category == 'down':
             continue
 
         filtered_nodes.append((node_name, info))
@@ -221,11 +347,10 @@ def print_node_details(nodes, node_jobs, show_idle=False, show_down=False):
     left_nodes = filtered_nodes[:mid]
     right_nodes = filtered_nodes[mid:]
 
-    # Column width
-    col_width = 60
-
-    print(f"{'Node':<12} {'St':<5} {'CPU':<18} {'Mem':<18}   {'Node':<12} {'St':<5} {'CPU':<18} {'Mem':<18}")
-    print(f"{'-'*12} {'-'*5} {'-'*18} {'-'*18}   {'-'*12} {'-'*5} {'-'*18} {'-'*18}")
+    print(f"{'Node':<12} {'St':<5} {'CPU':<18} {'Mem':<18} {'ReqAvail':<14} {'GPU':<12}   "
+          f"{'Node':<12} {'St':<5} {'CPU':<18} {'Mem':<18} {'ReqAvail':<14} {'GPU':<12}")
+    print(f"{'-'*12} {'-'*5} {'-'*18} {'-'*18} {'-'*14} {'-'*12}   "
+          f"{'-'*12} {'-'*5} {'-'*18} {'-'*18} {'-'*14} {'-'*12}")
 
     for i in range(len(left_nodes)):
         # Left column
@@ -240,6 +365,26 @@ def print_node_details(nodes, node_jobs, show_idle=False, show_down=False):
         else:
             print(left_line)
 
+def format_gpu_display(info):
+    """Format the GPU allocated/idle column, e.g. '2/4G (2 idle)'"""
+    gpu_total = info['gpu_count']
+    if gpu_total == 0:
+        return f'\033[90m{"--":<12}\033[0m'
+
+    gpu_alloc = info['gpu_allocated']
+    gpu_idle = info['gpu_idle']
+    text = f"{gpu_alloc}/{gpu_total}G ({gpu_idle} idle)"
+
+    gpu_pct = (gpu_alloc / gpu_total * 100) if gpu_total > 0 else 0
+    if gpu_pct < 30:
+        color = '\033[92m'  # Green
+    elif gpu_pct < 70:
+        color = '\033[93m'  # Yellow
+    else:
+        color = '\033[91m'  # Red
+
+    return f'{color}{text:<12}\033[0m'
+
 def format_node_line(node_name, info, node_jobs):
     """Format a single node line"""
     # CPU utilization
@@ -252,6 +397,12 @@ def format_node_line(node_name, info, node_jobs):
     mem_pct = (used_mem / info['total_memory'] * 100) if info['total_memory'] > 0 else 0
     mem_bar = create_bar(used_mem, info['total_memory'], width=10)
     mem_display = colorize_bar(mem_bar, mem_pct)
+
+    # GPU allocated/idle
+    gpu_display = format_gpu_display(info)
+
+    # Requestable/available memory for oversubscription planning
+    avail_mem_display = format_avail_mem_display(info)
 
     # State display (shortened)
     state = info['state'][:5]
@@ -266,13 +417,9 @@ def format_node_line(node_name, info, node_jobs):
     else:
         state_display = f'{state:<5}'
 
-    # Add GPU indicator
-    gpu_indicator = f"[{info['gpu_count']}G]" if info['gpu_count'] > 0 else ""
     node_display = f"{node_name:<12}"
-    if gpu_indicator:
-        node_display = f"{node_name[:8]:<8}{gpu_indicator:<4}"
 
-    return f"{node_display} {state_display} {cpu_display:<28} {mem_display:<28}"
+    return f"{node_display} {state_display} {cpu_display:<28} {mem_display:<28} {avail_mem_display} {gpu_display}"
 
 def monitor_cluster(show_idle=True, show_down=False):
     """Main monitoring function"""
@@ -294,15 +441,16 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s                    # Show all nodes (default)
+  %(prog)s                    # Show all nodes, including idle (default)
+  %(prog)s --hide-idle        # Hide idle nodes
   %(prog)s --show-down        # Include down/drained nodes
   %(prog)s --watch            # Continuous monitoring
         """
     )
     parser.add_argument(
-        '--all',
+        '--hide-idle',
         action='store_true',
-        help='Show all nodes (default behavior, kept for compatibility)'
+        help='Hide idle nodes (idle nodes are shown by default)'
     )
     parser.add_argument(
         '--show-down',
@@ -328,11 +476,11 @@ Examples:
             import time
             while True:
                 print('\033[2J\033[H', end='')  # Clear screen
-                monitor_cluster(args.all, args.show_down)
+                monitor_cluster(not args.hide_idle, args.show_down)
                 print(f"Press Ctrl+C to stop... (refreshing every {args.interval}s)")
                 time.sleep(args.interval)
         else:
-            monitor_cluster(args.all, args.show_down)
+            monitor_cluster(not args.hide_idle, args.show_down)
     except KeyboardInterrupt:
         print("\n\nMonitoring stopped.")
         sys.exit(0)

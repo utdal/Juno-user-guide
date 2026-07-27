@@ -82,14 +82,16 @@ The H200 nodes use faster interconnects: **400 Gb InfiniBand (NDR)** between nod
 
 See [Storage and Data Transfer](storage.md) and [Scratch Space](scratch-space.md) for details on available storage systems.
 
-| System | Path | Quota | Backup | Use For |
-|--------|------|-------|--------|---------|
-| Home (Io) | `~` | 50 GB | Daily | Config files, scripts, small data |
-| Work (Io) | `~/work` | 1 TB | Daily | Large software, data, results |
-| Group (Io) | `/groups/<pi-name>` | 1 TB+ | Daily | Shared group data |
-| Scratch | `~/scratch` | 30 TB | Never | High-speed I/O during batch jobs |
+| System | Path | Quota | Backup | Shared with G2 | Use For |
+|--------|------|-------|--------|----------------|---------|
+| Home (Io) | `~` | 50 GB | Daily | No | Config files, scripts, small data |
+| Work (Io) | `~/work` | 1 TB | Daily | No (Juno only) | Large software, data, results |
+| Group (Io) | `/groups/<pi-name>` | 1 TB+ | Daily | **Yes** | Shared group data |
+| Scratch | `~/scratch` | 30 TB | Never | **Yes** | High-speed I/O during batch jobs |
 
 Scratch is up to **10× faster** for large I/O than home, work, or group directories.
+
+`/groups/<pi-name>` and `~/scratch` are the **same filesystems as on Ganymede 2** — see [Shared with Ganymede 2](storage.md#storage-systems-on-juno).
 
 ## Next Steps
 
