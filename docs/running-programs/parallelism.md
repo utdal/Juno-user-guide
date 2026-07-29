@@ -9,14 +9,29 @@ Parallelism is the key to using an HPC cluster effectively. This page explains t
 ## Choosing a Model
 
 ```
-Is your problem parallel?
-├─ Yes
-│  ├─ Fits on one node?
-│  │  ├─ Yes → OpenMP (threads) or multiprocessing
-│  │  └─ No  → MPI or Hybrid (MPI + OpenMP)
-│  ├─ Involves GPUs?       → CUDA / CuPy / PyTorch
-│  └─ Many independent tasks? → Job arrays or Launcher
-└─ No → Serial execution
+┌──────────────────────────────┐            ┌──────────────────┐
+│ Is your problem parallel?    ├─ no ─────► │ Serial execution │
+└──────────────┬───────────────┘            └──────────────────┘
+               │ yes
+               ▼
+┌──────────────────────────────┐            ┌────────────────────────┐
+│ Many independent tasks?      ├─ yes ────► │ Job arrays or Launcher │
+└──────────────┬───────────────┘            └────────────────────────┘
+               │ no
+               ▼
+┌──────────────────────────────┐            ┌───────────────────────┐
+│ Involves GPUs?               ├─ yes ────► │ CUDA / CuPy / PyTorch │
+└──────────────┬───────────────┘            └───────────────────────┘
+               │ no
+               ▼
+┌──────────────────────────────┐            ┌─────────────────────┐
+│ Fits on one node?            ├─ yes ────► │ OpenMP (threads) or │
+└──────────────┬───────────────┘            │ multiprocessing     │
+               │ no                         └─────────────────────┘
+               ▼
+┌──────────────────────────────┐
+│ MPI or Hybrid (MPI + OpenMP) │
+└──────────────────────────────┘
 ```
 
 | Model | Memory | Nodes | Best for |
