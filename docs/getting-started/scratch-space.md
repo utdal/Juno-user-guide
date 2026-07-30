@@ -14,13 +14,11 @@ Scratch is Juno's high-performance temporary filesystem, designed for fast I/O d
 | Quota | 30 TB (soft limit) |
 | Performance | Up to 10× faster than Io for large I/O |
 | Backup | **None** |
-| Shared with Ganymede 2 | **Yes** — same filesystem, same quota |
+| Shared with Ganymede 2 | **No** — separate per cluster (only `/groups` is shared) |
 | Purge | Files not accessed in **45 days** will be purged |
 
-!!! info "`~/scratch` is the same filesystem on Juno and Ganymede 2"
-    Scratch is shared between the two clusters: a file written from a Juno job is immediately visible to a Ganymede 2 (G2) job at the same path, and the 30 TB quota is shared across both. You never need to copy scratch data between clusters — and cleaning up on one cluster frees space on the other. The same is true of `/groups/<pi-name>`.
-
-    This also means the **45-day purge applies to the single shared copy**: a file you last touched from G2 is at risk on Juno too, and vice versa.
+!!! info "`~/scratch` is **not** shared between Juno and Ganymede 2"
+    Each cluster has its own scratch filesystem and its own 30 TB quota: a file written to `~/scratch` on Juno is **not** visible from Ganymede 2 (G2), and vice versa. The only filesystem shared between the two clusters is `/groups/<pi-name>` — if you need data on the other cluster, stage it there.
 
 For an overview of all storage tiers and how to move data between them, see [Storage and Data Transfer](storage.md).
 

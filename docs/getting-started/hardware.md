@@ -87,11 +87,11 @@ See [Storage and Data Transfer](storage.md) and [Scratch Space](scratch-space.md
 | Home (Io) | `~` | 50 GB | Daily | No | Config files, scripts, small data |
 | Work (Io) | `~/work` | 1 TB | Daily | No (Juno only) | Large software, data, results |
 | Group (Io) | `/groups/<pi-name>` | 1 TB+ | Daily | **Yes** | Shared group data |
-| Scratch | `~/scratch` | 30 TB | Never | **Yes** | High-speed I/O during batch jobs |
+| Scratch | `~/scratch` | 30 TB | Never | No | High-speed I/O during batch jobs |
 
 Scratch is up to **10× faster** for large I/O than home, work, or group directories.
 
-`/groups/<pi-name>` and `~/scratch` are the **same filesystems as on Ganymede 2** — see [Shared with Ganymede 2](storage.md#storage-systems-on-juno).
+`/groups/<pi-name>` is the **only filesystem shared with Ganymede 2** — see [Shared with Ganymede 2](storage.md#storage-systems-on-juno). Home, `~/work`, and `~/scratch` are all separate per cluster.
 
 ## Next Steps
 

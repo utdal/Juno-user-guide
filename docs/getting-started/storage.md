@@ -13,18 +13,20 @@ Juno has two storage tiers:
 - **Io**: High-speed storage for programs and data in active use. Includes Home, Work, and Group directories.
 - **Scratch**: Very high-performance storage for I/O-intensive batch jobs. Scratch is up to **10× faster** than Io for large I/O.
 
-!!! info "Shared with Ganymede 2: `/groups` and `~/scratch`"
+!!! info "Shared with Ganymede 2: `/groups`"
 
-    Both `/groups/<pi-name>` and `~/scratch` are the **same filesystems on Juno and Ganymede 2 (G2)** — a file written from one cluster is immediately visible from the other, with the same quota shared between them. You do not need to copy data between the two clusters; just reference the same path.
+    `/groups/<pi-name>` is the **only filesystem shared between Juno and Ganymede 2 (G2)** — a file written from one cluster is immediately visible from the other, with the same quota shared between them. You do not need to copy group data between the two clusters; just reference the same path.
 
-    The one difference: Juno additionally provides a **`~/work`** tier (1 TB, backed up). **G2 has no `~/work`.** If you share scripts with colleagues who work on G2, or move your own workflow across, replace `~/work` paths with `/groups/<pi-name>` — that is where G2 users keep the large, persistent data a Juno user would put in `~/work`.
+    Everything else is separate per cluster, **including `~/scratch`** — each cluster has its own scratch filesystem and quota, so scratch data on one cluster is not visible from the other. If you need to move data between clusters, stage it through `/groups/<pi-name>`.
+
+    Juno additionally provides a **`~/work`** tier (1 TB, backed up). **G2 has no `~/work`.** If you share scripts with colleagues who work on G2, or move your own workflow across, replace `~/work` paths with `/groups/<pi-name>` — that is where G2 users keep the large, persistent data a Juno user would put in `~/work`.
 
     | Path | Juno | G2 | Shared between them? |
     |------|------|-----|---------------------|
     | `~` (Home) | 50 GB | 50 GB | No — separate per cluster |
     | `~/work` | 1 TB | **not available** | — |
     | `/groups/<pi-name>` | 1 TB+ | 1 TB (20 TB condo owners) | **Yes** |
-    | `~/scratch` | 30 TB | 30 TB | **Yes** |
+    | `~/scratch` | 30 TB | 30 TB | No — separate per cluster |
 
     See the [Ganymede 2 user guide](https://utdallas-hpc-g2-ug.readthedocs-hosted.com/) for G2's own storage documentation.
 
@@ -129,7 +131,7 @@ mfsgetquota -H ~/work
 
 - ✓ Quota: 30 TB (soft limit)
 - ✓ Up to 10× faster than Home/Work/Group for large I/O
-- ✓ Shared with Ganymede 2 `~/scratch`, i.e. the same files are visible from both clusters
+- ✗ Not shared with Ganymede 2 — Juno has its own separate scratch filesystem
 - ✗ **Never backed up**
 - ✗ Files not accessed for 45 days will be purged
 

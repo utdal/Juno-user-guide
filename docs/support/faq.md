@@ -33,13 +33,13 @@ This usually happens after multiple failed login attempts. Email [circ-assist@ut
 | Home (Io) | `~` | No | Config files, scripts, small data |
 | Work (Io) | `~/work` | No (Juno only) | Large software, data, results |
 | Group (Io) | `/groups/<pi-name>` | **Yes** | Shared group data |
-| Scratch | `~/scratch` | **Yes** | High-speed I/O during batch jobs |
+| Scratch | `~/scratch` | No | High-speed I/O during batch jobs |
 
 See the [Storage Guide](../getting-started/storage.md) for details.
 
 ### Can I get to my Juno data from Ganymede 2?
 
-Yes, for `/groups/<pi-name>` and `~/scratch` — those are the **same filesystems** on both clusters, with a shared quota, so no copying is needed. Your home directory is separate per cluster, and `~/work` exists only on Juno (on G2, use `/groups/<pi-name>` instead).
+Yes, for `/groups/<pi-name>` — that is the **only filesystem shared** between the two clusters, with a shared quota, so no copying is needed there. Your home directory and `~/scratch` are separate per cluster; to move that data across, stage it through `/groups/<pi-name>`. `~/work` exists only on Juno (on G2, use `/groups/<pi-name>` instead).
 
 ### What's my storage quota?
 

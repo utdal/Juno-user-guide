@@ -18,10 +18,6 @@ Several prohibited developers distribute AI/ML models and tooling that users may
 
 The broader DIR lists also cover consumer apps (TikTok, WeChat, Lemon8, RedNote, Temu, CamScanner, WPS Office, Kaspersky, …) and hardware manufacturers (Huawei, DJI, Hikvision, TP-Link, ZTE, Xiaomi, …). Do not use prohibited hardware to connect to Juno.
 
-## Exceptions
-
-Limited exceptions may be approved **only by an agency head** (for law enforcement, security measures, or other legitimate uses). If you believe your research genuinely requires a prohibited technology, **do not install it yourself** — contact UT Dallas IT Security first.
-
 ## Questions & reporting
 
 - **Is something prohibited? / requesting an exception**: [issuport@utdallas.edu](mailto:issuport@utdallas.edu)
