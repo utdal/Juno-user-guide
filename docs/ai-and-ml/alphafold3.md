@@ -228,10 +228,6 @@ watch -n 2 nvidia-smi
 
 Target: GPU utilization should be consistently **> 80%** during inference.
 
-### Storage Considerations
-
-The genetic databases are large (~600 GB). Use the shared databases provided on Juno rather than downloading your own copy. Your output and model weights should live in `~/work` (1 TB quota, backed up). Use `~/scratch` for temporary intermediate files if needed.
-
 ---
 
 ## Related Pages
