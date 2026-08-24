@@ -71,8 +71,6 @@ The right way to keep important data is to move it off scratch:
 mv ~/scratch/results/*.txt ~/work/project/results/
 ```
 
-Touching files to reset their access time (`find ~/scratch/project -type f -exec touch {} \;`) only delays the inevitable — use it sparingly, not as a substitute for moving data you intend to keep.
-
 ## Recommended Workflow
 
 ![Scratch data lifecycle — stage data in before the job, process on scratch during the job, copy important results to Home/Work after, then clean up scratch.](../images/scratch-data-lifecycle.png)
