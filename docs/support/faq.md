@@ -147,7 +147,7 @@ Or check your program for memory leaks.
 ### How do I request GPU resources?
 
 ```bash
-#SBATCH -p h100                 # or h200, a30, a30-2.12gb, a30-4.6gb
+#SBATCH -p h100                 # or h200, a30
 #SBATCH --gres=gpu:1            # Request 1 GPU
 ```
 
@@ -155,11 +155,9 @@ Choose the partition based on your VRAM needs:
 
 | Partition | GPU | VRAM |
 |-----------|-----|------|
-| `h200` | H200 NVL (physical) | 141 GB |
-| `h100` | H100 (physical or half-slice) | 80 GB, 94 GB NVL, or 47 GB half |
-| `a30` | A30 (physical) | 24 GB |
-| `a30-2.12gb` | A30 (virtual half) | 12 GB |
-| `a30-4.6gb` | A30 (virtual quarter) | 6 GB |
+| `h200` | H200 NVL | 141 GB |
+| `h100` | H100 or H100 NVL | 80 GB or 94 GB NVL |
+| `a30` | A30 | 24 GB |
 
 See [SLURM Guide](../running-programs/slurm.md) for GPU job examples.
 

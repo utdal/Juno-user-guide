@@ -49,7 +49,7 @@ dev             up    2:00:00      5   idle c-02-[01-05]
 sinfo -t idle,mix
 
 # Show GPU partitions only
-sinfo -p h100,a30,a30-2.12gb,a30-4.6gb
+sinfo -p h200,h100,a30
 
 # One line per node (useful for detailed view)
 sinfo -N -l
@@ -404,7 +404,7 @@ Your time in the queue is driven by two things: **how much you request** and you
 
 - **Submit to multiple partitions** so the job starts wherever capacity frees up first: `sbatch -p normal,dev job.sh` (see [Submitting to Multiple Partitions](slurm.md#submitting-to-multiple-partitions)).
 - **Use `dev` for short jobs** — it shares hardware with `normal` but is sized for quick turnaround (2-hour limit).
-- **Right-size GPU requests** — a full H100 is in high demand, so a [virtual GPU slice](slurm.md#partitions-overview) (`a30-2.12gb`, or a half-H100 slice in the `h100` partition) may start much sooner for light GPU work.
+- **Right-size GPU requests** — H100s are in high demand, so if your job fits in 24 GB of VRAM, an [`a30` GPU](slurm.md#partitions-overview) may start much sooner. Request only as many GPUs (`--gres=gpu:<n>`) as your code actually uses.
 
 ### 4. See the whole cluster at a glance — `cluster_monitor.py`
 

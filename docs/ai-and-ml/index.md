@@ -10,13 +10,11 @@ Juno provides several GPU partitions suited to different workloads, from interac
 
 | Partition | Nodes | GPUs / Node | GPU Model | VRAM / GPU | Time Limit | Best For |
 |---|---|---|---|---|---|---|
-| `a30` | 2 | 2 | NVIDIA A30 | 24 GB | 2 days | Medium GPU workloads, inference, development |
-| `a30-2.12gb` | 1 | 4 (virtual, half-A30) | NVIDIA A30 | 12 GB | 2 days | Multiple concurrent small jobs |
-| `a30-4.6gb` | 1 | 8 (virtual, quarter-A30) | NVIDIA A30 | 6 GB | 2 days | Light GPU jobs, debugging |
-| `h100` | 1 | 4 | NVIDIA H100 (80GB HBM3) | 80 GB | 2 days | Large models, high-throughput / multi-GPU training |
+| `a30` | 4 | 2 | NVIDIA A30 | 24 GB | 2 days | Medium GPU workloads, inference, development |
+| `h100` | 3 | 4 / 2 / 1 | NVIDIA H100 (80 GB HBM3) / H100 NVL (94 GB) | 80 / 94 GB | 2 days | Large models, high-throughput / multi-GPU training |
 | `h200` | 26 | 2 | NVIDIA H200 NVL | 141 GB | 2 days | Very large models, distributed AI training |
 
-*The `h100` partition also serves a 94 GB H100 NVL node and 47 GB half-H100 virtual slices (the former `h100-94gb` and `h100-2.47gb` partitions, now merged into `h100`).*
+*The `h100` partition has one 4× H100 (80 GB) node, one 2× H100 NVL (94 GB) node, and one 1× H100 NVL (94 GB) node.*
 
 !!! note "H200 Nodes"
     Juno has 26 H200 nodes (52 GPUs total). The NVIDIA H200 NVL carries **141 GB of HBM3e memory** — nearly double the H100 — making it ideal for training and serving large language models that don't fit on older GPUs. These are **NVL cards with no NVLink** between GPUs: GPUs attach via PCIe Gen 5.0, and nodes are connected by 400 Gb InfiniBand for distributed training.
@@ -82,7 +80,7 @@ See the [Miniconda Guide](../advanced/miniconda.md) for more on managing Conda e
 
 ```bash
 # See GPU partition status
-sinfo -p h200,h100,a30,a30-2.12gb,a30-4.6gb
+sinfo -p h200,h100,a30
 
 # Detailed view of a specific GPU node
 scontrol show node g-05-01

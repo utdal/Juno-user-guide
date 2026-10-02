@@ -36,8 +36,6 @@ These are the standard compute nodes used for most CPU-based workloads. Submit j
 | 1 | 2× Intel Xeon Platinum 8462Y 2.8 GHz | 64 cores total | 512 GB | 2× H100 (physical, 94 GB NVL) | 94 GB | HDR100 InfiniBand |
 | 1 | 2× Intel Xeon Platinum 8462Y 2.8 GHz | 64 cores total | 512 GB | 1× H100 (physical, 94 GB NVL) | 94 GB | HDR100 InfiniBand |
 
-H100 nodes also support **virtual GPU slicing** — a single physical H100 can be split into multiple virtual GPUs. See the [SLURM partitions table](../running-programs/slurm.md#partitions-overview) for available GPU configurations.
-
 !!! note "NVLink is only on `g-04-02`"
     Only the **4× H100 (80 GB HBM3)** node, `g-04-02`, has **NVLink** for fast direct GPU-to-GPU communication. Despite the "NVL" in their product name, the 94 GB H100 NVL nodes do **not** have NVLink bridges installed, and the A30 nodes have no NVLink either — on all other nodes, GPUs communicate over PCIe. This matters for multi-GPU jobs (see [PyTorch Training Tutorial](../ai-and-ml/pytorch-training.md)).
 
@@ -46,8 +44,6 @@ H100 nodes also support **virtual GPU slicing** — a single physical H100 can b
 | Quantity | CPU | Cores/node | RAM | GPUs | GPU Memory | Network |
 |----------|-----|------------|-----|------|------------|---------|
 | 4 | 2× AMD EPYC 9534 2.45 GHz | 64C/128T per CPU → **128 cores total** | 1,024 GB | 2× A30 (physical, 24 GB each) | 24 GB | HDR100 InfiniBand, 2× 10/25 Gbps Ethernet |
-
-A30 nodes also support virtual GPU slicing into 12 GB and 6 GB configurations.
 
 ## GPU Compute Nodes — NVIDIA H200
 
@@ -64,13 +60,9 @@ H200 NVL cards have **no NVLink** — GPUs communicate over PCIe Gen 5.0 within 
 
 | Partition | GPU Type | Count | VRAM Each |
 |-----------|----------|-------|-----------|
-| `a30` | A30 physical | 2 per node | 24 GB |
-| `a30-2.12gb` | A30 virtual (half) | 4 per node | 12 GB |
-| `a30-4.6gb` | A30 virtual (quarter) | 8 per node | 6 GB |
-| `h100` | H100 physical / virtual | 4× (80 GB), 1× (94 GB NVL), or 4× half-slice (47 GB) | 80 / 94 / 47 GB |
+| `a30` | A30 | 2 per node | 24 GB |
+| `h100` | H100 / H100 NVL | 4× (80 GB), 2× (94 GB NVL), or 1× (94 GB NVL) per node | 80 / 94 GB |
 | `h200` | H200 NVL | 2 per node | 141 GB |
-
-![GPU virtual slicing — a physical A30 or H100 can be divided into multiple virtual GPUs, each with a smaller VRAM slice, for concurrent lightweight workloads.](../images/hardware-gpu-slicing.png)
 
 ## Network Infrastructure
 

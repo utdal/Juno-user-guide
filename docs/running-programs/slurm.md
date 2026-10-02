@@ -518,7 +518,7 @@ sinfo -o "%P %l"
 
 2. **Use appropriate partitions**:
    - `normal` for CPU jobs, `dev` for short test jobs
-   - `h100` / `a30` (and their virtual-slice variants) for GPU jobs
+   - `h200` / `h100` / `a30` for GPU jobs
    - See the [partitions table](#partitions-overview) or run `sinfo`
 
 3. **Organize output files**:
@@ -540,18 +540,16 @@ sinfo -o "%P %l"
 
 ## Partitions Overview
 
-![Juno cluster partitions — how the compute nodes are divided across dev, normal, h200, h100, a30, a30-2.12gb, a30-4.6gb, and vdi partitions.](../images/slurm-partitions.png)
+![Juno cluster partitions — how the compute nodes are divided across dev, normal, h200, h100, a30, and vdi partitions.](../images/slurm-partitions.png)
 
 | Partition name | Time limit | Nodes | Max nodes/job | Cores/node | Memory/node | GPUs/node                             | VRAM/GPU   | Best used for |
 |----------------|------------|-------|----------------|------------|-------------|---------------------------------------|------------|---------------|
-| `dev`            | 2 hours    | 8*    | 4              | 64         | 384 GB      | –                                     | –          | Code development, short jobs, benchmarking |
-| `normal`         | 2 days     | 92*   | 8†             | 64         | 384 GB      | –                                     | –          | Long jobs, big jobs, production (main) compute workloads |
-| `h200` ‡         | 2 days     | 26    | 8              | 64         | 384 GB      | 2 H200 NVL (physical)                 | 141 GB     | Very large models, distributed AI training |
-| `h100` ‡         | 2 days     | 3§    | 2 / 1§         | 64         | 512 GB      | 4 H100 (80 GB), 1 H100 NVL (94 GB), or 4 half-H100 virtual (47 GB)§ | 80 / 94 / 47 GB | Large, long jobs requiring high GPU resources |
-| `a30` ‡          | 2 days     | 2     | 2              | 128        | 1,024 GB    | 2 A30 (physical)                      | 24 GB      | Large, long jobs requiring medium GPU resources |
-| `a30-2.12gb` ‡   | 2 days     | 1     | 1              | 128        | 1,024 GB    | 4 half-A30 (virtual)                  | 12 GB      | GPU jobs with moderate memory needs |
-| `a30-4.6gb` ‡    | 2 days     | 1     | 1              | 128        | 1,024 GB    | 8 quarter-A30 (virtual)               | 6 GB       | GPU jobs with minimal memory requirements |
-| `vdi`            | 8 hours    | 2     | 1              | 64         | 384 GB      | –                                     | –          | GUI-interactive workloads (Open OnDemand) |
+| `dev`            | 2 hours    | 8*    | 4              | 64         | 384 GB      | –                                     | –          | Code development and debugging |
+| `normal`         | 2 days     | 92*   | 8†             | 64         | 384 GB      | –                                     | –          | Large, long jobs, production (main) compute workloads |
+| `h200` ‡         | 2 days     | 26    | 8              | 64         | 384 GB      | 2 H200 NVL                            | 141 GB     | Large, long jobs requiring high GPU resources |
+| `h100` ‡         | 2 days     | 3§    | 1              | 64         | 512 GB      | 4 H100, 2 H100 NVL, or 1 H100 NVL§    | 80 / 94 GB | Large, long jobs requiring high GPU resources |
+| `a30` ‡          | 2 days     | 4     | 2              | 128        | 1,024 GB    | 2 A30                                 | 24 GB      | Large, long jobs requiring medium GPU resources |
+| `vdi`            | 8 hours    | 2     | 1              | 64         | 384 GB      | –                                     | –          | Used by Open OnDemand workload |
 
 \* `dev` partition shares nodes with the `normal` partition.
 
@@ -559,7 +557,7 @@ sinfo -o "%P %l"
 
 ‡ GPU partitions — pass the `--gres=gpu:<n>` option to `sbatch`/`srun` to request `<n>` GPUs; jobs that omit it are allocated no GPU.
 
-§ The `h100` partition spans three GPU configurations across its nodes: 4× H100 (80 GB, max 2 nodes/job), 1× H100 NVL (94 GB, max 1 node/job), and 4× half-H100 virtual slices (47 GB, max 1 node/job). The former `h100-94gb` and `h100-2.47gb` partitions have been merged into `h100`.
+§ The `h100` partition has three nodes, one of each configuration: 4× H100 (80 GB), 2× H100 NVL (94 GB), and 1× H100 NVL (94 GB).
 
 The `h200` partition is available. The H200 NVL cards have **no NVLink** — GPUs connect via PCIe Gen 5.0 within a node and 400 Gb InfiniBand between nodes. See [GPU Computing on Juno](../ai-and-ml/index.md).
 
