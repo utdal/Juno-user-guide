@@ -54,6 +54,7 @@ Common interactive apps include:
 - RStudio
 - Desktop (full Linux desktop environment)
 - VSCode Server
+- ParaView Desktop (see [ParaView on Juno](paraview-desktop.md))
 
 ### Starting an Interactive App
 
@@ -191,6 +192,7 @@ Need a GUI program that isn't available as an interactive app? See [Launching GU
 - [Set up VSCode for remote development →](vscode.md)
 - [Launch JupyterLab →](jupyter.md)
 - [Run RStudio →](rstudio.md)
+- [Visualize data with ParaView →](paraview-desktop.md)
 - [Learn about containerized applications →](../advanced/containers.md)
 
 ## Need Help?

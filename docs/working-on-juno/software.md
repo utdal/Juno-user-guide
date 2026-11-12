@@ -163,6 +163,14 @@ The tables below list software currently installed on Juno, grouped by category.
 
 ---
 
+## Visualization
+
+| Software | Version(s) | Module | Description |
+|---|---|---|---|
+| ParaView | 6.2 | `module load paraview/6.2` | Visualization and analysis of large scientific datasets (`pvpython`, `pvbatch`). For the full GUI, use the [ParaView Desktop](../gui-and-tools/paraview-desktop.md) app in Open OnDemand |
+
+---
+
 ## Profiling & Performance Analysis
 
 | Software | Version(s) | Module | Description |
